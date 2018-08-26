@@ -8,8 +8,13 @@ class Lexer(object):
     def tokenize(self):
         keywords = ["if", "else", "while", "int", "float", "void", "return"]
         symbols = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]"
+        #symbols = ['+', '!', '-', '/', '*', '<', '>', ">=", "<=", "==", "=", "!=", ";", ",", "(", ")", "[", "]", "{", "}"]
         characters = "[a-zA-Z]+" #gets all words/ID's
         digits =  "[0-9]+(\.[0-9]+)?(E(\+|-)?[0-9]+)?" #gets all int/float values
+
+        #regex = "(%s)|(%s)|(%s)|(%s)" % (keywords, symbols, characters, digits)
+        #'([a-zA-Z]+)|([0-9]+(\.[0-9]+)?(E(\+|-)?[0-9]+)?)|'
+        #'("\/\*|\*\/|\+|-|\*|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]|//")|(\S)'
 
         insideComment = 0 #counter for comments
 
@@ -30,30 +35,33 @@ class Lexer(object):
             #This will recognize a variable  and create a token for it
             if word == "var": tokens.append(["VAR_DECLARATION", word])
 
+            # This will recognize operators and create an OPERATOR token for it
+            elif re.match(symbols, word):
+                tokens.append([word])
+
             elif re.match(characters, word):
-                #if word[len(word) - 1] == ";":
-                    #tokens.append(['ID', word[0:len(word) - 1]])
                 if word in keywords:
                     tokens.append(['KEYWORD', word])
                 else:
                     tokens.append(['ID', word])
+                # if word[len(word) - 1] == ")":
+                # tokens.append(['ID', word[0:len(word) - 1]])
+
 
             #This will recognize an integer and create an INTEGER token for it
             elif re.match(digits, word):
                 #if word[len(word) -1] == ";":
                     #tokens.append(['INTEGER', word[0:len(word) - 1]])
                 #else:
-                    tokens.append(['INTEGER', word])
+                tokens.append(['INTEGER', word])
 
-            #This will recognize operators and create an OPERATOR token for it
-            elif word in symbols:
-                    tokens.append([word])
+
 
 
 
             #If a STATEMENT_END (;) is found at the last character in a word add a STATEMENT_END token
-            #if word[len(word) - 1] == ";":
-                #tokens.append(['STATEMENT_END', ';'])
+            #if word[len(word) - 1] == ")":
+                #tokens.append(['End Statement', ')'])
 
            
            
@@ -65,7 +73,7 @@ class Lexer(object):
             #Increase word index after checking it
             source_index += 1
 
-        print(str(tokens) + "\n")
+        print(str(tokens))
 
         #Return created tokens
         return tokens
