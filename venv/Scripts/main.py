@@ -1,7 +1,7 @@
 import lexer
 import sys
 
-content = ""
+#content = ""
 #with open(sys.argv[1], "r") as file:
    #content = file.read()
 def main():
