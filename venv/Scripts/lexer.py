@@ -1,136 +1,71 @@
 import re
+import sys
 
-class Lexer(object):
-
-
-    def __init__(self, source_code):
-        self.source_code = source_code
-    def tokenize(self):
-        keywords = ["if", "else", "while", "int", "float", "void", "return"]
-        symbols = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]"
-        #doubleSymbols = "<=|>=|==|!="
-        #symbols = ['+', '!', '-', '/', '*', '<', '>', ">=", "<=", "==", "=", "!=", ";", ",", "(", ")", "[", "]", "{", "}"]
-        characters = "[a-zA-Z]+|." #gets all words/ID's
-        #digits = "[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?"
-        #dPlaceholder = "[-+]?\d*\.\d+|\d+"
-        errorID = "(r'[a-zA-Z]+[.0-9][.0-9a-zA-Z]')"
-        errorInteger = "(r'[0-9]+[a-df-zA-DF-Z][.0-9a-zA-Z]')"
-        digits =  "[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?" #gets all int/float values
-        errorSymbols = "[@|_|!]"
-        errors = "\S"
-        dot = "."
-        empty = "E"
-        #list = "(%s)|(%s)|(%s)|(%s)" % (characters, digits, symbols, errors)
-        '([a-zA-Z]+)|([0-9]+(\.[0-9]+)?(E(\+|-)?[0-9]+)?)|'
-        '("\/\*|\*\/|\+|-|\*|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]|//")|(\S)'
-
-        insideComment = 0
-        #insideComment = True/False
-
-        #Where all the tokens created by lexer will be stored
-        tokens = []
-
-        #Create a word list of the source code
-        source_code = self.source_code.split()
-
-        #Keep track of word inex we are at in source code
-        source_index = 0
-
-        #loop through each word in source code to generate tokens
-        while source_index < len(source_code):
-
-            word = source_code[source_index]
-
-            #This will recognize a variable  and create a token for it
-            #if word == "var": tokens.append(["VAR_DECLARATION", word])
-
-            # This will find all the characters in the file
-            #for word in re.findall(list, word):
-            # for word in re.findall("\s*(?:(\d+)|(\w+)|(E+)|(\S+)|(.))", word):
-            # for word in re.findall("\s*(\d+|\w+|.)", word):
-            for word in re.findall("\s*(?:([-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?)|(\w+)|(.))", word):
+with open(sys.argv[1], "r") as file: #opens file
+    filelines = file.read().splitlines() # reads file and splits lines
+    file.close() #closes file
 
 
-                if re.match(digits, word[0]):
-                    #if word[0] and insideComment == 0:
-                    if "." in word[0]:
-                        tokens.append(["FLOAT:", word[0]])
-                    elif "E" in word[0]:
-                        tokens.append(["FLOAT:", word[0]])
+insideComment = 0
+keywords = ["if", "else", "while", "int", "float", "void", "return"] #denotes all keywords
+symbols = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]" #denotes symbols used
+characters = "[a-zA-Z]+" #obtains all words for the IDs
+digits =  "[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?" #gets all decimal values, including integer values 0-9
+errors = "\S" #reports errors
+tokens = [] #creates a list that holds all of the tokens
+
+
+for importantLines in filelines: #receiving importantlines from filelines
+    importantLine = importantLines #sets importantLine to importantLines
+    if importantLine: #needs to be an importantLine
+        tokens.append("INPUT: " + importantLines.strip()) #appends input and strips blank space
+
+
+
+    list = "(%s)|(%s)|(%s)|(%s)" % (characters, digits, symbols, errors) #puts entire library into a list of strings
+
+    for word in re.findall(list, importantLine): #finds list
+        if re.match(characters, word[0]) and insideComment == 0: #matches digits and makes sure insideComment is 0
+            if word[0] in keywords:
+                tokens.append("KEYWORD: " + word[0]) #keyword is constructed out of characters a-zA-Z
+            else:
+                tokens.append("ID: " + word[0]) # appends character values that are not keywords
+
+        elif re.match(digits, word[1]) and insideComment == 0: #matches characters and makes sure insideComment is 0
+            if "." in word[1]:
+                tokens.append("FLOAT: " + word[1]) #checks if value is a decimal value and prints
+            elif "E" in word[1]:
+                tokens.append("FLOAT: " + word[1]) #checks if value is an expontential value and prints
+            else:
+                tokens.append("INTEGER: " + word[1])  #appends integer value
+
+
+        elif re.match(symbols, word[3]): #matches symbols
+            if "/*" in word[3]: #Checks when word approaches /*
+                insideComment += 1 #increments insideComment if inside
+            elif "*/" in word[3] and insideComment > 0: #Checks when word approaches */
+                insideComment -= 1 #decrements insideComment if outside
+            elif "//" in word[3] and insideComment > 0: #If neither
+                break
+            elif insideComment == 0: #when inside counter is 0
+                if "*/" in word[3]: #when it reaches terminal */
+                    if "*/*" in word: #when it's still sorting through comments
+                        tokens.append("*")
+                        insideComment += 1
+                        continue #skips comments and continues through the program
                     else:
-                        tokens.append(["INTEGER:", word[0]])
+                        tokens.append("*") #appends multiplication symbol
+                        tokens.append("/") #appends division symbol
+                else:
+                    tokens.append(word[3]) #appends rest of symbols
+        elif word[4] and insideComment == 0: #matches errors and makes sure insideComment is 0
+            tokens.append("ERROR: " + word[4]) #appends error
+
+for token in tokens:
+    print(str(token)) #prints tokens
 
 
-                elif re.match(characters, word[2]):
-                    #if word[2] and insideComment == 0:
-                    if word[2] in keywords:
-                        tokens.append(["KEYWORD:", word[2]])
-                    else:
-                        #if word[2] in errorID:
-                            #tokens.append(["ERROR:", word[2]])
-                        if word[2] in errorSymbols:
-                            tokens.append(["ERROR:", word[2]])
-                        else:
-                            tokens.append(["ID:", word[2]])
-
-                elif re.match(characters, word[3]):
-                    if word[3] in errorSymbols:
-                        tokens.append(["ERROR:", word[3]])
-                    else:
-                        #if word[3] == "=":
-                            #if len(word[3] + 1) in ["<", ">"]:
-                               #tokens.append("SYMBOL:", word[3])
-                        #:
-                            #tokens.append(["DOUBLESYMBOL", word[3][0:len(word[3] + 1)]])
-                            tokens.append(["SYMBOL:", word[3]])
-
-
-                """elif word[3]:
-                    if word[3] == "/*":
-                        insideComment = insideComment + 1
-                    elif word[3] == "*/" and insideComment > 0:
-                        insideComment = insideComment - 1
-                    elif word[3] == "//" and insideComment == 0:
-                        break
-                    elif insideComment == 0:
-                        if word[3] == "*/":
-                            if "*/*" in word:
-                                tokens.append(["*"])
-                                insideComment += 1
-                                continue
-                            else:
-                                tokens.append(["*"])
-                                tokens.append(["/"])
-                        else:
-                                tokens.append(word[3]) """
-
-
-
-                    #else:
-                        #elif.re.match(symbols, word[3]):
-                            #if word[3] and insideComment == 0:
-                                #tokens.append("Symbols:", word[3])
-
-
-
-
-                   
-
-
-
-
-                #elif re.match(errors,word[3]):
-                    #tokens.append(["ERROR:", word[3]])
-
-
-
-
-
-
-                #elif re.match(not "\s*(\d+|\w+|.)", word):
-                    #tokens.append(["ERROR:", word])
-
-
+ #this is the end of the program
 
 
 
@@ -143,14 +78,4 @@ class Lexer(object):
 
 
             
-            
-            
-            #Increase word index after checking it
-            source_index += 1
-
-        for token in tokens:
-            print(str(token))
-
-        #Return created tokens
-        return tokens
 
