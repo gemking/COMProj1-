@@ -10,6 +10,8 @@ insideComment = 0
 keywords = ["if", "else", "while", "int", "float", "void", "return"] #denotes all keywords
 symbols = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]" #denotes symbols used
 comparisonSymbols = "<=|<|>=|>|==|!=" #for comparision
+addSubtractSymbols = "+|-"
+multiplyDivideSymbols = "*|/"
 characters = "[a-zA-Z]+" #obtains all words for the IDs
 digits = "[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?" #gets all decimal values, including integer values 0-9
 errors = "\S" #reports errors
@@ -306,7 +308,7 @@ def statement(): # 17
         itstmt()
     elif "return" in tokens[x]:
         retstmt()
-    else
+    else:
         print("REJECT")
         sys.exit(0)
 
@@ -393,7 +395,7 @@ def itstmt(): #20
 
     statement()
 
-def retsmt(): #21
+def retstmt(): #21
     global x
     if "return" in tokens[x]:
         x+= 1 # "return" is accepted
@@ -438,14 +440,14 @@ def exp(): #22
         if ")" in tokens[x]:
             termprime()
             addexpprime()
-            if "<=" in tokens[x] or "<" in tokens[x] or ">" in tokens[x] or ">=" in tokens[x] or "==" in tokens[x] or "!=" in tokens[x]:
+            if comparisonSymbols in tokens[x]: #Checks for "<", "<=", ">", ">=", "!=", "=="
                 relop()
                 addexp()
             elif "+" in tokens[x] or "-" in tokens[x]:
-                addexprime()
-                if "<=" in tokens[x] or "<" in tokens[x] or ">" in tokens[x] or ">=" in tokens[x] or "==" in tokens[x] or "!=" in tokens[x]:
-                relop()
-                addexp()
+                addexpprime()
+                if comparisonSymbols in tokens[x]:
+                    relop()
+                    addexp()
             else:
                 return
         else:
@@ -455,15 +457,15 @@ def exp(): #22
         x += 1 # "NUM", "FLOAT" accepted
         termprime()
         addexpprime()
-        if "<=" in tokens[x] or "<" in tokens[x] or ">" in tokens[x] or ">=" in tokens[x] or "==" in tokens[x] or "!=" in tokens[x]:
+        if comparisonSymbols in tokens[x]:
             relop()
             addexp()
-        elif "+" in tokens[x] or "-" in tokens[x]:
+        elif addSubtractSymbols in tokens[x]:
             addexpprime()
-            if "<=" in tokens[x] or "<" in tokens[x] or ">" in tokens[x] or ">=" in tokens[x] or "==" in tokens[x] or "!=" in tokens[x]:
+            if comparisonSymbols in tokens[x]:
                 relop()
                 addexp()
-            elif "<=" in tokens[x] or "<" in tokens[x] or ">" in tokens[x] or ">=" in tokens[x] or "==" in tokens[x] or "!=" in tokens[x]:
+            elif comparisonSymbols in tokens[x]:
                 relop()
                 addexp()
             else:
@@ -472,7 +474,7 @@ def exp(): #22
             print("REJECT")
             sys.exit(0)
 
-    def ex(): #22X
+def ex(): #22X
         global x
         if "=" in tokens[x]:
             x += 1 # "=" is accepted
@@ -488,17 +490,227 @@ def exp(): #22
                 if "=" in tokens[x]:
                     x += 1 # "=" is accepted
                     exp()
-                elif "*" in tokens[x] or "/" in tokens[x]:
+                elif multiplyDivideSymbols in tokens[x]:
                     termprime()
-                    addexprime()
+                    addexpprime()
                     if comparisonSymbols in tokens[x]:
                         relop()
                         addexp()
                     else:
                         return
-                elif "+" in tokens[x] or "-" in tokens[x]:
-                    addexprime()
+                elif addSubtractSymbols in tokens[x]:
+                    addexpprime()
                     if comparisonSymbols in tokens[x]:
                         relop()
                         addexp()
+                    elif comparisonSymbols in tokens[x]:
+                        relop()
+                        addexp()
+                    else:
+                        return
+                else:
+                    print("REJECT")
+                    sys.exit(0)
+            elif "(" in tokens[x]:
+                x += 1 # "(" is accepted
+                args()
+                if ")" in tokens[x]:
+                    x += 1 #")" is accepted
+                if multiplyDivideSymbols in tokens[x]:
+                    termprime()
+                    addexpprime()
+                    if comparisonSymbols in tokens[x]:
+                        relop()
+                        addexp()
+                    else:
+                        return
+                elif addSubtractSymbols in tokens[x]:
+                    addexpprime()
+                    if comparisonSymbols in tokens[x]:
+                        relop()
+                        addexp()
+                elif comparisonSymbols in tokens[x]:
+                    relop()
+                    addexp()
+                else:
+                    return
+            else:
+                print("REJECT")
+                sys.exit(0)
+        elif multiplyDivideSymbols in tokens[x]:
+            termprime()
+            addexpprime()
+            if comparisonSymbols in tokens[x]:
+                relop()
+                addexp()
+            else:
+                return
+        elif addSubtractSymbols in tokens[x]:
+            addexpprime()
+            if comparisonSymbols in tokens[x]:
+                relop()
+                addexp()
+            else:
+                return
+        elif comparisonSymbols in tokens[x]:
+            relop()
+            addexp()
+        else:
+            return
+
+def var(): #23
+    global x
+    w = tokens[x].isalpha()
+    if tokens[x] not in keywords and w is True:
+        x += 1 #"ID" is accepted
+    else:
+        return
+    if "[" in tokens[x]:
+        x += 1 #"[" is accepted
+        exp()
+        if "]" in tokens[x]:
+            x += 1 #"]" is accepted
+        else:
+            print("REJECT")
+            sys.exit(0)
+    else:
+        return
+def simexp(): #24
+    addexp()
+    if comparisonSymbols in tokens[x]:
+        relop()
+        addexp()
+    else:
+        return
+
+def relop(): #25
+    global x
+    if comparisonSymbols in tokens[x]:
+        x += 1
+    else:
+        return
+
+def addexp(): #26
+    term()
+    addexpprime()
+
+def addexpprime(): #27
+    if addSubtractSymbols in tokens[x]:
+        addop()
+        term()
+        addexpprime()
+    else:
+        return
+
+def addop(): #28
+    global x
+    if addSubtractSymbols in tokens[x]:
+        x += 1 # "+", "-" is accepted
+    else:
+        return
+
+def term(): #29
+    factor()
+    termprime()
+
+def termprime(): #30
+    if multiplyDivideSymbols in tokens[x]:
+        mulop()
+        factor()
+        termprime()
+    else:
+        return
+
+def mulop(): #31
+    global x
+    if multiplyDivideSymbols in tokens[x]:
+        x += 1 # "*", "/" is accepted
+    else:
+        return
+
+def factor(): #32
+    global x
+    w = tokens[x].isalpha()
+    z = containsNumber(tokens[x])
+    if tokens[x] not in keywords and w is True:
+        x += 1 # "ID" is accepted
+        if "[" in tokens[x]:
+            x += 1 # "[" is accepted
+            exp()
+            if "]" in tokens[x]:
+                x += 1 # "]" is accepted
+            else:
+                return
+        elif "(" in tokens[x]:
+            x += 1 #"(" is accepted
+            args()
+            if ")" in tokens[x]:
+                x += 1 # ")" is accepted
+            else:
+                return
+        else:
+            return
+    elif z is True:
+            x += 1 #"NUM", "FLOAT" is accepted
+    elif "(" in tokens[x]:
+        x += 1 # "(" is accepted
+        exp()
+        if ")" in tokens[x]:
+            x += 1  #")" is accepted
+        else:
+            return
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+
+def call(): #33
+    global x
+    w = tokens[x].isalpha()
+    if tokens[x] not in keywords and x is True:
+        x += 1 # "ID" is accepted
+        if "(" in tokens[x]:
+            x += 1 # "(" is accepted
+            args()
+            if ")" in tokens[x]:
+                x += 1 #")" is accepted
+            else:
+                print("REJECT")
+                sys.exit(0)
+        else:
+            print("REJECT")
+            sys.exit(0)
+    else:
+        return
+
+def args(): #34
+    global x
+    w = tokens[x].isalpha()
+    z = containsNumber(tokens[x])
+    if tokens[x] not in keywords and w is True:
+        argslist()
+    elif z is True:
+        argslist()
+    elif "(" in tokens[x]:
+        argslist()
+    elif ")" in tokens[x]:
+        return
+
+def argslist(): #35
+    exp()
+    argslistprime()
+
+def argslistprime(): #36
+    global x
+    if "," in tokens[x]:
+        x += 1 # "," is accepted
+        exp()
+        argslistprime()
+    elif ")" in tokens[x]:
+        return
+    else:
+        return
+
+#start parsing
+program()
 
