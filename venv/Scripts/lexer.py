@@ -33,9 +33,9 @@ for importantLines in filelines: #receiving importantlines from filelines
 
         elif re.match(digits, word[1]) and insideComment == 0: #matches characters and makes sure insideComment is 0
             if "." in word[1]:
-                tokens.append("FLOAT: " + word[1]) #checks if value is a decimal value and prints
+                tokens.append("FLOAT: " + word[1]) #checks if value is a decimal value and appends
             elif "E" in word[1]:
-                tokens.append("FLOAT: " + word[1]) #checks if value is an expontential value and prints
+                tokens.append("FLOAT: " + word[1]) #checks if value is an expontential value and appends
             else:
                 tokens.append("INTEGER: " + word[1])  #appends integer value
 
