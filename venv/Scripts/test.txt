@@ -1,5 +1,5 @@
 /* test for basic functionality of proj 3 - pass */
-/* test 14 - test param id types */
+/* test 21 - relop expression must return int */
 
 int x;
 int y;
@@ -11,7 +11,7 @@ int my ( float b, int c)
 
 	z = z+c;
 
-	return z+c;
+	return z;
 }
 
 
@@ -25,8 +25,8 @@ void main( int x, int y )
 	if (z < 5)
 	{
 		z=my(q,z);
-
 	}
+	z = 7 < y;
 
 }
 
