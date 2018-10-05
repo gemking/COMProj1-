@@ -9,6 +9,12 @@ keywordchecklist = ["else", "if", "int", "return", "void", "while", "float"]  # 
 
 # our regular expressions for the lexical analyzer
 wordsRegex = "[a-z]+"  # gets all words/ID's
+#comparisonSymbols = "<=|<|>=|>|==|!=" #for comparision
+comparisonSymbols = "<" or "<=" or  ">" or ">=" or "==" or"!="
+addSubtractSymbols = "+" or "-"
+multiplyDivideSymbols = "*" or "/"
+parenthesesSemicolonSymbols = "(" or ";"
+#numberVoidSymbols = "int" or "void" or "float"
 numbersRegex = "[0-9]+(\.[0-9]+)?(E(\+|-)?[0-9]+)?"  # gets all NUM's/float numbers
 symRegex = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]"  # gets all special symbols
 errorRegex = "\S"
@@ -87,7 +93,7 @@ def hasnum(inputstring):
 
 def program():  # 1
     dl()
-    if token[i] == "$":
+    if "$" in token[i]:
         print("ACCEPT")
     else:
         print ("REJECT")
@@ -99,10 +105,10 @@ def dl():  # 2
 
 
 def dlprime():  # 3
-    if token[i] == "int" or token[i] == "void" or token[i] == "float":
+    if "int" in token[i] or "void" in token[i] or "float" in token[i]:
         declaration()
         dlprime()
-    elif token[i] == "$":
+    elif "$" in token[i]:
         return
     else:
         return
@@ -114,16 +120,16 @@ def declaration():  # 4
     x = token[i].isalpha()
     if token[i] not in keywordchecklist and x is True:
         i += 1  # Accept ID
-        if token[i] == ";":
+        if ";" in token[i]:
             i += 1  # Accept ;
-        elif token[i] == "[":
+        elif "[" in token[i]:
             i += 1  # Accept [
             y = hasnum(token[i])
             if y is True:
                 i += 1  # Accept NUM/FLOAT
-                if token[i] == "]":
+                if "]" in token[i]:
                     i += 1  # Accept ]
-                    if token[i] == ";":
+                    if ";" in token[i]:
                         i += 1  # Accept ;
                     else:
                         print("REJECT")
@@ -134,10 +140,11 @@ def declaration():  # 4
             else:
                 print("REJECT")
                 sys.exit(0)
-        elif token[i] == "(":
+        elif "(" in token[i]:
             i += 1  # Accept (
             params()
-            if token[i] == ")":
+
+            if ")" in token[i]:
                 i += 1  # Accept )
                 compoundstmt()
             else:
@@ -162,16 +169,16 @@ def vd():  # 5
         print("REJECT")
         sys.exit(0)
 
-    if token[i] == ";":
+    if ";" in token[i]:
         i += 1  # Accept ;
-    elif token[i] == "[":
+    elif "[" in token[i]:
         i += 1  # Accept [
         x = hasnum(token[i])
         if x is True:
             i += 1  # Accept NUM/FLOAT
-            if token[i] == "]":
+            if "]" in token[i]:
                 i += 1  # Accept ]
-                if token[i] == ";":
+                if ";" in token[i]:
                     i += 1  # Accept ;
                     return
                 else:
@@ -187,10 +194,10 @@ def vd():  # 5
         print("REJECT")
         sys.exit(0)
 
-
+# checking if in keywords messes up program process
 def types():  # 6
     global i
-    if token[i] == "int" or token[i] == "void" or token[i] == "float":
+    if "int" in token[i] or "void" in token[i] or "float" in token[i]:
         i += 1  # Accept int/void/float
     else:
         return
@@ -206,7 +213,7 @@ def fd():  # 7
     else:
         return
 
-    if token[i] == "(":
+    if "(" in token[i]:
         i += 1  # Accept (
     else:
         print()
@@ -214,7 +221,7 @@ def fd():  # 7
 
     params()
 
-    if token[i] == ")":
+    if ")" in token[i]:
         i += 1  # Accept )
     else:
         print("REJECT")
@@ -225,9 +232,9 @@ def fd():  # 7
 
 def params():  # 8
     global i
-    if token[i] == "int" or token[i] == "float":
+    if "int" in token[i] or "float" in token[i]:
         paramslist()
-    elif token[i] == "void":
+    elif "void" in token[i]:
         i += 1  # Accept void
         return
     else:
@@ -242,11 +249,11 @@ def paramslist():  # 9
 
 def paramslistprime():  # 10
     global i
-    if token[i] == ",":
+    if "," in token[i]:
         i += 1  # Accept ,
         param()
         paramslistprime()
-    elif token[i] == ")":
+    elif  ")" in token[i]:
         return
     else:
         return
@@ -260,9 +267,9 @@ def param():  # 11
         i += 1  # Accept ID
     else:
         return
-    if token[i] == "[":
+    if "[" in token[i]:
         i += 1  # Accept [
-        if token[i] == "]":
+        if "]" in token[i]:
             i += 1  # Accept ]
             return
         else:
@@ -274,7 +281,7 @@ def param():  # 11
 
 def compoundstmt():  # 12
     global i
-    if token[i] == "{":
+    if "{" in token[i]:
         i += 1  # Accept {
     else:
         return
@@ -282,7 +289,7 @@ def compoundstmt():  # 12
     localdeclarations()
     statementlist()
 
-    if token[i] == "}":
+    if "}" in token[i]:
         i += 1  # Accept }
     else:
         print("REJECT")
@@ -294,7 +301,7 @@ def localdeclarations():  # 13
 
 
 def localdeclarationsprime():  # 14
-    if token[i] == "int" or token[i] == "void" or token[i] == "float":
+    if "int" in token[i] or "void" in token[i] or "float" in token[i]:
         vd()
         localdeclarationsprime()
     else:
@@ -314,11 +321,10 @@ def statementlistprime():  # 16
     elif y is True:
         statement()
         statementlistprime()
-    elif token[i] == "(" or token[i] == ";" or token[i] == "{" or token[i] == "if" or\
-                     token[i] == "while" or token[i] == "return":
+    elif "(" in token[i] or ";" in token[i] or "{" in token[i] or "if" in token[i] or "while" in token[i] or "return" in token[i]:
         statement()
         statementlistprime()
-    elif token[i] == "}":
+    elif "}" in token[i]:
         return
     else:
         return
@@ -331,15 +337,15 @@ def statement():  # 17
         expstmt()
     elif y is True:
         expstmt()
-    elif token[i] == "(" or token[i] == ";":
+    elif "(" in token[i] or ";" in token[i]:
         expstmt()
-    elif token[i] == "{":
+    elif "{" in token[i]:
         compoundstmt()
-    elif token[i] == "if":
+    elif "if" in token[i]:
         selectionstmt()
-    elif token[i] == "while":
+    elif "while" in token[i]:
         itstmt()
-    elif token[i] == "return":
+    elif "return" in token[i]:
         retstmt()
     else:
         print("REJECT")
@@ -352,26 +358,26 @@ def expstmt():  # 18
     y = hasnum(token[i])
     if token[i] not in keywordchecklist and x is True:
         exp()
-        if token[i] == ";":
+        if ";" in token[i]:
             i += 1  # Accept ;
         else:
             print("REJECT")
             sys.exit(0)
     elif y is True:
         exp()
-        if token[i] == ";":
+        if ";" in token[i]:
             i += 1  # Accept ;
         else:
             print("REJECT")
             sys.exit(0)
-    elif token[i] == "(":
+    elif "(" in token[i]:
         exp()
-        if token[i] == ";":
+        if ";" in token[i]:
             i += 1  # Accept ;
         else:
             print("REJECT")
             sys.exit(0)
-    elif token[i] == ";":
+    elif ";" in token[i]:
         i += 1  # Accept ;
     else:
         print("REJECT")
@@ -380,12 +386,12 @@ def expstmt():  # 18
 
 def selectionstmt():  # 19
     global i
-    if token[i] == "if":
+    if "if" in token[i]:
         i += 1  # Accept if
     else:
         return
 
-    if token[i] == "(":
+    if "(" in token[i]:
         i += 1  # Accept (
     else:
         print("REJECT")
@@ -393,7 +399,7 @@ def selectionstmt():  # 19
 
     exp()
 
-    if token[i] == ")":
+    if ")" in token[i]:
         i += 1  # Accept )
     else:
         print("REJECT")
@@ -401,7 +407,7 @@ def selectionstmt():  # 19
 
     statement()
 
-    if token[i] == "else":
+    if "else" in token[i]:
         i += 1  # Accept else
         statement()
     else:
@@ -410,12 +416,12 @@ def selectionstmt():  # 19
 
 def itstmt():  # 20
     global i
-    if token[i] == "while":
+    if "while" in token[i]:
         i += 1  # Accept while
     else:
         return
 
-    if token[i] == "(":
+    if "(" in token[i]:
         i += 1  # Accept (
     else:
         print("REJECT")
@@ -423,7 +429,7 @@ def itstmt():  # 20
 
     exp()
 
-    if token[i] == ")":
+    if ")" in token[i]:
         i += 1  # Accept )
     else:
         print("REJECT")
@@ -434,19 +440,19 @@ def itstmt():  # 20
 
 def retstmt():  # 21
     global i
-    if token[i] == "return":
+    if "return" in token[i]:
         i += 1  # Accept return
     else:
         return
 
     x = token[i].isalpha()
     y = hasnum(token[i])
-    if token[i] == ";":
+    if ";" in token[i]:
         i += 1  # Accept ;
         return
     elif token[i] not in keywordchecklist and x is True:
         exp()
-        if token[i] == ";":
+        if ";" in token[i]:
             i += 1  # Accept ;
             return
         else:
@@ -454,15 +460,15 @@ def retstmt():  # 21
             sys.exit(0)
     elif y is True:
         exp()
-        if token[i] == ";":
+        if ";" in token[i]:
             i += 1  # Accept ;
             return
         else:
             print("REJECT")
             sys.exit(0)
-    elif token[i] == "(":
+    elif "(" in token[i]:
         exp()
-        if token[i] == ";":
+        if ";" in token[i]:
             i += 1  # Accept ;
             return
         else:
@@ -480,25 +486,22 @@ def exp():  # 22
     if token[i] not in keywordchecklist and x is True:
         i += 1  # Accept ID
         ex()
-    elif token[i] == "(":
+    elif "(" in token[i]:
         i += 1  # Accept (
         exp()
-        if token[i] == ")":
+        if ")" in token[i]:
             i += 1  # Accept )
             termprime()
             addexpprime()
-            if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                           token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+            if comparisonSymbols in token[i]:
                 relop()
                 addexp()
-            elif token[i] == "+" or token[i] == "-":
+            elif addSubtractSymbols in token[i]:
                 addexpprime()
-                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                if comparisonSymbols in token[i]:
                     relop()
                     addexp()
-            elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                             token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+            elif comparisonSymbols in token[i]:
                 relop()
                 addexp()
             else:
@@ -510,18 +513,15 @@ def exp():  # 22
         i += 1  # Accept NUM/FLOAT
         termprime()
         addexpprime()
-        if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                       token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+        if comparisonSymbols in token[i]:
             relop()
             addexp()
-        elif token[i] == "+" or token[i] == "-":
+        elif addSubtractSymbols in token[i]:
             addexpprime()
-            if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                           token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+            if comparisonSymbols in token[i]:
                 relop()
                 addexp()
-        elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                         token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+        elif comparisonSymbols in token[i]:
                 relop()
                 addexp()
         else:
@@ -533,37 +533,34 @@ def exp():  # 22
 
 def ex():  # 22X
     global i
-    if token[i] == "=":
+    if "=" in token[i]:
         i += 1  # Accept =
         exp()
-    elif token[i] == "[":
+    elif "[" in token[i]:
         i += 1  # Accept [
         exp()
-        if token[i-1] == "[":
+        if "[" in token[i-1]:
             print("REJECT")
             sys.exit(0)
-        if token[i] == "]":
+        if "]" in token[i]:
             i += 1  # Accept ]
-            if token[i] == "=":
+            if "=" in token[i]:
                 i += 1  # Accept =
                 exp()
-            elif token[i] == "*" or token[i] == "/":
+            elif multiplyDivideSymbols in token[i]:
                 termprime()
                 addexpprime()
-                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                if comparisonSymbols in token[i]:
                     relop()
                     addexp()
                 else:
                     return
-            elif token[i] == "+" or token[i] == "-":
+            elif addSubtractSymbols in token[i]:
                 addexpprime()
-                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                if comparisonSymbols in token[i]:
                     relop()
                     addexp()
-            elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                             token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+            elif comparisonSymbols in token[i]:
                 relop()
                 addexp()
             else:
@@ -571,28 +568,25 @@ def ex():  # 22X
         else:
             print("REJECT")
             sys.exit(0)
-    elif token[i] == "(":
+    elif "(" in token[i]:
         i += 1  # Accept (
         args()
-        if token[i] == ")":
+        if ")" in token[i]:
             i += 1  # Accept )
-            if token[i] == "*" or token[i] == "/":
+            if multiplyDivideSymbols in token[i]:
                 termprime()
                 addexpprime()
-                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                if comparisonSymbols in token[i]:
                     relop()
                     addexp()
                 else:
                     return
-            elif token[i] == "+" or token[i] == "-":
+            elif addSubtractSymbols in token[i]:
                 addexpprime()
-                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                if comparisonSymbols in token[i]:
                     relop()
                     addexp()
-            elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                             token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+            elif comparisonSymbols in token[i]:
                 relop()
                 addexp()
             else:
@@ -600,25 +594,23 @@ def ex():  # 22X
         else:
             print("REJECT")
             sys.exit(0)
-    elif token[i] == "*" or token[i] == "/":
+    elif multiplyDivideSymbols in token[i]:
         termprime()
         addexpprime()
-        if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                       token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+        if comparisonSymbols in token[i]:
             relop()
             addexp()
         else:
             return
-    elif token[i] == "+" or token[i] == "-":
+        # error begins
+    elif addSubtractSymbols in token[i]:
         addexpprime()
-        if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                       token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+        if comparisonSymbols in token[i]:
             relop()
             addexp()
         else:
             return
-    elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                     token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+    elif comparisonSymbols in token[i]:
         relop()
         addexp()
     else:
@@ -632,10 +624,10 @@ def var():  # 23
         i += 1  # Accept ID
     else:
         return
-    if token[i] == "[":
+    if "[" in token[i]:
         i += 1  # Accept [
         exp()
-        if token[i] == "]":
+        if "]" in token[i]:
             i += 1  # Accept ]
         else:
             print("REJECT")
@@ -646,8 +638,7 @@ def var():  # 23
 
 def simexp():  # 24
     addexp()
-    if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                   token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+    if comparisonSymbols in token[i]:
         relop()
         addexp()
     else:
@@ -656,8 +647,7 @@ def simexp():  # 24
 
 def relop():  # 25
     global i
-    if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                   token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+    if comparisonSymbols in token[i]:
         i += 1  # Accept <=, <, >, >=, ==, or !=
     else:
         return
@@ -669,7 +659,7 @@ def addexp():  # 26
 
 
 def addexpprime():  # 27
-    if token[i] == "+" or token[i] == "-":
+    if addSubtractSymbols in token[i]:
         addop()
         term()
         addexpprime()
@@ -679,7 +669,7 @@ def addexpprime():  # 27
 
 def addop():  # 28
     global i
-    if token[i] == "+" or token[i] == "-":
+    if addSubtractSymbols in token[i]:
         i += 1  # Accept +, -
     else:
         return
@@ -691,7 +681,7 @@ def term():  # 29
 
 
 def termprime():  # 30
-    if token[i] == "*" or token[i] == "/":
+    if multiplyDivideSymbols in token[i]:
         mulop()
         factor()
         termprime()
@@ -701,7 +691,7 @@ def termprime():  # 30
 
 def mulop():  # 31
     global i
-    if token[i] == "*" or token[i] == "/":
+    if multiplyDivideSymbols in token[i]:
         i += 1  # Accept *, /
     else:
         return
@@ -713,17 +703,17 @@ def factor():  # 32
     y = hasnum(token[i])
     if token[i] not in keywordchecklist and x is True:
         i += 1  # Accept ID
-        if token[i] == "[":
+        if "[" in token[i]:
             i += 1  # Accept [
             exp()
-            if token[i] == "]":
+            if "]" in token[i]:
                 i += 1  # Accept ]
             else:
                 return
-        elif token[i] == "(":
+        elif "(" in token[i]:
             i += 1  # Accept (
             args()
-            if token[i] == ")":
+            if ")" in token[i]:
                 i += 1  # Accept )
             else:
                 return
@@ -731,10 +721,10 @@ def factor():  # 32
             return
     elif y is True:
         i += 1  # Accept NUM/FLOAT
-    elif token[i] == "(":
+    elif "(" in token[i]:
         i += 1  # Accept (
         exp()
-        if token[i] == ")":
+        if ")" in token[i]:
             i += 1  # Accept )
         else:
             return
@@ -748,10 +738,10 @@ def call():  # 33
     x = token[i].isalpha()
     if token[i] not in keywordchecklist and x is True:
         i += 1  # Accept ID
-        if token[i] == "(":
+        if "(" in token[i]:
             i += 1  # Accept (
             args()
-            if token[i] == ")":
+            if ")" in token[i]:
                 i += 1  # Accept )
             else:
                 print("REJECT")
@@ -771,9 +761,9 @@ def args():  # 34
         arglist()
     elif y is True:
         arglist()
-    elif token[i] == "(":
+    elif "(" in token[i]:
         arglist()
-    elif token[i] == ")":
+    elif ")" in token[i]:
         return
     else:
         return
@@ -786,11 +776,11 @@ def arglist():  # 35
 
 def arglistprime():  # 36
     global i
-    if token[i] == ",":
+    if "," in token[i]:
         i += 1  # Accept ,
         exp()
         arglistprime()
-    elif token[i] == ")":
+    elif ")" in token[i]:
         return
     else:
         return
