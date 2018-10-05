@@ -1,21 +1,41 @@
-/* test for basic functionality of proj 3 - should pass */
-/* test 2 - 2 methods, scope check on z */
+/* test for basic functionality of proj 3 - pass */
+/* test 14 - test param id types */
 
 int x;
 int y;
 
-void main ( int x, int y )
+
+int my ( float b, int c)
 {
 	int z;
 
+	z = z+c;
+
+	return z+c;
+}
+
+
+void main( int x, int y )
+{
+	float q;
+	int z;
+	x=1;
+	y=2;
 	z = x + y;
+	if (z < 5)
+	{
+		z=my(q,z);
+
+	}
 
 }
 
-int my ( float b, int u)
+int something( int z, int q)
 {
-	int z;
+	int why;
 
-	z = z+y;
-	return z;
+	why = z+q;
+
+	return why;
+
 }
