@@ -12,18 +12,19 @@
     <session id="-691979507">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="17" />
+          <entry key="project.closed" value="19" />
           <entry key="project.open.time.0" value="3" />
           <entry key="project.open.time.1" value="6" />
           <entry key="project.open.time.12" value="1" />
-          <entry key="project.open.time.2" value="3" />
+          <entry key="project.open.time.2" value="4" />
           <entry key="project.open.time.27" value="1" />
           <entry key="project.open.time.28" value="1" />
+          <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.32" value="1" />
           <entry key="project.open.time.48" value="1" />
           <entry key="project.open.time.63" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="19" />
+          <entry key="project.opened" value="21" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -41,14 +42,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="23" />
-          <entry key="py" value="20760" />
+          <entry key="py" value="20932" />
           <entry key="txt" value="126" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="149" />
-          <entry key="Python" value="20759" />
+          <entry key="Python" value="20931" />
           <entry key="RegExp" value="1" />
         </counts>
       </usages-collector>
@@ -59,7 +60,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/lexer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-85">
+            <state relative-caret-position="612">
               <caret line="37" column="23" selection-start-line="37" selection-start-column="23" selection-end-line="37" selection-end-column="23" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
@@ -68,11 +69,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/parser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="528">
-              <caret line="74" lean-forward="true" selection-start-line="74" selection-end-line="74" />
+            <state relative-caret-position="2125">
+              <caret line="125" column="18" lean-forward="true" selection-start-line="125" selection-start-column="18" selection-end-line="125" selection-end-column="18" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -80,16 +81,16 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermod1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="357">
-              <caret line="85" column="12" selection-start-line="85" selection-end-line="791" selection-end-column="9" />
+            <state relative-caret-position="301">
+              <caret line="748" column="13" selection-start-line="746" selection-start-column="18" selection-end-line="748" selection-end-column="13" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-                <marker date="1539470530617" expanded="true" signature="7881:7915" ph="..." />
-                <marker date="1539470530617" expanded="true" signature="16043:16049" ph="..." />
-                <marker date="1539470530617" expanded="true" signature="16043:16050" ph="..." />
+                <marker date="1539905582971" expanded="true" signature="7856:7890" ph="..." />
+                <marker date="1539905582971" expanded="true" signature="15985:15991" ph="..." />
+                <marker date="1539905582971" expanded="true" signature="15985:15992" ph="..." />
               </folding>
             </state>
           </provider>
@@ -98,8 +99,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/OGparser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="26" column="15" lean-forward="true" selection-start-line="26" selection-start-column="15" selection-end-line="26" selection-end-column="15" />
+            <state relative-caret-position="119">
+              <caret line="7" column="28" lean-forward="true" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -111,7 +112,7 @@
         <entry file="file://$PROJECT_DIR$/venv/Scripts/ParserGit.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1360">
-              <caret line="81" column="17" lean-forward="true" selection-start-line="81" selection-start-column="17" selection-end-line="81" selection-end-column="17" />
+              <caret line="81" column="17" selection-start-line="81" selection-start-column="17" selection-end-line="81" selection-end-column="17" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -157,16 +158,15 @@
         <option value="$PROJECT_DIR$/venv/Scripts/ParserGit.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/test.txt" />
         <option value="$PROJECT_DIR$/venv/Scripts/OGparser.py" />
-        <option value="$PROJECT_DIR$/venv/Scripts/parsermod1.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/parser.py" />
+        <option value="$PROJECT_DIR$/venv/Scripts/parsermod1.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="19" />
-    <option name="y" value="99" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="428" />
     <option name="width" value="1397" />
-    <option name="height" value="1100" />
+    <option name="height" value="1085" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -174,6 +174,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -211,11 +212,10 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="SearchEverywhereHistoryKey" value="addex&#9;null&#9;null&#10;retstm&#9;null&#9;null&#10;lex.py&#9;FILE&#9;file://C:/Users/Luis/PycharmProjects/Proj1/venv/Scripts/lexer.py&#10;test.txt&#9;FILE&#9;file://C:/Users/Luis/PycharmProjects/Proj1/test.txt" />
+    <property name="SearchEverywhereHistoryKey" value="checker1&#9;null&#9;null&#10;addex&#9;null&#9;null&#10;retstm&#9;null&#9;null&#10;lex.py&#9;FILE&#9;file://C:/Users/Luis/PycharmProjects/Proj1/venv/Scripts/lexer.py&#10;test.txt&#9;FILE&#9;file://C:/Users/Luis/PycharmProjects/Proj1/test.txt" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -234,7 +234,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.parser">
+  <component name="RunManager" selected="Python.parsermod1">
     <configuration name="OGparser" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Proj1" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -371,9 +371,9 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.lexer" />
         <item itemvalue="Python.parsermod1" />
         <item itemvalue="Python.OGparser" />
+        <item itemvalue="Python.lexer" />
         <item itemvalue="Python.ParserGit" />
         <item itemvalue="Python.main" />
       </list>
@@ -402,15 +402,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="428" y="0" width="1397" height="1085" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4990403" visible="true" weight="0.2186512" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4990403" visible="true" weight="0.21854305" />
       <window_info id="Structure" order="1" sideWeight="0.5009597" side_tool="true" weight="0.24908425" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2646421" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.26708728" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.36749482" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -452,6 +452,11 @@
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/venv/Scripts/main.py</url>
           <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/venv/Scripts/parsermod1.py</url>
+          <line>26</line>
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -514,10 +519,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/lexer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="612">
+          <caret line="37" column="23" selection-start-line="37" selection-start-column="23" selection-end-line="37" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/ParserGit.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1360">
-          <caret line="81" column="17" lean-forward="true" selection-start-line="81" selection-start-column="17" selection-end-line="81" selection-end-column="17" />
+          <caret line="81" column="17" selection-start-line="81" selection-start-column="17" selection-end-line="81" selection-end-column="17" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
@@ -531,45 +546,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/OGparser.py">
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/parser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="26" column="15" lean-forward="true" selection-start-line="26" selection-start-column="15" selection-end-line="26" selection-end-column="15" />
+        <state relative-caret-position="2125">
+          <caret line="125" column="18" lean-forward="true" selection-start-line="125" selection-start-column="18" selection-end-line="125" selection-end-column="18" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/lexer.py">
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/OGparser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-85">
-          <caret line="37" column="23" selection-start-line="37" selection-start-column="23" selection-end-line="37" selection-end-column="23" />
+        <state relative-caret-position="119">
+          <caret line="7" column="28" lean-forward="true" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermod1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="357">
-          <caret line="85" column="12" selection-start-line="85" selection-end-line="791" selection-end-column="9" />
+        <state relative-caret-position="301">
+          <caret line="748" column="13" selection-start-line="746" selection-start-column="18" selection-end-line="748" selection-end-column="13" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <marker date="1539470530617" expanded="true" signature="7881:7915" ph="..." />
-            <marker date="1539470530617" expanded="true" signature="16043:16049" ph="..." />
-            <marker date="1539470530617" expanded="true" signature="16043:16050" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/parser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="528">
-          <caret line="74" lean-forward="true" selection-start-line="74" selection-end-line="74" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <marker date="1539905582971" expanded="true" signature="7856:7890" ph="..." />
+            <marker date="1539905582971" expanded="true" signature="15985:15991" ph="..." />
+            <marker date="1539905582971" expanded="true" signature="15985:15992" ph="..." />
           </folding>
         </state>
       </provider>

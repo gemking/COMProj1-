@@ -146,7 +146,7 @@ def declaration():  # 4
         sys.exit(0)
 
 
-def checker1():  # 5
+def variableDeclaration():  # 5
     global i
     types()
 

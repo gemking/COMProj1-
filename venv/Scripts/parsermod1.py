@@ -5,18 +5,19 @@ f = open(sys.argv[1], "r")  # open file and read contents into a list (without "
 filelines = f.read().splitlines()
 f.close()
 
-keywordchecklist = ["else", "if", "int", "return", "void", "while", "float"]  # list of all keywords
-
+keywords = ["if", "else", "while", "int", "float", "void", "return"] #denotes all keywords
+symbols = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]" #denotes symbols used
 # our regular expressions for the lexical analyzer
-wordsRegex = "[a-z]+"  # gets all words/ID's
+characters = "[a-z]+"  # gets all words/ID's
 #comparisonSymbols = "<=|<|>=|>|==|!=" #for comparision
 comparisonSymbols = "<" or "<=" or  ">" or ">=" or "==" or"!="
 addSubtractSymbols = "+" or "-"
 multiplyDivideSymbols = "*" or "/"
 #numberVoidSymbols = "int" or "void" or "float"
-numbersRegex = "[0-9]+(\.[0-9]+)?(E(\+|-)?[0-9]+)?"  # gets all NUM's/float numbers
-symRegex = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]"  # gets all special symbols
-errorRegex = "\S"
+
+characters = "[a-zA-Z]+" #obtains all words for the IDs
+digits = "[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?" #gets all decimal values, including integer values 0-9
+errors = "\S" #reports errors
 
 incomment = 0  # check to see if in comment
 token = []  # create List to hold all tokens
@@ -32,13 +33,11 @@ for flines in filelines:
     # if fline:
         # print "INPUT: " + fline  # print the input line, while also getting rid of blank lines
 
-    regex = "(%s)|(%s)|(%s)|(%s)" % (wordsRegex, numbersRegex, symRegex, errorRegex)
-    '([a-z]+)|([0-9]+(\.[0-9]+)?(E(\+|-)?[0-9]+)?)|'
-    '("\/\*|\*\/|\+|-|\*|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]|//")|(\S)'
+    list = "(%s)|(%s)|(%s)|(%s)" % (characters, digits, symbols, errors)  # puts entire library into a list of strings
 
-    for t in re.findall(regex, fline):
+    for t in re.findall(list, fline):
         if t[0] and incomment == 0:
-            if t[0] in keywordchecklist:
+            if t[0] in keywords:
                 token.append(t[0])
                 # print "keyword:", t[0]
             else:
@@ -54,15 +53,15 @@ for flines in filelines:
             else:
                 # print "NUM:", t[1]
                 token.append(t[1])
-        elif t[5]:
-            if t[5] == "/*":
+        elif t[3]:
+            if t[3] == "/*":
                 incomment = incomment + 1
-            elif t[5] == "*/" and incomment > 0:
+            elif t[3] == "*/" and incomment > 0:
                 incomment = incomment - 1
-            elif t[5] == "//" and incomment == 0:
+            elif t[3] == "//" and incomment == 0:
                 break
             elif incomment == 0:
-                if t[5] == "*/":
+                if t[3] == "*/":
                     if "*/*" in fline:
                         # print "*"
                         token.append("*")
@@ -75,10 +74,10 @@ for flines in filelines:
                         token.append("/")
                 else:
                     # print t[5]
-                    token.append(t[5])
-        elif t[6] and incomment == 0:
+                    token.append(t[3])
+        elif t[4] and incomment == 0:
             # print "ERROR:", t[6]
-            token.append(t[6])
+            token.append(t[4])
 # ------------ end of for loop for the file and getting tokens --------------------------- #
 
 token.append("$")  # add to end to check if done parsing
@@ -117,7 +116,7 @@ def declaration():  # 4
     global i
     types()
     x = token[i].isalpha()
-    if token[i] not in keywordchecklist and x is True:
+    if token[i] not in keywords and x is True:
         i += 1  # Accept ID
         if ";" in token[i]:
             i += 1  # Accept ;
@@ -157,12 +156,12 @@ def declaration():  # 4
         sys.exit(0)
 
 
-def checker1():  # 5
+def variableDeclaration():  # 5
     global i
     types()
 
     x = token[i].isalpha()
-    if token[i] not in keywordchecklist and x is True:
+    if token[i] not in keywords and x is True:
         i += 1  # Accept ID
     else:
         print("REJECT")
@@ -202,7 +201,7 @@ def types():  # 6
         return
 
 
-def checker2():  # 7
+def functionDeclaration():  # 7
     global i
     types()
 
@@ -232,7 +231,7 @@ def parameter():
     global i
     types()
     x = token[i].isalpha()
-    if token[i] not in keywordchecklist and x is True:
+    if token[i] not in keywords and x is True:
         i += 1  # Accept ID
     else:
         return
@@ -302,7 +301,7 @@ def localDeclarations():  # 13
 
 def localDeclarationsPrime():  # 14
     if "int" in token[i] or "void" in token[i] or "float" in token[i]:
-        checker1()
+        variableDeclaration()
         localDeclarationsPrime()
     else:
         return
@@ -315,7 +314,7 @@ def statementList():  # 15
 def statementListPrime():  # 16
     x = token[i].isalpha()
     y = hasnum(token[i])
-    if token[i] not in keywordchecklist and x is True:
+    if token[i] not in keywords and x is True:
         statement()
         statementListPrime()
     elif y is True:
@@ -333,7 +332,7 @@ def statementListPrime():  # 16
 def statement():  # 17
     x = token[i].isalpha()
     y = hasnum(token[i])
-    if token[i] not in keywordchecklist and x is True:
+    if token[i] not in keywords and x is True:
         expressionStatement()
     elif y is True:
         expressionStatement()
@@ -356,7 +355,7 @@ def expressionStatement():  # 18
     global i
     x = token[i].isalpha()
     y = hasnum(token[i])
-    if token[i] not in keywordchecklist and x is True:
+    if token[i] not in keywords and x is True:
         expression()
         if ";" in token[i]:
             i += 1  # Accept ;
@@ -414,7 +413,7 @@ def selectionStatement():  # 19
         return
 
 
-def itStatement():  # 20
+def iterationStatement():  # 20
     global i
     if "while" in token[i]:
         i += 1  # Accept while
@@ -450,7 +449,7 @@ def returnStatement():  # 21
     if ";" in token[i]:
         i += 1  # Accept ;
         return
-    elif token[i] not in keywordchecklist and x is True:
+    elif token[i] not in keywords and x is True:
         expression()
         if ";" in token[i]:
             i += 1  # Accept ;
@@ -483,7 +482,7 @@ def expression():  # 22
     global i
     x = token[i].isalpha()
     y = hasnum(token[i])
-    if token[i] not in keywordchecklist and x is True:
+    if token[i] not in keywords and x is True:
         i += 1  # Accept ID
         moreExpressions()
     elif "(" in token[i]:
@@ -701,7 +700,7 @@ def factor():  # 32
     global i
     x = token[i].isalpha()
     y = hasnum(token[i])
-    if token[i] not in keywordchecklist and x is True:
+    if token[i] not in keywords and x is True:
         i += 1  # Accept ID
         if "[" in token[i]:
             i += 1  # Accept [
@@ -757,7 +756,7 @@ def arguments():  # 34
     global i
     x = token[i].isalpha()
     y = hasnum(token[i])
-    if token[i] not in keywordchecklist and x is True:
+    if token[i] not in keywords and x is True:
         argumentsList()
     elif y is True:
         argumentsList()
