@@ -8,7 +8,7 @@ f.close()
 keywords = ["if", "else", "while", "int", "float", "void", "return"] #denotes all keywords
 symbols = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]" #denotes symbols used
 # our regular expressions for the lexical analyzer
-characters = "[a-z]+"  # gets all words/ID's
+characters = "[a-zA-Z]+" #obtains all words for the IDs
 #comparisonSymbols = "<=|<|>=|>|==|!=" #for comparision
 comparisonSymbols = "<" or "<=" or  ">" or ">=" or "==" or"!="
 addSubtractSymbols = "+" or "-"
@@ -19,15 +19,15 @@ characters = "[a-zA-Z]+" #obtains all words for the IDs
 digits = "[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?" #gets all decimal values, including integer values 0-9
 errors = "\S" #reports errors
 
-incomment = 0  # check to see if in comment
+insideComment = 0  # check to see if in comment
 token = []  # create List to hold all tokens
 i = 0  # token counter for parser
 
-# ------------------Begin going through the file and getting tokens----------------------- #
-for flines in filelines:
-    fline = flines
+for importantLines in filelines: #receiving importantlines from filelines
+    importantLine = importantLines #sets importantLine to importantLines
 
-    if not fline:
+
+    if not importantLine:
         continue
     # print  # extra line to separate input lines
     # if fline:
@@ -35,49 +35,43 @@ for flines in filelines:
 
     list = "(%s)|(%s)|(%s)|(%s)" % (characters, digits, symbols, errors)  # puts entire library into a list of strings
 
-    for t in re.findall(list, fline):
-        if t[0] and incomment == 0:
-            if t[0] in keywords:
-                token.append(t[0])
-                # print "keyword:", t[0]
+    for word in re.findall(list, importantLine):
+        if re.match(characters, word[0]) and insideComment == 0:
+            if word[0] in keywords:
+                token.append(word[0]) #keyword is constructed out of characters a-zA-Z
             else:
-                # print "ID:", t[0]
-                token.append(t[0])
-        elif t[1] and incomment == 0:
-            if "." in t[1]:
-                # print "FLOAT:", t[1]
-                token.append(t[1])
-            elif "E" in t[1]:
-                # print "FLOAT:", t[1]
-                token.append(t[1])
+                token.append(word[0]) #appends character values that are not keywords
+
+
+
+
+        elif re.match(digits,word[1]) and insideComment == 0:
+            if "." in word[1]:
+                token.append(word[1]) #checks if value is a decimal value and appends
+            elif "E" in word[1]:
+                token.append(word[1]) #checks if value is an expontential value and appends
             else:
-                # print "NUM:", t[1]
-                token.append(t[1])
-        elif t[3]:
-            if t[3] == "/*":
-                incomment = incomment + 1
-            elif t[3] == "*/" and incomment > 0:
-                incomment = incomment - 1
-            elif t[3] == "//" and incomment == 0:
+                token.append(word[1]) #appends integer value
+        elif re.match(symbols, word[3]):  # matches symbols
+            if "/*" in word[3]:  # Checks when word approaches /*
+                insideComment += 1  # increments insideComment if inside
+            elif "*/" in word[3] and insideComment > 0:  # Checks when word approaches */
+                insideComment -= 1  # decrements insideComment if outside
+            elif "//" in word[3] and insideComment > 0:  # If neither
                 break
-            elif incomment == 0:
-                if t[3] == "*/":
-                    if "*/*" in fline:
-                        # print "*"
+            elif insideComment == 0:  # when inside counter is 0
+                if "*/" in word[3]:  # when it reaches terminal */
+                    if "*/*" in word:  # when it's still sorting through comments
                         token.append("*")
-                        incomment += 1
-                        continue
+                        insideComment += 1
+                        continue  # skips comments and continues through the program
                     else:
-                        # print "*"
-                        token.append("*")
-                        # print "/"
-                        token.append("/")
+                        token.append("*")  # appends multiplication symbol
+                        token.append("/")  # appends division symbol
                 else:
-                    # print t[5]
-                    token.append(t[3])
-        elif t[4] and incomment == 0:
-            # print "ERROR:", t[6]
-            token.append(t[4])
+                    token.append(word[3])  # appends rest of symbols
+        elif word[4] and insideComment == 0:  # matches errors and makes sure insideComment is 0
+            token.append(word[4])  # appends error
 # ------------ end of for loop for the file and getting tokens --------------------------- #
 
 token.append("$")  # add to end to check if done parsing
