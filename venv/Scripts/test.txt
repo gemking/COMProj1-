@@ -1,41 +1,5 @@
-/* test for basic functionality of proj 3 - pass */
-/* test 21 - relop expression must return int */
-
-int x;
-int y;
-
-
-int my ( float b, int c)
-{
-	int z;
-
-	z = z+c;
-
-	return z;
-}
-
-
-void main( int x, int y )
-{
-	float q;
-	int z;
-	x=1;
-	y=2;
-	z = x + y;
-	if (z < 5)
-	{
-		z=my(q,z);
-	}
-	z = 7 < y;
-
-}
-
-int something( int z, int q)
-{
-	int why;
-
-	why = z+q;
-
-	return why;
-
+int gcd(int u, int v){
+    if (v == 0) return u;
+    else return gcd(v,u-u/v*v);
+    /* u-u/v*v == u mod v */
 }

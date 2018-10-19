@@ -44,26 +44,31 @@ for importantLines in filelines: #receiving importantlines from filelines
                 token.append(word[1]) #checks if value is an expontential value and appends
             else:
                 token.append(word[1]) #appends integer value
-        elif re.match(symbols, word[3]):  # matches symbols
-            if "/*" in word[3]:  # Checks when word approaches /*
-                insideComment += 1  # increments insideComment if inside
-            elif "*/" in word[3] and insideComment > 0:  # Checks when word approaches */
-                insideComment -= 1  # decrements insideComment if outside
-            elif "//" in word[3] and insideComment > 0:  # If neither
+        elif word[3]:
+            if "/*" in word[3]:
+                insideComment = insideComment + 1
+            elif "*/" in word[3] and insideComment > 0:
+                insideComment = insideComment - 1
+            elif "//" in word[3] and insideComment == 0:
                 break
-            elif insideComment == 0:  # when inside counter is 0
-                if "*/" in word[3]:  # when it reaches terminal */
-                    if "*/*" in word:  # when it's still sorting through comments
+            elif insideComment == 0:
+                if "*/" in word[3]:
+                    if "*/*" in importantLine:
+                        # print "*"
                         token.append("*")
                         insideComment += 1
-                        continue  # skips comments and continues through the program
+                        continue
                     else:
-                        token.append("*")  # appends multiplication symbol
-                        token.append("/")  # appends division symbol
+                        # print "*"
+                        token.append("*")
+                        # print "/"
+                        token.append("/")
                 else:
-                    token.append(word[3])  # appends rest of symbols
-        elif word[4] and insideComment == 0:  # matches errors and makes sure insideComment is 0
-            token.append(word[4])  # appends error
+                    # print t[5]
+                    token.append(word[3])
+        elif word[3] and insideComment == 0:
+            # print "ERROR:", t[6]
+            token.append(word[4])
 # ------------ end of for loop for the file and getting tokens --------------------------- #
 
 token.append("$")  # add to end to check if done parsing
