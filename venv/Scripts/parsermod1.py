@@ -1,27 +1,22 @@
 import sys
 import re
 
-f = open(sys.argv[1], "r")  # open file and read contents into a list (without "\n")
-filelines = f.read().splitlines()
-f.close()
+with open(sys.argv[1], "r") as file: #opens file
+    filelines = file.read().splitlines() # reads file and splits lines
+    file.close() #closes file
 
+
+insideComment = 0
 keywords = ["if", "else", "while", "int", "float", "void", "return"] #denotes all keywords
 symbols = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]" #denotes symbols used
-# our regular expressions for the lexical analyzer
-characters = "[a-zA-Z]+" #obtains all words for the IDs
-#comparisonSymbols = "<=|<|>=|>|==|!=" #for comparision
-comparisonSymbols = "<" or "<=" or  ">" or ">=" or "==" or"!="
-addSubtractSymbols = "+" or "-"
-multiplyDivideSymbols = "*" or "/"
-#numberVoidSymbols = "int" or "void" or "float"
-
+comparisonSymbols = "<" or "<=" or  ">" or ">=" or "==" or"!=" #holds relational operations
+addSubtractSymbols = "+" or "-" #holds addition and subtraction operations
+multiplyDivideSymbols = "*" or "/" #holds multiplication and division operations
 characters = "[a-zA-Z]+" #obtains all words for the IDs
 digits = "[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?" #gets all decimal values, including integer values 0-9
 errors = "\S" #reports errors
-
-insideComment = 0  # check to see if in comment
-token = []  # create List to hold all tokens
-x = 0  # token counter for parser
+token = []  # creates a list that holds all of the tokens
+x = 0  #value that holds the token counter for the parser
 
 for importantLines in filelines: #receiving importantlines from filelines
     importantLine = importantLines #sets importantLine to importantLines
@@ -29,14 +24,11 @@ for importantLines in filelines: #receiving importantlines from filelines
 
     if not importantLine:
         continue
-    # print  # extra line to separate input lines
-    # if fline:
-        # print "INPUT: " + fline  # print the input line, while also getting rid of blank lines
 
     list = "(%s)|(%s)|(%s)|(%s)" % (characters, digits, symbols, errors)  # puts entire library into a list of strings
 
-    for word in re.findall(list, importantLine):
-        if re.match(characters, word[0]) and insideComment == 0:
+    for word in re.findall(list, importantLine): #finds list
+        if re.match(characters, word[0]) and insideComment == 0: #matches digits and makes sure insideComment is 0
             if word[0] in keywords:
                 token.append(word[0]) #keyword is constructed out of characters a-zA-Z
             else:
@@ -125,13 +117,13 @@ def declaration():  # 4
                         x += 1  # Accept ;
                     else:
                         print("REJECT")
-                        sys.exit(0)
+                        exit(0)
                 else:
                     print("REJECT")
-                    sys.exit(0)
+                    exit(0)
             else:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
         elif "(" in token[x]:
             x += 1  # Accept (
             parameters()
@@ -141,13 +133,13 @@ def declaration():  # 4
                 compoundStatement()
             else:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def variableDeclaration():  # 5
@@ -159,7 +151,7 @@ def variableDeclaration():  # 5
         x += 1  # Accept ID
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
     if ";" in token[x]:
         x += 1  # Accept ;
@@ -175,16 +167,16 @@ def variableDeclaration():  # 5
                     return
                 else:
                     print("REJECT")
-                    sys.exit(0)
+                    exit(0)
             else:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 # checking if in keywords messes up program process
 def types():  # 6
@@ -195,7 +187,7 @@ def types():  # 6
         return
 
 
-def functionDeclaration():  # 7
+def variableDeclarationPrime():  # 7
     global x
     types()
 
@@ -209,7 +201,7 @@ def functionDeclaration():  # 7
         x += 1  # Accept (
     else:
         print()
-        sys.exit(0)
+        exit(0)
 
     parameters()
 
@@ -217,7 +209,7 @@ def functionDeclaration():  # 7
         x += 1  # Accept )
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
     compoundStatement()
 
@@ -236,7 +228,7 @@ def parameter():
             return
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     else:
         return
 
@@ -249,7 +241,7 @@ def parameters():  # 8
         return
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def parametersList():  # 9
@@ -286,7 +278,7 @@ def compoundStatement():  # 12
         x += 1  # Accept }
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def localDeclarations():  # 13
@@ -342,7 +334,7 @@ def statement():  # 17
         returnStatement()
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def expressionStatement():  # 18
@@ -355,26 +347,26 @@ def expressionStatement():  # 18
             x += 1  # Accept ;
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif z is True:
         expression()
         if ";" in token[x]:
             x += 1  # Accept ;
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif "(" in token[x]:
         expression()
         if ";" in token[x]:
             x += 1  # Accept ;
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif ";" in token[x]:
         x += 1  # Accept ;
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def selectionStatement():  # 19
@@ -388,7 +380,7 @@ def selectionStatement():  # 19
         x += 1  # Accept (
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
     expression()
 
@@ -396,7 +388,7 @@ def selectionStatement():  # 19
         x += 1  # Accept )
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
     statement()
 
@@ -418,7 +410,7 @@ def iterationStatement():  # 20
         x += 1  # Accept (
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
     expression()
 
@@ -426,7 +418,7 @@ def iterationStatement():  # 20
         x += 1  # Accept )
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
     statement()
 
@@ -450,7 +442,7 @@ def returnStatement():  # 21
             return
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif z  is True:
         expression()
         if ";" in token[x]:
@@ -458,7 +450,7 @@ def returnStatement():  # 21
             return
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif "(" in token[x]:
         expression()
         if ";" in token[x]:
@@ -466,10 +458,10 @@ def returnStatement():  # 21
             return
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def expression():  # 22
@@ -501,7 +493,7 @@ def expression():  # 22
                 return
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif z is True:
         x += 1  # Accept NUM/FLOAT
         termPrime()
@@ -521,7 +513,7 @@ def expression():  # 22
             return
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def moreExpressions():  # 22X
@@ -534,7 +526,7 @@ def moreExpressions():  # 22X
         expression()
         if "[" in token[x-1]:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
         if "]" in token[x]:
             x += 1  # Accept ]
             if "=" in token[x]:
@@ -560,7 +552,7 @@ def moreExpressions():  # 22X
                 return
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif "(" in token[x]:
         x += 1  # Accept (
         arguments()
@@ -586,7 +578,7 @@ def moreExpressions():  # 22X
                 return
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif multiplyDivideSymbols in token[x]:
         termPrime()
         addExpressionPrime()
@@ -624,7 +616,7 @@ def variable():  # 23
             x += 1  # Accept ]
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     else:
         return
 
@@ -723,7 +715,7 @@ def factor():  # 32
             return
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def call():  # 33
@@ -738,10 +730,10 @@ def call():  # 33
                 x += 1  # Accept )
             else:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     else:
         return
 
