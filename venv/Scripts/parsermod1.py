@@ -100,7 +100,7 @@ def dollarOnePrime():  # 3
 
 def declaration():  # 4
     global x
-    types()
+    typeSpecifier()
     w = token[x].isalpha()
     if token[x] not in keywords and w is True:
         x += 1  # Accept ID
@@ -141,10 +141,35 @@ def declaration():  # 4
         print("REJECT")
         exit(0)
 
+def declarationPrime():  # 5
+    global x
+    types()
+    #variableDeclaration()
+    w = token[x].isalpha()
+    if token[x] not in keywordchecklist and w is True:
+        x += 1  # Accept ID
+    else:
+        return
+
+    if "(" in token[x]:
+        x += 1  # Accept (
+    else:
+        print()
+        exit(0)
+
+    parameters()
+
+    if ")" in token[x]:
+        x += 1  # Accept )
+    else:
+        print("REJECT")
+        exit(0)
+
+    compoundStatement()
 
 def variableDeclaration():  # 5
     global x
-    types()
+    typeSpecifier()
 
     w = token[x].isalpha()
     if token[x] not in keywords and w is True:
@@ -179,7 +204,7 @@ def variableDeclaration():  # 5
         exit(0)
 
 # checking if in keywords messes up program process
-def types():  # 6
+def typeSpecifier():  # 6
     global x
     if "int" in token[x] or "void" in token[x] or "float" in token[x]:
         x += 1  # Accept int/void/float
@@ -187,35 +212,10 @@ def types():  # 6
         return
 
 
-def variableDeclarationPrime():  # 7
-    global x
-    types()
-
-    w = token[x].isalpha()
-    if token[x] not in keywordchecklist and w is True:
-        x += 1  # Accept ID
-    else:
-        return
-
-    if "(" in token[x]:
-        x += 1  # Accept (
-    else:
-        print()
-        exit(0)
-
-    parameters()
-
-    if ")" in token[x]:
-        x += 1  # Accept )
-    else:
-        print("REJECT")
-        exit(0)
-
-    compoundStatement()
 
 def parameter():
     global x
-    types()
+    typeSpecifier()
     w = token[x].isalpha()
     if token[x] not in keywords and w is True:
         x += 1  # Accept ID
@@ -329,7 +329,7 @@ def statement():  # 17
     elif "if" in token[x]:
         selectionStatement()
     elif "while" in token[x]:
-        itStatement()
+        iterationStatement()
     elif "return" in token[x]:
         returnStatement()
     else:
