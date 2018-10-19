@@ -159,7 +159,7 @@ def declarationPrime():  # 5
     if "(" in token[x]:
         x += 1  # Accept (
     else:
-        print()
+        print("REJECT")
         exit(0)
 
     parameters()
@@ -347,21 +347,21 @@ def expressionStatement():  # 18
     w = token[x].isalpha()
     z = hasnum(token[x])
     if token[x] not in keywords and w is True:
-        expression()
+        expressionPrime()
         if ";" in token[x]:
             x += 1  # Accept ;
         else:
             print("REJECT")
             exit(0)
     elif z is True:
-        expression()
+        expressionPrime()
         if ";" in token[x]:
             x += 1  # Accept ;
         else:
             print("REJECT")
             exit(0)
     elif "(" in token[x]:
-        expression()
+        expressionPrime()
         if ";" in token[x]:
             x += 1  # Accept ;
         else:
@@ -387,7 +387,7 @@ def selectionStatement():  # 19
         print("REJECT")
         exit(0)
 
-    expression()
+    expressionPrime()
 
     if ")" in token[x]:
         x += 1  # Accept )
@@ -417,7 +417,7 @@ def iterationStatement():  # 20
         print("REJECT")
         exit(0)
 
-    expression()
+    expressionPrime()
 
     if ")" in token[x]:
         x += 1  # Accept )
@@ -441,7 +441,7 @@ def returnStatement():  # 21
         x += 1  # Accept ;
         return
     elif token[x] not in keywords and w is True:
-        expression()
+        expressionPrime()
         if ";" in token[x]:
             x += 1  # Accept ;
             return
@@ -449,7 +449,7 @@ def returnStatement():  # 21
             print("REJECT")
             exit(0)
     elif z  is True:
-        expression()
+        expressionPrime()
         if ";" in token[x]:
             x += 1  # Accept ;
             return
@@ -457,7 +457,7 @@ def returnStatement():  # 21
             print("REJECT")
             exit(0)
     elif "(" in token[x]:
-        expression()
+        expressionPrime()
         if ";" in token[x]:
             x += 1  # Accept ;
             return
@@ -469,16 +469,16 @@ def returnStatement():  # 21
         exit(0)
 
 
-def expression():  # 22
+def expressionPrime():  # 22
     global x
     w = token[x].isalpha()
     z = hasnum(token[x])
     if token[x] not in keywords and w is True:
         x += 1  # Accept ID
-        moreExpressions()
+        expression()
     elif "(" in token[x]:
         x += 1  # Accept (
-        expression()
+        expressionPrime()
         if ")" in token[x]:
             x += 1  # Accept )
             termPrime()
@@ -521,14 +521,14 @@ def expression():  # 22
         exit(0)
 
 
-def moreExpressions():  # 22X
+def expression():  # 22X
     global x
     if "=" in token[x]:
         x += 1  # Accept =
-        expression()
+        expressionPrime()
     elif "[" in token[x]:
         x += 1  # Accept [
-        expression()
+        expressionPrime()
         if "[" in token[x-1]:
             print("REJECT")
             exit(0)
@@ -536,7 +536,7 @@ def moreExpressions():  # 22X
             x += 1  # Accept ]
             if "=" in token[x]:
                 x += 1  # Accept =
-                expression()
+                expressionPrime()
             elif multiplyDivideSymbols in token[x]:
                 termPrime()
                 addExpressionPrime()
@@ -610,13 +610,13 @@ def moreExpressions():  # 22X
 def variable():  # 23
     global x
     w = token[x].isalpha()
-    if token[x] not in keywordchecklist and w is True:
+    if token[x] not in keywords and w is True:
         x += 1  # Accept ID
     else:
         return
     if "[" in token[x]:
         x += 1  # Accept [
-        expression()
+        expressionPrime()
         if "]" in token[x]:
             x += 1  # Accept ]
         else:
@@ -626,7 +626,7 @@ def variable():  # 23
         return
 
 
-def simplifyExpression():  # 24
+def simpleExpression():  # 24
     addExpression()
     if comparisonSymbols in token[x]:
         comparisonOperation()
@@ -695,7 +695,7 @@ def factor():  # 32
         x += 1  # Accept ID
         if "[" in token[x]:
             x += 1  # Accept [
-            expression()
+            expressionPrime()
             if "]" in token[x]:
                 x += 1  # Accept ]
             else:
@@ -713,7 +713,7 @@ def factor():  # 32
         x += 1  # Accept NUM/FLOAT
     elif "(" in token[x]:
         x += 1  # Accept (
-        expression()
+        expressionPrime()
         if ")" in token[x]:
             x += 1  # Accept )
         else:
@@ -760,7 +760,7 @@ def arguments():  # 34
 
 
 def argumentsList():  # 35
-    expression()
+    expressionPrime()
     argumentslistPrime()
 
 
@@ -768,7 +768,7 @@ def argumentslistPrime():  # 36
     global x
     if "," in token[x]:
         x += 1  # Accept ,
-        expression()
+        expressionPrime()
         argumentslistPrime()
     elif ")" in token[x]:
         return
