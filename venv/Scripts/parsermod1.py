@@ -21,7 +21,7 @@ errors = "\S" #reports errors
 
 insideComment = 0  # check to see if in comment
 token = []  # create List to hold all tokens
-i = 0  # token counter for parser
+x = 0  # token counter for parser
 
 for importantLines in filelines: #receiving importantlines from filelines
     importantLine = importantLines #sets importantLine to importantLines
@@ -85,7 +85,7 @@ def hasnum(inputstring):
 
 def program():  # 1
     dollarOne()
-    if "$" in token[i]:
+    if "$" in token[x]:
         print("ACCEPT")
     else:
         print ("REJECT")
@@ -97,32 +97,32 @@ def dollarOne():  # 2
 
 
 def dollarOnePrime():  # 3
-    if "int" in token[i] or "void" in token[i] or "float" in token[i]:
+    if "int" in token[x] or "void" in token[x] or "float" in token[x]:
         declaration()
         dollarOnePrime()
-    elif "$" in token[i]:
+    elif "$" in token[x]:
         return
     else:
         return
 
 
 def declaration():  # 4
-    global i
+    global x
     types()
-    x = token[i].isalpha()
-    if token[i] not in keywords and x is True:
-        i += 1  # Accept ID
-        if ";" in token[i]:
-            i += 1  # Accept ;
-        elif "[" in token[i]:
-            i += 1  # Accept [
-            y = hasnum(token[i])
-            if y is True:
-                i += 1  # Accept NUM/FLOAT
-                if "]" in token[i]:
-                    i += 1  # Accept ]
-                    if ";" in token[i]:
-                        i += 1  # Accept ;
+    w = token[x].isalpha()
+    if token[x] not in keywords and w is True:
+        x += 1  # Accept ID
+        if ";" in token[x]:
+            x += 1  # Accept ;
+        elif "[" in token[x]:
+            x += 1  # Accept [
+            z = hasnum(token[x])
+            if z is True:
+                x += 1  # Accept NUM/FLOAT
+                if "]" in token[x]:
+                    x += 1  # Accept ]
+                    if ";" in token[x]:
+                        x += 1  # Accept ;
                     else:
                         print("REJECT")
                         sys.exit(0)
@@ -132,12 +132,12 @@ def declaration():  # 4
             else:
                 print("REJECT")
                 sys.exit(0)
-        elif "(" in token[i]:
-            i += 1  # Accept (
+        elif "(" in token[x]:
+            x += 1  # Accept (
             parameters()
 
-            if ")" in token[i]:
-                i += 1  # Accept )
+            if ")" in token[x]:
+                x += 1  # Accept )
                 compoundStatement()
             else:
                 print("REJECT")
@@ -151,27 +151,27 @@ def declaration():  # 4
 
 
 def variableDeclaration():  # 5
-    global i
+    global x
     types()
 
-    x = token[i].isalpha()
-    if token[i] not in keywords and x is True:
-        i += 1  # Accept ID
+    w = token[x].isalpha()
+    if token[x] not in keywords and w is True:
+        x += 1  # Accept ID
     else:
         print("REJECT")
         sys.exit(0)
 
-    if ";" in token[i]:
-        i += 1  # Accept ;
-    elif "[" in token[i]:
-        i += 1  # Accept [
-        x = hasnum(token[i])
-        if x is True:
-            i += 1  # Accept NUM/FLOAT
-            if "]" in token[i]:
-                i += 1  # Accept ]
-                if ";" in token[i]:
-                    i += 1  # Accept ;
+    if ";" in token[x]:
+        x += 1  # Accept ;
+    elif "[" in token[x]:
+        x += 1  # Accept [
+        w = hasnum(token[x])
+        if w is True:
+            x += 1  # Accept NUM/FLOAT
+            if "]" in token[x]:
+                x += 1  # Accept ]
+                if ";" in token[x]:
+                    x += 1  # Accept ;
                     return
                 else:
                     print("REJECT")
@@ -188,33 +188,33 @@ def variableDeclaration():  # 5
 
 # checking if in keywords messes up program process
 def types():  # 6
-    global i
-    if "int" in token[i] or "void" in token[i] or "float" in token[i]:
-        i += 1  # Accept int/void/float
+    global x
+    if "int" in token[x] or "void" in token[x] or "float" in token[x]:
+        x += 1  # Accept int/void/float
     else:
         return
 
 
 def functionDeclaration():  # 7
-    global i
+    global x
     types()
 
-    x = token[i].isalpha()
-    if token[i] not in keywordchecklist and x is True:
-        i += 1  # Accept ID
+    w = token[x].isalpha()
+    if token[x] not in keywordchecklist and w is True:
+        x += 1  # Accept ID
     else:
         return
 
-    if "(" in token[i]:
-        i += 1  # Accept (
+    if "(" in token[x]:
+        x += 1  # Accept (
     else:
         print()
         sys.exit(0)
 
     parameters()
 
-    if ")" in token[i]:
-        i += 1  # Accept )
+    if ")" in token[x]:
+        x += 1  # Accept )
     else:
         print("REJECT")
         sys.exit(0)
@@ -222,17 +222,17 @@ def functionDeclaration():  # 7
     compoundStatement()
 
 def parameter():
-    global i
+    global x
     types()
-    x = token[i].isalpha()
-    if token[i] not in keywords and x is True:
-        i += 1  # Accept ID
+    w = token[x].isalpha()
+    if token[x] not in keywords and w is True:
+        x += 1  # Accept ID
     else:
         return
-    if "[" in token[i]:
-        i += 1  # Accept [
-        if "]" in token[i]:
-            i += 1  # Accept ]
+    if "[" in token[x]:
+        x += 1  # Accept [
+        if "]" in token[x]:
+            x += 1  # Accept ]
             return
         else:
             print("REJECT")
@@ -241,11 +241,11 @@ def parameter():
         return
 
 def parameters():  # 8
-    global i
-    if "int" in token[i] or "float" in token[i]:
+    global x
+    if "int" in token[x] or "float" in token[x]:
         parametersList()
-    elif "void" in token[i]:
-        i += 1  # Accept void
+    elif "void" in token[x]:
+        x += 1  # Accept void
         return
     else:
         print("REJECT")
@@ -258,12 +258,12 @@ def parametersList():  # 9
 
 
 def parametersListPrime():  # 10
-    global i
-    if "," in token[i]:
-        i += 1  # Accept ,
+    global x
+    if "," in token[x]:
+        x += 1  # Accept ,
         parameter()
         parametersListPrime()
-    elif  ")" in token[i]:
+    elif  ")" in token[x]:
         return
     else:
         return
@@ -273,17 +273,17 @@ def parametersListPrime():  # 10
 
 
 def compoundStatement():  # 12
-    global i
-    if "{" in token[i]:
-        i += 1  # Accept {
+    global x
+    if "{" in token[x]:
+        x += 1  # Accept {
     else:
         return
 
     localDeclarations()
     statementList()
 
-    if "}" in token[i]:
-        i += 1  # Accept }
+    if "}" in token[x]:
+        x += 1  # Accept }
     else:
         print("REJECT")
         sys.exit(0)
@@ -294,7 +294,7 @@ def localDeclarations():  # 13
 
 
 def localDeclarationsPrime():  # 14
-    if "int" in token[i] or "void" in token[i] or "float" in token[i]:
+    if "int" in token[x] or "void" in token[x] or "float" in token[x]:
         variableDeclaration()
         localDeclarationsPrime()
     else:
@@ -306,39 +306,39 @@ def statementList():  # 15
 
 
 def statementListPrime():  # 16
-    x = token[i].isalpha()
-    y = hasnum(token[i])
-    if token[i] not in keywords and x is True:
+    w = token[x].isalpha()
+    z = hasnum(token[x])
+    if token[x] not in keywords and w is True:
         statement()
         statementListPrime()
-    elif y is True:
+    elif z is True:
         statement()
         statementListPrime()
-    elif "(" in token[i] or ";" in token[i] or "{" in token[i] or "if" in token[i] or "while" in token[i] or "return" in token[i]:
+    elif "(" in token[x] or ";" in token[x] or "{" in token[x] or "if" in token[x] or "while" in token[x] or "return" in token[x]:
         statement()
         statementListPrime()
-    elif "}" in token[i]:
+    elif "}" in token[x]:
         return
     else:
         return
 
 
 def statement():  # 17
-    x = token[i].isalpha()
-    y = hasnum(token[i])
-    if token[i] not in keywords and x is True:
+    w = token[x].isalpha()
+    z = hasnum(token[x])
+    if token[x] not in keywords and w is True:
         expressionStatement()
-    elif y is True:
+    elif z is True:
         expressionStatement()
-    elif "(" in token[i] or ";" in token[i]:
+    elif "(" in token[x] or ";" in token[x]:
         expressionStatement()
-    elif "{" in token[i]:
+    elif "{" in token[x]:
         compoundStatement()
-    elif "if" in token[i]:
+    elif "if" in token[x]:
         selectionStatement()
-    elif "while" in token[i]:
+    elif "while" in token[x]:
         itStatement()
-    elif "return" in token[i]:
+    elif "return" in token[x]:
         returnStatement()
     else:
         print("REJECT")
@@ -346,84 +346,84 @@ def statement():  # 17
 
 
 def expressionStatement():  # 18
-    global i
-    x = token[i].isalpha()
-    y = hasnum(token[i])
-    if token[i] not in keywords and x is True:
+    global x
+    w = token[x].isalpha()
+    z = hasnum(token[x])
+    if token[x] not in keywords and w is True:
         expression()
-        if ";" in token[i]:
-            i += 1  # Accept ;
+        if ";" in token[x]:
+            x += 1  # Accept ;
         else:
             print("REJECT")
             sys.exit(0)
-    elif y is True:
+    elif z is True:
         expression()
-        if ";" in token[i]:
-            i += 1  # Accept ;
+        if ";" in token[x]:
+            x += 1  # Accept ;
         else:
             print("REJECT")
             sys.exit(0)
-    elif "(" in token[i]:
+    elif "(" in token[x]:
         expression()
-        if ";" in token[i]:
-            i += 1  # Accept ;
+        if ";" in token[x]:
+            x += 1  # Accept ;
         else:
             print("REJECT")
             sys.exit(0)
-    elif ";" in token[i]:
-        i += 1  # Accept ;
+    elif ";" in token[x]:
+        x += 1  # Accept ;
     else:
         print("REJECT")
         sys.exit(0)
 
 
 def selectionStatement():  # 19
-    global i
-    if "if" in token[i]:
-        i += 1  # Accept if
+    global x
+    if "if" in token[x]:
+        x += 1  # Accept if
     else:
         return
 
-    if "(" in token[i]:
-        i += 1  # Accept (
+    if "(" in token[x]:
+        x += 1  # Accept (
     else:
         print("REJECT")
         sys.exit(0)
 
     expression()
 
-    if ")" in token[i]:
-        i += 1  # Accept )
+    if ")" in token[x]:
+        x += 1  # Accept )
     else:
         print("REJECT")
         sys.exit(0)
 
     statement()
 
-    if "else" in token[i]:
-        i += 1  # Accept else
+    if "else" in token[x]:
+        x += 1  # Accept else
         statement()
     else:
         return
 
 
 def iterationStatement():  # 20
-    global i
-    if "while" in token[i]:
-        i += 1  # Accept while
+    global x
+    if "while" in token[x]:
+        x += 1  # Accept while
     else:
         return
 
-    if "(" in token[i]:
-        i += 1  # Accept (
+    if "(" in token[x]:
+        x += 1  # Accept (
     else:
         print("REJECT")
         sys.exit(0)
 
     expression()
 
-    if ")" in token[i]:
-        i += 1  # Accept )
+    if ")" in token[x]:
+        x += 1  # Accept )
     else:
         print("REJECT")
         sys.exit(0)
@@ -432,37 +432,37 @@ def iterationStatement():  # 20
 
 
 def returnStatement():  # 21
-    global i
-    if "return" in token[i]:
-        i += 1  # Accept return
+    global x
+    if "return" in token[x]:
+        x += 1  # Accept return
     else:
         return
 
-    x = token[i].isalpha()
-    y = hasnum(token[i])
-    if ";" in token[i]:
-        i += 1  # Accept ;
+    w = token[x].isalpha()
+    z = hasnum(token[x])
+    if ";" in token[x]:
+        x += 1  # Accept ;
         return
-    elif token[i] not in keywords and x is True:
+    elif token[x] not in keywords and w is True:
         expression()
-        if ";" in token[i]:
-            i += 1  # Accept ;
+        if ";" in token[x]:
+            x += 1  # Accept ;
             return
         else:
             print("REJECT")
             sys.exit(0)
-    elif y is True:
+    elif z  is True:
         expression()
-        if ";" in token[i]:
-            i += 1  # Accept ;
+        if ";" in token[x]:
+            x += 1  # Accept ;
             return
         else:
             print("REJECT")
             sys.exit(0)
-    elif "(" in token[i]:
+    elif "(" in token[x]:
         expression()
-        if ";" in token[i]:
-            i += 1  # Accept ;
+        if ";" in token[x]:
+            x += 1  # Accept ;
             return
         else:
             print("REJECT")
@@ -473,28 +473,28 @@ def returnStatement():  # 21
 
 
 def expression():  # 22
-    global i
-    x = token[i].isalpha()
-    y = hasnum(token[i])
-    if token[i] not in keywords and x is True:
-        i += 1  # Accept ID
+    global x
+    w = token[x].isalpha()
+    z = hasnum(token[x])
+    if token[x] not in keywords and w is True:
+        x += 1  # Accept ID
         moreExpressions()
-    elif "(" in token[i]:
-        i += 1  # Accept (
+    elif "(" in token[x]:
+        x += 1  # Accept (
         expression()
-        if ")" in token[i]:
-            i += 1  # Accept )
+        if ")" in token[x]:
+            x += 1  # Accept )
             termPrime()
             addExpressionPrime()
-            if comparisonSymbols in token[i]:
+            if comparisonSymbols in token[x]:
                 comparisonOperation()
                 addExpression()
-            elif addSubtractSymbols in token[i]:
+            elif addSubtractSymbols in token[x]:
                 addExpressionPrime()
-                if comparisonSymbols in token[i]:
+                if comparisonSymbols in token[x]:
                     comparisonOperation()
                     addExpression()
-            elif comparisonSymbols in token[i]:
+            elif comparisonSymbols in token[x]:
                 comparisonOperation()
                 addExpression()
             else:
@@ -502,19 +502,19 @@ def expression():  # 22
         else:
             print("REJECT")
             sys.exit(0)
-    elif y is True:
-        i += 1  # Accept NUM/FLOAT
+    elif z is True:
+        x += 1  # Accept NUM/FLOAT
         termPrime()
         addExpressionPrime()
-        if comparisonSymbols in token[i]:
+        if comparisonSymbols in token[x]:
             comparisonOperation()
             addExpression()
-        elif addSubtractSymbols in token[i]:
+        elif addSubtractSymbols in token[x]:
             addExpressionPrime()
-            if comparisonSymbols in token[i]:
+            if comparisonSymbols in token[x]:
                 comparisonOperation()
                 addExpression()
-        elif comparisonSymbols in token[i]:
+        elif comparisonSymbols in token[x]:
                 comparisonOperation()
                 addExpression()
         else:
@@ -525,35 +525,35 @@ def expression():  # 22
 
 
 def moreExpressions():  # 22X
-    global i
-    if "=" in token[i]:
-        i += 1  # Accept =
+    global x
+    if "=" in token[x]:
+        x += 1  # Accept =
         expression()
-    elif "[" in token[i]:
-        i += 1  # Accept [
+    elif "[" in token[x]:
+        x += 1  # Accept [
         expression()
-        if "[" in token[i-1]:
+        if "[" in token[x-1]:
             print("REJECT")
             sys.exit(0)
-        if "]" in token[i]:
-            i += 1  # Accept ]
-            if "=" in token[i]:
-                i += 1  # Accept =
+        if "]" in token[x]:
+            x += 1  # Accept ]
+            if "=" in token[x]:
+                x += 1  # Accept =
                 expression()
-            elif multiplyDivideSymbols in token[i]:
+            elif multiplyDivideSymbols in token[x]:
                 termPrime()
                 addExpressionPrime()
-                if comparisonSymbols in token[i]:
+                if comparisonSymbols in token[x]:
                     comparisonOperation()
                     addExpression()
                 else:
                     return
-            elif addSubtractSymbols in token[i]:
+            elif addSubtractSymbols in token[x]:
                 addExpressionPrime()
-                if comparisonSymbols in token[i]:
+                if comparisonSymbols in token[x]:
                     comparisonOperation()
                     addExpression()
-            elif comparisonSymbols in token[i]:
+            elif comparisonSymbols in token[x]:
                 comparisonOperation()
                 addExpression()
             else:
@@ -561,25 +561,25 @@ def moreExpressions():  # 22X
         else:
             print("REJECT")
             sys.exit(0)
-    elif "(" in token[i]:
-        i += 1  # Accept (
+    elif "(" in token[x]:
+        x += 1  # Accept (
         arguments()
-        if ")" in token[i]:
-            i += 1  # Accept )
-            if multiplyDivideSymbols in token[i]:
+        if ")" in token[x]:
+            x += 1  # Accept )
+            if multiplyDivideSymbols in token[x]:
                 termPrime()
                 addExpressionPrime()
-                if comparisonSymbols in token[i]:
+                if comparisonSymbols in token[x]:
                     comparisonOperation()
                     addExpression()
                 else:
                     return
-            elif addSubtractSymbols in token[i]:
+            elif addSubtractSymbols in token[x]:
                 addExpressionPrime()
-                if comparisonSymbols in token[i]:
+                if comparisonSymbols in token[x]:
                     comparisonOperation()
                     addExpression()
-            elif comparisonSymbols in token[i]:
+            elif comparisonSymbols in token[x]:
                 comparisonOperation()
                 addExpression()
             else:
@@ -587,23 +587,23 @@ def moreExpressions():  # 22X
         else:
             print("REJECT")
             sys.exit(0)
-    elif multiplyDivideSymbols in token[i]:
+    elif multiplyDivideSymbols in token[x]:
         termPrime()
         addExpressionPrime()
-        if comparisonSymbols in token[i]:
+        if comparisonSymbols in token[x]:
             comparisonOperation()
             addExpression()
         else:
             return
         # error begins
-    elif addSubtractSymbols in token[i]:
+    elif addSubtractSymbols in token[x]:
         addExpressionPrime()
-        if comparisonSymbols in token[i]:
+        if comparisonSymbols in token[x]:
             comparisonOperation()
             addExpression()
         else:
             return
-    elif comparisonSymbols in token[i]:
+    elif comparisonSymbols in token[x]:
         comparisonOperation()
         addExpression()
     else:
@@ -611,17 +611,17 @@ def moreExpressions():  # 22X
 
 
 def variable():  # 23
-    global i
-    x = token[i].isalpha()
-    if token[i] not in keywordchecklist and x is True:
-        i += 1  # Accept ID
+    global x
+    w = token[x].isalpha()
+    if token[x] not in keywordchecklist and w is True:
+        x += 1  # Accept ID
     else:
         return
-    if "[" in token[i]:
-        i += 1  # Accept [
+    if "[" in token[x]:
+        x += 1  # Accept [
         expression()
-        if "]" in token[i]:
-            i += 1  # Accept ]
+        if "]" in token[x]:
+            x += 1  # Accept ]
         else:
             print("REJECT")
             sys.exit(0)
@@ -631,7 +631,7 @@ def variable():  # 23
 
 def simplifyExpression():  # 24
     addExpression()
-    if comparisonSymbols in token[i]:
+    if comparisonSymbols in token[x]:
         comparisonOperation()
         addExpression()
     else:
@@ -639,9 +639,9 @@ def simplifyExpression():  # 24
 
 
 def comparisonOperation():  # 25
-    global i
-    if comparisonSymbols in token[i]:
-        i += 1  # Accept <=, <, >, >=, ==, or !=
+    global x
+    if comparisonSymbols in token[x]:
+        x += 1  # Accept <=, <, >, >=, ==, or !=
     else:
         return
 
@@ -652,7 +652,7 @@ def addExpression():  # 26
 
 
 def addExpressionPrime():  # 27
-    if addSubtractSymbols in token[i]:
+    if addSubtractSymbols in token[x]:
         addOperation()
         term()
         addExpressionPrime()
@@ -661,9 +661,9 @@ def addExpressionPrime():  # 27
 
 
 def addOperation():  # 28
-    global i
-    if addSubtractSymbols in token[i]:
-        i += 1  # Accept +, -
+    global x
+    if addSubtractSymbols in token[x]:
+        x += 1  # Accept +, -
     else:
         return
 
@@ -674,7 +674,7 @@ def term():  # 29
 
 
 def termPrime():  # 30
-    if multiplyDivideSymbols in token[i]:
+    if multiplyDivideSymbols in token[x]:
         multiplyOperation()
         factor()
         termPrime()
@@ -683,42 +683,42 @@ def termPrime():  # 30
 
 
 def multiplyOperation():  # 31
-    global i
-    if multiplyDivideSymbols in token[i]:
-        i += 1  # Accept *, /
+    global x
+    if multiplyDivideSymbols in token[x]:
+        x += 1  # Accept *, /
     else:
         return
 
 
 def factor():  # 32
-    global i
-    x = token[i].isalpha()
-    y = hasnum(token[i])
-    if token[i] not in keywords and x is True:
-        i += 1  # Accept ID
-        if "[" in token[i]:
-            i += 1  # Accept [
+    global x
+    w = token[x].isalpha()
+    z = hasnum(token[x])
+    if token[x] not in keywords and w is True:
+        x += 1  # Accept ID
+        if "[" in token[x]:
+            x += 1  # Accept [
             expression()
-            if "]" in token[i]:
-                i += 1  # Accept ]
+            if "]" in token[x]:
+                x += 1  # Accept ]
             else:
                 return
-        elif "(" in token[i]:
-            i += 1  # Accept (
+        elif "(" in token[x]:
+            x += 1  # Accept (
             arguments()
-            if ")" in token[i]:
-                i += 1  # Accept )
+            if ")" in token[x]:
+                x += 1  # Accept )
             else:
                 return
         else:
             return
-    elif y is True:
-        i += 1  # Accept NUM/FLOAT
-    elif "(" in token[i]:
-        i += 1  # Accept (
+    elif z is True:
+        x += 1  # Accept NUM/FLOAT
+    elif "(" in token[x]:
+        x += 1  # Accept (
         expression()
-        if ")" in token[i]:
-            i += 1  # Accept )
+        if ")" in token[x]:
+            x += 1  # Accept )
         else:
             return
     else:
@@ -727,15 +727,15 @@ def factor():  # 32
 
 
 def call():  # 33
-    global i
-    x = token[i].isalpha()
-    if token[i] not in keywordchecklist and x is True:
-        i += 1  # Accept ID
-        if "(" in token[i]:
-            i += 1  # Accept (
+    global x
+    w = token[x].isalpha()
+    if token[x] not in keywords and w is True:
+        x += 1  # Accept ID
+        if "(" in token[x]:
+            x += 1  # Accept (
             arguments()
-            if ")" in token[i]:
-                i += 1  # Accept )
+            if ")" in token[x]:
+                x += 1  # Accept )
             else:
                 print("REJECT")
                 sys.exit(0)
@@ -747,16 +747,16 @@ def call():  # 33
 
 
 def arguments():  # 34
-    global i
-    x = token[i].isalpha()
-    y = hasnum(token[i])
-    if token[i] not in keywords and x is True:
+    global x
+    w = token[x].isalpha()
+    z = hasnum(token[x])
+    if token[x] not in keywords and w is True:
         argumentsList()
-    elif y is True:
+    elif z is True:
         argumentsList()
-    elif "(" in token[i]:
+    elif "(" in token[x]:
         argumentsList()
-    elif ")" in token[i]:
+    elif ")" in token[x]:
         return
     else:
         return
@@ -768,12 +768,12 @@ def argumentsList():  # 35
 
 
 def argumentslistPrime():  # 36
-    global i
-    if "," in token[i]:
-        i += 1  # Accept ,
+    global x
+    if "," in token[x]:
+        x += 1  # Accept ,
         expression()
         argumentslistPrime()
-    elif ")" in token[i]:
+    elif ")" in token[x]:
         return
     else:
         return
