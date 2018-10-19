@@ -1,6 +1,8 @@
 import sys
 import re
-
+# i = x
+# x = w
+# y = z
 with open(sys.argv[1], "r") as file: #opens file
     filelines = file.read().splitlines() # reads file and splits lines
     file.close() #closes file
@@ -13,7 +15,7 @@ comparisonSymbols = "<" or "<=" or  ">" or ">=" or "==" or"!=" #holds relational
 addSubtractSymbols = "+" or "-" #holds addition and subtraction operations
 multiplyDivideSymbols = "*" or "/" #holds multiplication and division operations
 characters = "[a-zA-Z]+" #obtains all words for the IDs
-digits = "[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?" #gets all decimal values, including integer values 0-9
+digits = "[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?" #gets all decimal values, including integer values 0-9
 errors = "\S" #reports errors
 token = []  # creates a list that holds all of the tokens
 x = 0  #value that holds the token counter for the parser
@@ -44,15 +46,15 @@ for importantLines in filelines: #receiving importantlines from filelines
                 token.append(word[1]) #checks if value is an expontential value and appends
             else:
                 token.append(word[1]) #appends integer value
-        elif word[3]:
-            if "/*" in word[3]:
+        elif word[4]:
+            if "/*" in word[4]:
                 insideComment = insideComment + 1
-            elif "*/" in word[3] and insideComment > 0:
+            elif "*/" in word[4] and insideComment > 0:
                 insideComment = insideComment - 1
-            elif "//" in word[3] and insideComment == 0:
+            elif "//" in word[4] and insideComment == 0:
                 break
             elif insideComment == 0:
-                if "*/" in word[3]:
+                if "*/" in word[4]:
                     if "*/*" in importantLine:
                         # print "*"
                         token.append("*")
@@ -65,16 +67,15 @@ for importantLines in filelines: #receiving importantlines from filelines
                         token.append("/")
                 else:
                     # print t[5]
-                    token.append(word[3])
+                    token.append(word[4])
         elif word[3] and insideComment == 0:
             # print "ERROR:", t[6]
-            token.append(word[4])
+            token.append(word[3])
 # ------------ end of for loop for the file and getting tokens --------------------------- #
 
 token.append("$")  # add to end to check if done parsing
 
 # ---------------------------------- parsing functions ----------------------------------- #
-
 
 def hasnum(inputstring):
     return any(char.isdigit() for char in inputstring)
@@ -148,10 +149,10 @@ def declaration():  # 4
 
 def declarationPrime():  # 5
     global x
-    types()
+    typeSpecifier()
     #variableDeclaration()
     w = token[x].isalpha()
-    if token[x] not in keywordchecklist and w is True:
+    if token[x] not in keywords and w is True:
         x += 1  # Accept ID
     else:
         return

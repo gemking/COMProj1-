@@ -1,6 +1,13 @@
-void main(void){
-    int x; int y;
-    x = input(); y = input();
-    output(gcd(x,y));
+/*
+  Error: Void functions may not return values.
+*/
+
+void print(void)
+{
+   return 6;
 }
 
+void main(void)
+{
+   print();
+}
