@@ -292,7 +292,7 @@ def localDeclarations():  # 13
 
 
 def localDeclarationsPrime():  # 14
-    if "int" in token[x] or "void" in token[x] or "float" in token[x]:
+    if token[x] == "void" or token[x] == "float" or token[x] == "int":
         variableDeclaration()
         localDeclarationsPrime()
     else:

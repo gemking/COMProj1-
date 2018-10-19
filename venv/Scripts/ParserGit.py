@@ -101,7 +101,8 @@ def dl():  # 2
 
 
 def dlprime():  # 3
-    if token[i] == "int" or token[i] == "void" or token[i] == "float":
+    if "int" in token[i] or "void" in token[i] or "float" in token[i]:
+    #if token[i] == "int" or token[i] == "void" or token[i] == "float":
         declaration()
         dlprime()
     elif token[i] == "$":
@@ -192,7 +193,8 @@ def vd():  # 5
 
 def types():  # 6
     global i
-    if token[i] == "int" or token[i] == "void" or token[i] == "float":
+    if "int" in token[i] or "void" in token[i] or "float" in token[i]:
+    #if token[i] == "int" or token[i] == "void" or token[i] == "float":
         i += 1  # Accept int/void/float
     else:
         return
@@ -227,7 +229,8 @@ def fd():  # 7
 
 def params():  # 8
     global i
-    if token[i] == "int" or token[i] == "float":
+    if "int" in token[i] or "float" in token[i]:
+    #if token[i] == "int" or token[i] == "float":
         paramslist()
     elif token[i] == "void":
         i += 1  # Accept void
@@ -296,6 +299,7 @@ def localdeclarations():  # 13
 
 
 def localdeclarationsprime():  # 14
+    #if "int" in token[i] or "void" in token[i] or "float" in token[i]:
     if token[i] == "int" or token[i] == "void" or token[i] == "float":
         vd()
         localdeclarationsprime()
