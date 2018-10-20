@@ -115,18 +115,18 @@ def declaration():  # 4
     types()
     x = token[i].isalpha()
     if token[i] not in keywordchecklist and x is True:
-        i += 1  # Accept ID
+        i += 1  # Accepts ID
         if token[i] == ";":
-            i += 1  # Accept ;
+            i += 1  # Accepts ;
         elif token[i] == "[":
-            i += 1  # Accept [
+            i += 1  # Accepts [
             y = hasnum(token[i])
             if y is True:
-                i += 1  # Accept NUM/FLOAT
+                i += 1  # Accepts NUM/FLOAT
                 if token[i] == "]":
-                    i += 1  # Accept ]
+                    i += 1  # Accepts ]
                     if token[i] == ";":
-                        i += 1  # Accept ;
+                        i += 1  # Accepts ;
                     else:
                         print("REJECT")
                         sys.exit(0)
@@ -137,10 +137,10 @@ def declaration():  # 4
                 print("REJECT")
                 sys.exit(0)
         elif token[i] == "(":
-            i += 1  # Accept (
+            i += 1  # Accepts (
             params()
             if token[i] == ")":
-                i += 1  # Accept )
+                i += 1  # Accepts )
                 compoundstmt()
             else:
                 print("REJECT")
@@ -159,22 +159,22 @@ def vd():  # 5
 
     x = token[i].isalpha()
     if token[i] not in keywordchecklist and x is True:
-        i += 1  # Accept ID
+        i += 1  # Accepts ID
     else:
         print("REJECT")
         sys.exit(0)
 
     if token[i] == ";":
-        i += 1  # Accept ;
+        i += 1  # Accepts ;
     elif token[i] == "[":
-        i += 1  # Accept [
+        i += 1  # Accepts [
         x = hasnum(token[i])
         if x is True:
-            i += 1  # Accept NUM/FLOAT
+            i += 1  # Accepts NUM/FLOAT
             if token[i] == "]":
-                i += 1  # Accept ]
+                i += 1  # Accepts ]
                 if token[i] == ";":
-                    i += 1  # Accept ;
+                    i += 1  # Accepts ;
                     return
                 else:
                     print("REJECT")
@@ -193,7 +193,7 @@ def vd():  # 5
 def types():  # 6
     global i
     if token[i] == "int" or token[i] == "void" or token[i] == "float":
-        i += 1  # Accept int/void/float
+        i += 1  # Accepts int/void/float
     else:
         return
 
@@ -204,12 +204,12 @@ def fd():  # 7
 
     x = token[i].isalpha()
     if token[i] not in keywordchecklist and x is True:
-        i += 1  # Accept ID
+        i += 1  # Accepts ID
     else:
         return
 
     if token[i] == "(":
-        i += 1  # Accept (
+        i += 1  # Accepts (
     else:
         print("REJECT")
         sys.exit(0)

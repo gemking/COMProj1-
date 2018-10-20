@@ -42,14 +42,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="23" />
-          <entry key="py" value="25890" />
+          <entry key="py" value="25984" />
           <entry key="txt" value="162" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="185" />
-          <entry key="Python" value="25889" />
+          <entry key="Python" value="25983" />
           <entry key="RegExp" value="1" />
         </counts>
       </usages-collector>
@@ -72,7 +72,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/parser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1071">
+            <state relative-caret-position="-1734">
               <caret line="3" column="24" selection-start-line="3" selection-start-column="24" selection-end-line="3" selection-end-column="24" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
@@ -81,17 +81,17 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermod1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="149">
-              <caret line="419" column="25" selection-start-line="419" selection-start-column="25" selection-end-line="419" selection-end-column="25" />
+            <state relative-caret-position="-867">
+              <caret line="9" column="9" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-                <marker date="1540062734262" expanded="true" signature="8083:8085" ph="..." />
-                <marker date="1540062734262" expanded="true" signature="8948:8976" ph="..." />
-                <marker date="1540062734262" expanded="true" signature="11228:11333" ph="..." />
-                <marker date="1540062734262" expanded="true" signature="16820:16821" ph="..." />
+                <marker date="1540064744122" expanded="true" signature="8106:8108" ph="..." />
+                <marker date="1540064744122" expanded="true" signature="8974:9002" ph="..." />
+                <marker date="1540064744122" expanded="true" signature="11261:11367" ph="..." />
+                <marker date="1540064744122" expanded="true" signature="16875:16876" ph="..." />
               </folding>
             </state>
           </provider>
@@ -100,8 +100,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/OGparser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="102">
-              <caret line="528" lean-forward="true" selection-start-line="528" selection-end-line="528" />
+            <state relative-caret-position="280">
+              <caret line="211" column="25" selection-start-line="211" selection-start-column="25" selection-end-line="211" selection-end-column="25" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -121,11 +121,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/test.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" lean-forward="true" selection-end-line="39" selection-end-column="1" />
+            <state relative-caret-position="272">
+              <caret line="16" column="12" lean-forward="true" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -157,16 +157,16 @@
         <option value="$PROJECT_DIR$/venv/Scripts/main1.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/lexer.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/parser.py" />
-        <option value="$PROJECT_DIR$/venv/Scripts/OGparser.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/ParserGit.py" />
-        <option value="$PROJECT_DIR$/venv/Scripts/parsermod1.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/test.txt" />
+        <option value="$PROJECT_DIR$/venv/Scripts/OGparser.py" />
+        <option value="$PROJECT_DIR$/venv/Scripts/parsermod1.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="859" />
-    <option name="y" value="86" />
+    <option name="x" value="787" />
+    <option name="y" value="70" />
     <option name="width" value="1382" />
     <option name="height" value="1023" />
   </component>
@@ -366,7 +366,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="859" y="86" width="1382" height="1023" extended-state="0" />
+    <frame x="787" y="70" width="1382" height="1023" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4990403" weight="0.21854305" />
@@ -498,16 +498,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/parser.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1071">
-          <caret line="3" column="24" selection-start-line="3" selection-start-column="24" selection-end-line="3" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/ParserGit.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-7463">
@@ -518,10 +508,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/test.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="12" lean-forward="true" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/parser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1734">
+          <caret line="3" column="24" selection-start-line="3" selection-start-column="24" selection-end-line="3" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/OGparser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="528" lean-forward="true" selection-start-line="528" selection-end-line="528" />
+        <state relative-caret-position="280">
+          <caret line="211" column="25" selection-start-line="211" selection-start-column="25" selection-end-line="211" selection-end-column="25" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -530,22 +537,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermod1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="419" column="25" selection-start-line="419" selection-start-column="25" selection-end-line="419" selection-end-column="25" />
+        <state relative-caret-position="-867">
+          <caret line="9" column="9" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <marker date="1540062734262" expanded="true" signature="8083:8085" ph="..." />
-            <marker date="1540062734262" expanded="true" signature="8948:8976" ph="..." />
-            <marker date="1540062734262" expanded="true" signature="11228:11333" ph="..." />
-            <marker date="1540062734262" expanded="true" signature="16820:16821" ph="..." />
+            <marker date="1540064744122" expanded="true" signature="8106:8108" ph="..." />
+            <marker date="1540064744122" expanded="true" signature="8974:9002" ph="..." />
+            <marker date="1540064744122" expanded="true" signature="11261:11367" ph="..." />
+            <marker date="1540064744122" expanded="true" signature="16875:16876" ph="..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/test.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" lean-forward="true" selection-end-line="39" selection-end-column="1" />
         </state>
       </provider>
     </entry>
