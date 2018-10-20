@@ -1,8 +1,5 @@
 import sys
 import re
-# i = x
-# x = w
-# y = z
 with open(sys.argv[1], "r") as file: #opens file
     filelines = file.read().splitlines() # reads file and splits lines
     file.close() #closes file
@@ -25,12 +22,12 @@ for importantLines in filelines: #receiving importantlines from filelines
 
 
     if not importantLine:
-        continue
+        continue # if not an important line, it continues through the file
 
     list = "(%s)|(%s)|(%s)|(%s)" % (characters, digits, symbols, errors)  # puts entire library into a list of strings
 
     for word in re.findall(list, importantLine): #finds list
-        if re.match(characters, word[0]) and insideComment == 0: #matches digits and makes sure insideComment is 0
+        if re.match(characters, word[0]) and insideComment == 0: #matches characters and makes sure insideComment is 0
             if word[0] in keywords:
                 token.append(word[0]) #keyword is constructed out of characters a-zA-Z
             else:
@@ -39,62 +36,61 @@ for importantLines in filelines: #receiving importantlines from filelines
 
 
 
-        elif re.match(digits,word[1]) and insideComment == 0:
+        elif re.match(digits,word[1]) and insideComment == 0: #matches digits and makes sure inside comment is 0
             if "." in word[1]:
                 token.append(word[1]) #checks if value is a decimal value and appends
             elif "E" in word[1]:
                 token.append(word[1]) #checks if value is an expontential value and appends
             else:
                 token.append(word[1]) #appends integer value
-        elif word[4]:
-            if "/*" in word[4]:
-                insideComment = insideComment + 1
-            elif "*/" in word[4] and insideComment > 0:
-                insideComment = insideComment - 1
-            elif "//" in word[4] and insideComment == 0:
+        elif re.match(symbols, word[4]): #matches symbols
+            if "/*" in word[4]: #Checks when word approaches /*
+                insideComment = insideComment + 1 #increments insideComment if inside
+            elif "*/" in word[4] and insideComment > 0: #Checks when word approaches */
+                insideComment = insideComment - 1 #decrements insideComment if outside
+            elif "//" in word[4] and insideComment == 0: #If neither
                 break
-            elif insideComment == 0:
-                if "*/" in word[4]:
-                    if "*/*" in importantLine:
-                        # print "*"
+            elif insideComment == 0: #when inside counter is 0
+                if "*/" in word[4]: #when it reaches terminal */
+                    if "*/*" in importantLine: #when it's still sorting through comments
                         token.append("*")
                         insideComment += 1
-                        continue
+                        continue #skips comments and continue through the program
                     else:
-                        # print "*"
-                        token.append("*")
-                        # print "/"
-                        token.append("/")
+                        token.append("*") #appends multiplication symbol
+                        token.append("/") #appends division symbol
                 else:
                     # print t[5]
-                    token.append(word[4])
-        elif word[3] and insideComment == 0:
+                    token.append(word[4]) #appends rest of symbols
+        elif word[3] and insideComment == 0: #matches errors and makes sure insideComment is 0
             # print "ERROR:", t[6]
-            token.append(word[3])
-# ------------ end of for loop for the file and getting tokens --------------------------- #
+            token.append(word[3]) #appends error
 
-token.append("$")  # add to end to check if done parsing
+                    # ----- end of lexer ----- #
 
-# ---------------------------------- parsing functions ----------------------------------- #
+token.append("$")  #appended to determine when the program is done programming
+
+
+                 # ----- beginning of parser ----- #
 
 def hasnum(inputstring):
     return any(char.isdigit() for char in inputstring)
 
 
-def program():  # 1
+def program():
     dollarOne()
     if "$" in token[x]:
-        print("ACCEPT")
+        print("ACCEPT") #if $ can be applied in the token, proceed
     else:
-        print ("REJECT")
+        print ("REJECT") #if not, Reject
 
 
-def dollarOne():  # 2
+def dollarOne():
     declaration()
     dollarOnePrime()
 
 
-def dollarOnePrime():  # 3
+def dollarOnePrime():
     if "int" in token[x] or "void" in token[x] or "float" in token[x]:
         declaration()
         dollarOnePrime()
@@ -104,7 +100,7 @@ def dollarOnePrime():  # 3
         return
 
 
-def declaration():  # 4
+def declaration():
     global x
     typeSpecifier()
     w = token[x].isalpha()
@@ -147,7 +143,7 @@ def declaration():  # 4
         print("REJECT")
         exit(0)
 
-def declarationPrime():  # 5
+def declarationPrime():
     global x
     typeSpecifier()
     #variableDeclaration()
@@ -173,7 +169,7 @@ def declarationPrime():  # 5
 
     compoundStatement()
 
-def variableDeclaration():  # 5
+def variableDeclaration():
     global x
     typeSpecifier()
 
@@ -210,7 +206,7 @@ def variableDeclaration():  # 5
         exit(0)
 
 # checking if in keywords messes up program process
-def typeSpecifier():  # 6
+def typeSpecifier():
     global x
     if "int" in token[x] or "void" in token[x] or "float" in token[x]:
         x += 1  # Accept int/void/float
@@ -238,7 +234,7 @@ def parameter():
     else:
         return
 
-def parameters():  # 8
+def parameters():
     global x
     if "int" in token[x] or "float" in token[x]:
         parametersList()
@@ -250,12 +246,12 @@ def parameters():  # 8
         exit(0)
 
 
-def parametersList():  # 9
+def parametersList():
     parameter()
     parametersListPrime()
 
 
-def parametersListPrime():  # 10
+def parametersListPrime():
     global x
     if "," in token[x]:
         x += 1  # Accept ,
@@ -270,7 +266,7 @@ def parametersListPrime():  # 10
 
 
 
-def compoundStatement():  # 12
+def compoundStatement():
     global x
     if "{" in token[x]:
         x += 1  # Accept {
@@ -287,11 +283,11 @@ def compoundStatement():  # 12
         exit(0)
 
 
-def localDeclarations():  # 13
+def localDeclarations():
     localDeclarationsPrime()
 
 
-def localDeclarationsPrime():  # 14
+def localDeclarationsPrime():
     if token[x] == "void" or token[x] == "float" or token[x] == "int":
         variableDeclaration()
         localDeclarationsPrime()
@@ -299,11 +295,11 @@ def localDeclarationsPrime():  # 14
         return
 
 
-def statementList():  # 15
+def statementList():
     statementListPrime()
 
 
-def statementListPrime():  # 16
+def statementListPrime():
     w = token[x].isalpha()
     z = hasnum(token[x])
     if token[x] not in keywords and w is True:
@@ -321,7 +317,7 @@ def statementListPrime():  # 16
         return
 
 
-def statement():  # 17
+def statement():
     w = token[x].isalpha()
     z = hasnum(token[x])
     if token[x] not in keywords and w is True:
@@ -343,7 +339,7 @@ def statement():  # 17
         exit(0)
 
 
-def expressionStatement():  # 18
+def expressionStatement():
     global x
     w = token[x].isalpha()
     z = hasnum(token[x])
@@ -375,7 +371,7 @@ def expressionStatement():  # 18
         exit(0)
 
 
-def selectionStatement():  # 19
+def selectionStatement():
     global x
     if "if" in token[x]:
         x += 1  # Accept if
@@ -405,7 +401,7 @@ def selectionStatement():  # 19
         return
 
 
-def iterationStatement():  # 20
+def iterationStatement():
     global x
     if "while" in token[x]:
         x += 1  # Accept while
@@ -429,7 +425,7 @@ def iterationStatement():  # 20
     statement()
 
 
-def returnStatement():  # 21
+def returnStatement():
     global x
     if "return" in token[x]:
         x += 1  # Accept return
@@ -470,7 +466,7 @@ def returnStatement():  # 21
         exit(0)
 
 
-def expressionPrime():  # 22
+def expressionPrime():
     global x
     w = token[x].isalpha()
     z = hasnum(token[x])
@@ -522,7 +518,7 @@ def expressionPrime():  # 22
         exit(0)
 
 
-def expression():  # 22X
+def expression():
     global x
     if "=" in token[x]:
         x += 1  # Accept =
@@ -608,7 +604,7 @@ def expression():  # 22X
         return
 
 
-def variable():  # 23
+def variable():
     global x
     w = token[x].isalpha()
     if token[x] not in keywords and w is True:
@@ -627,7 +623,7 @@ def variable():  # 23
         return
 
 
-def simpleExpression():  # 24
+def simpleExpression():
     addExpression()
     if comparisonSymbols in token[x]:
         comparisonOperation()
@@ -636,7 +632,7 @@ def simpleExpression():  # 24
         return
 
 
-def comparisonOperation():  # 25
+def comparisonOperation():
     global x
     if comparisonSymbols in token[x]:
         x += 1  # Accept <=, <, >, >=, ==, or !=
@@ -644,12 +640,12 @@ def comparisonOperation():  # 25
         return
 
 
-def addExpression():  # 26
+def addExpression():
     term()
     addExpressionPrime()
 
 
-def addExpressionPrime():  # 27
+def addExpressionPrime():
     if addSubtractSymbols in token[x]:
         addOperation()
         term()
@@ -658,7 +654,7 @@ def addExpressionPrime():  # 27
         return
 
 
-def addOperation():  # 28
+def addOperation():
     global x
     if addSubtractSymbols in token[x]:
         x += 1  # Accept +, -
@@ -666,12 +662,12 @@ def addOperation():  # 28
         return
 
 
-def term():  # 29
+def term():
     factor()
     termPrime()
 
 
-def termPrime():  # 30
+def termPrime():
     if multiplyDivideSymbols in token[x]:
         multiplyOperation()
         factor()
@@ -680,7 +676,7 @@ def termPrime():  # 30
         return
 
 
-def multiplyOperation():  # 31
+def multiplyOperation():
     global x
     if multiplyDivideSymbols in token[x]:
         x += 1  # Accept *, /
@@ -688,7 +684,7 @@ def multiplyOperation():  # 31
         return
 
 
-def factor():  # 32
+def factor():
     global x
     w = token[x].isalpha()
     z = hasnum(token[x])
@@ -724,7 +720,7 @@ def factor():  # 32
         exit(0)
 
 
-def call():  # 33
+def call():
     global x
     w = token[x].isalpha()
     if token[x] not in keywords and w is True:
@@ -744,7 +740,7 @@ def call():  # 33
         return
 
 
-def arguments():  # 34
+def arguments():
     global x
     w = token[x].isalpha()
     z = hasnum(token[x])
@@ -760,12 +756,12 @@ def arguments():  # 34
         return
 
 
-def argumentsList():  # 35
+def argumentsList():
     expressionPrime()
     argumentslistPrime()
 
 
-def argumentslistPrime():  # 36
+def argumentslistPrime(): 
     global x
     if "," in token[x]:
         x += 1  # Accept ,
