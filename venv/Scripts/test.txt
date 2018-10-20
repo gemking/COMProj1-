@@ -1,14 +1,40 @@
-void main(void){
-    int i;
-    i = 0;
-    while (i < 10){
-        x[i] = input();
-        i = i + 1;
-    }
-    sort(x, 0, 10);
-    i = 0;
-    while (i < 10){
-        output(x[i]);
-        i = i + 1;
-    }
+int x;
+int y;
+
+
+int my ( float b, int c)
+{
+	int z;
+
+	z = z+c;
+
+	return z;
+}
+
+
+void main( int x, int y )
+{
+	float q;
+	int z;
+	x=1;
+	y=2;
+	z = x + y;
+	if (z < 5)
+	{
+		z=my(q,z);
+	}
+
+	if (q)
+		z=z+1;
+
+}
+
+int bobTheBuilder( int z, int q)
+{
+	int clock;
+
+	why = z+q;
+
+	return clock;
+
 }
