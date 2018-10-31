@@ -1,40 +1,29 @@
+int q;
+void monkey(void)
+{
+int q;
+void a[4];
+int b;
+void c;
+
+b=b/2;
+while (b==3)
+{
 int x;
-int y;
-
-
-int my ( float b, int c)
+x=q+2;
+}
+if (c==b)
 {
-	int z;
+a[car(1)]=3;
+a[2+1]=3;
+c=car(4);
+}
+}
+int d;
+int car(int j)
+{
+int q[3];
 
-	z = z+c;
-
-	return z;
+q=j+4;
 }
 
-
-void main( int x, int y )
-{
-	float q;
-	int z;
-	x=1;
-	y=2;
-	z = x + y;
-	if (z < 5)
-	{
-		z=my(q,z);
-	}
-
-	if (q)
-		z=z+1;
-
-}
-
-int bobTheBuilder( int z, int q)
-{
-	int clock;
-
-	why = z+q;
-
-	return clock;
-
-}

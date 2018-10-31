@@ -12,7 +12,7 @@
     <session id="-691979507">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="21" />
+          <entry key="project.closed" value="23" />
           <entry key="project.open.time.0" value="3" />
           <entry key="project.open.time.1" value="7" />
           <entry key="project.open.time.12" value="1" />
@@ -21,35 +21,37 @@
           <entry key="project.open.time.28" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.32" value="1" />
+          <entry key="project.open.time.33" value="1" />
+          <entry key="project.open.time.42" value="1" />
           <entry key="project.open.time.48" value="1" />
           <entry key="project.open.time.63" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="23" />
+          <entry key="project.opened" value="25" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="17" />
+          <entry key="py" value="23" />
           <entry key="txt" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="17" />
+          <entry key="Python" value="23" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="23" />
-          <entry key="py" value="25984" />
-          <entry key="txt" value="162" />
+          <entry key="py" value="28695" />
+          <entry key="txt" value="548" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="185" />
-          <entry key="Python" value="25983" />
+          <entry key="PLAIN_TEXT" value="571" />
+          <entry key="Python" value="28694" />
           <entry key="RegExp" value="1" />
         </counts>
       </usages-collector>
@@ -58,10 +60,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/venv/Scripts/lexer.py">
+        <entry file="file://$PROJECT_DIR$/venv/Scripts/parser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="56" lean-forward="true" selection-start-line="14" selection-start-column="56" selection-end-line="14" selection-end-column="56" />
+            <state relative-caret-position="9877">
+              <caret line="582" column="13" selection-start-line="582" selection-start-column="13" selection-end-line="582" selection-end-column="13" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -70,28 +72,73 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/venv/Scripts/parser.py">
+        <entry file="file://$PROJECT_DIR$/venv/Scripts/FirstSemanticAnalyzer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1734">
-              <caret line="3" column="24" selection-start-line="3" selection-start-column="24" selection-end-line="3" selection-end-column="24" />
+            <state relative-caret-position="-2">
+              <caret line="1131" lean-forward="true" selection-start-line="1131" selection-end-line="1131" />
               <folding>
-                <element signature="e#0#9#0" expanded="true" />
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="155" column="24" selection-start-line="155" selection-start-column="24" selection-end-line="155" selection-end-column="24" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermod1.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="10" column="89" lean-forward="true" selection-start-line="10" selection-start-column="89" selection-end-line="10" selection-end-column="89" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+                <marker date="1540764854196" expanded="true" signature="8106:8108" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermod1.py">
+        <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermodRevised1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-867">
-              <caret line="9" column="9" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
+            <state relative-caret-position="202">
+              <caret line="775" column="23" selection-start-line="775" selection-start-column="23" selection-end-line="775" selection-end-column="23" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-                <marker date="1540064744122" expanded="true" signature="8106:8108" ph="..." />
-                <marker date="1540064744122" expanded="true" signature="8974:9002" ph="..." />
-                <marker date="1540064744122" expanded="true" signature="11261:11367" ph="..." />
-                <marker date="1540064744122" expanded="true" signature="16875:16876" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/venv/Scripts/semanticParserMod1.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="729">
+              <caret line="806" column="40" selection-start-line="806" selection-start-column="40" selection-end-line="806" selection-end-column="40" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/venv/Scripts/FirstParser.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="729">
+              <caret line="777" column="9" selection-start-line="777" selection-start-column="9" selection-end-line="777" selection-end-column="9" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -100,10 +147,15 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/OGparser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="211" column="25" selection-start-line="211" selection-start-column="25" selection-end-line="211" selection-end-column="25" />
+            <state relative-caret-position="8109">
+              <caret line="478" column="10" selection-start-line="478" selection-start-column="10" selection-end-line="478" selection-end-column="10" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
+                <marker date="1540765422643" expanded="true" signature="15428:15430" ph="..." />
+                <marker date="1540765422643" expanded="true" signature="15956:15957" ph="..." />
+                <marker date="1540765422643" expanded="true" signature="18100:18144" ph="..." />
+                <marker date="1540765422643" expanded="true" signature="18233:18238" ph="..." />
+                <marker date="1540765422643" expanded="true" signature="18495:18500" ph="..." />
               </folding>
             </state>
           </provider>
@@ -112,8 +164,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/ParserGit.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-7463">
-              <caret line="301" column="2" lean-forward="true" selection-start-line="301" selection-start-column="2" selection-end-line="301" selection-end-column="71" />
+            <state relative-caret-position="1717">
+              <caret line="102" column="19" selection-start-line="102" selection-start-column="19" selection-end-line="102" selection-end-column="19" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -124,8 +176,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/test.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="12" lean-forward="true" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
+            <state relative-caret-position="238">
+              <caret line="14" column="9" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -158,24 +210,75 @@
         <option value="$PROJECT_DIR$/venv/Scripts/lexer.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/parser.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/ParserGit.py" />
+        <option value="$PROJECT_DIR$/venv/Scripts/FirstParser.py" />
+        <option value="$PROJECT_DIR$/venv/Scripts/FirstSemanticAnalyzer.py" />
+        <option value="$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/test.txt" />
-        <option value="$PROJECT_DIR$/venv/Scripts/OGparser.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/parsermod1.py" />
+        <option value="$PROJECT_DIR$/venv/Scripts/OGparser.py" />
+        <option value="$PROJECT_DIR$/venv/Scripts/semanticParserMod1.py" />
+        <option value="$PROJECT_DIR$/venv/Scripts/parsermodRevised1.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="787" />
-    <option name="y" value="70" />
-    <option name="width" value="1382" />
-    <option name="height" value="1023" />
+    <option name="x" value="205" />
+    <option name="y" value="125" />
+    <option name="width" value="1365" />
+    <option name="height" value="945" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes />
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Proj1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Proj1" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Proj1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Proj1" type="462c0819:PsiDirectoryNode" />
+              <item name="venv" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Proj1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Proj1" type="462c0819:PsiDirectoryNode" />
+              <item name="venv" type="462c0819:PsiDirectoryNode" />
+              <item name="Scripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Proj1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+            <path>
+              <item name="Proj1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.5 (Proj1) &gt;" type="70bed36:NamedLibraryElementNode" />
+            </path>
+            <path>
+              <item name="Proj1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.5 (Proj1) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="venv" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Proj1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.5 (Proj1) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="venv" type="462c0819:PsiDirectoryNode" />
+              <item name="Scripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="checker1&#9;null&#9;null&#10;addex&#9;null&#9;null&#10;retstm&#9;null&#9;null&#10;lex.py&#9;FILE&#9;file://C:/Users/Luis/PycharmProjects/Proj1/venv/Scripts/lexer.py&#10;test.txt&#9;FILE&#9;file://C:/Users/Luis/PycharmProjects/Proj1/test.txt" />
@@ -198,7 +301,28 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.parsermod1">
+  <component name="RunManager" selected="Python.OGparser">
+    <configuration name="FirstParser" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Proj1" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/venv/Scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/Scripts/FirstParser.py" />
+      <option name="PARAMETERS" value="&quot;test.txt&quot;" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="OGparser" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Proj1" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -233,7 +357,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/Scripts/ParserGit.py" />
-      <option name="PARAMETERS" value="&quot;test.txt&quot;" />
+      <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -241,7 +365,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="lexer" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="RetryFirstSemanticAnalyzer" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Proj1" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -253,28 +377,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/Scripts/lexer.py" />
-      <option name="PARAMETERS" value="&quot;test.txt&quot;" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Proj1" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/venv/Scripts" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/Scripts/main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py" />
       <option name="PARAMETERS" value="&quot;test.txt&quot;" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -327,19 +430,19 @@
     </configuration>
     <list>
       <item itemvalue="Python.parser" />
-      <item itemvalue="Python.lexer" />
-      <item itemvalue="Python.main" />
-      <item itemvalue="Python.ParserGit" />
       <item itemvalue="Python.OGparser" />
+      <item itemvalue="Python.FirstParser" />
+      <item itemvalue="Python.RetryFirstSemanticAnalyzer" />
+      <item itemvalue="Python.ParserGit" />
       <item itemvalue="Python.parsermod1" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.parsermod1" />
         <item itemvalue="Python.OGparser" />
+        <item itemvalue="Python.parsermod1" />
+        <item itemvalue="Python.FirstParser" />
         <item itemvalue="Python.ParserGit" />
-        <item itemvalue="Python.lexer" />
-        <item itemvalue="Python.main" />
+        <item itemvalue="Python.RetryFirstSemanticAnalyzer" />
       </list>
     </recent_temporary>
   </component>
@@ -366,22 +469,22 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="787" y="70" width="1382" height="1023" extended-state="0" />
+    <frame x="205" y="125" width="1365" height="945" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4990403" weight="0.21854305" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4990403" visible="true" weight="0.22079879" />
       <window_info id="Structure" order="1" sideWeight="0.5009597" side_tool="true" weight="0.24908425" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.21372329" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.36645964" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.25584415" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3655793" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Event Log" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.329718" />
       <window_info anchor="bottom" id="TODO" order="8" weight="0.328125" />
-      <window_info anchor="bottom" id="Python Console" order="9" weight="0.32945284" />
+      <window_info anchor="bottom" id="Python Console" order="9" weight="0.32845894" />
       <window_info anchor="bottom" id="Terminal" order="10" weight="0.3286334" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -490,35 +593,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/lexer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="56" lean-forward="true" selection-start-line="14" selection-start-column="56" selection-end-line="14" selection-end-column="56" />
+        <state relative-caret-position="185">
+          <caret line="53" column="9" selection-start-line="53" selection-start-column="9" selection-end-line="53" selection-end-column="9" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/ParserGit.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7463">
-          <caret line="301" column="2" lean-forward="true" selection-start-line="301" selection-start-column="2" selection-end-line="301" selection-end-column="71" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/test.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="12" lean-forward="true" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/parser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1734">
-          <caret line="3" column="24" selection-start-line="3" selection-start-column="24" selection-end-line="3" selection-end-column="24" />
+        <state relative-caret-position="9877">
+          <caret line="582" column="13" selection-start-line="582" selection-start-column="13" selection-end-line="582" selection-end-column="13" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
@@ -527,8 +613,70 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/OGparser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="211" column="25" selection-start-line="211" selection-start-column="25" selection-end-line="211" selection-end-column="25" />
+        <state relative-caret-position="8109">
+          <caret line="478" column="10" selection-start-line="478" selection-start-column="10" selection-end-line="478" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+            <marker date="1540765422643" expanded="true" signature="15428:15430" ph="..." />
+            <marker date="1540765422643" expanded="true" signature="15956:15957" ph="..." />
+            <marker date="1540765422643" expanded="true" signature="18100:18144" ph="..." />
+            <marker date="1540765422643" expanded="true" signature="18233:18238" ph="..." />
+            <marker date="1540765422643" expanded="true" signature="18495:18500" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/ParserGit.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1717">
+          <caret line="102" column="19" selection-start-line="102" selection-start-column="19" selection-end-line="102" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/FirstSemanticAnalyzer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2">
+          <caret line="1131" lean-forward="true" selection-start-line="1131" selection-end-line="1131" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="155" column="24" selection-start-line="155" selection-start-column="24" selection-end-line="155" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/test.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="9" selection-start-line="14" selection-start-column="9" selection-end-line="14" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/FirstParser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="729">
+          <caret line="777" column="9" selection-start-line="777" selection-start-column="9" selection-end-line="777" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/semanticParserMod1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="729">
+          <caret line="806" column="40" selection-start-line="806" selection-start-column="40" selection-end-line="806" selection-end-column="40" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -537,14 +685,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermod1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-867">
-          <caret line="9" column="9" selection-start-line="9" selection-start-column="9" selection-end-line="9" selection-end-column="9" />
+        <state relative-caret-position="170">
+          <caret line="10" column="89" lean-forward="true" selection-start-line="10" selection-start-column="89" selection-end-line="10" selection-end-column="89" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <marker date="1540064744122" expanded="true" signature="8106:8108" ph="..." />
-            <marker date="1540064744122" expanded="true" signature="8974:9002" ph="..." />
-            <marker date="1540064744122" expanded="true" signature="11261:11367" ph="..." />
-            <marker date="1540064744122" expanded="true" signature="16875:16876" ph="..." />
+            <marker date="1540764854196" expanded="true" signature="8106:8108" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermodRevised1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="775" column="23" selection-start-line="775" selection-start-column="23" selection-end-line="775" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
