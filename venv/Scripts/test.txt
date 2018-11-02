@@ -1,42 +1,13 @@
-/* test for basic functionality of proj 3 - pass */
-/* test 14 - test param id types */
+/* test for basic funtionality of proj 3 - should pass */
+/* test 1 */
 
 int x;
 int y;
 
-
-int my ( float b, int c)
+void main ( int x, int y )
 {
 	int z;
 
-	z = z+c;
-
-	return z+c;
-}
-
-
-
-int something( int z, int q)
-{
-	int why;
-
-	why = z+q;
-
-	return why;
-
-}
-
-void main( int x, int y )
-{
-	float q;
-	int z;
-	x=1;
-	y=2;
 	z = x + y;
-	if (z < 5)
-	{
-		z=my(q,z);
-
-	}
 
 }

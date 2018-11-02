@@ -1037,7 +1037,28 @@ def factor(): #Rule 40
                     if "global" not in varsScope[q] and functionName not in varsScope[q]:
                         cz = 1
                     if functionName in varsScope[q]:
-                        
+                        cz = 0
+                        check = variableType[q]
+                        break
+                    check = variableType[q]
+                q += 1
+            if check not in expressionType:
+                print("REJECT")
+                exit(0)
+            if 1 in cz:
+                print("REJECT")
+                exit(0)
+
+        if 1 in exceptionReturn:
+            q = 0
+            for duplicates in vars: #get the type of the var for operand/operator checking
+                if token[i-1] in duplicates:
+                    check = variableType[q]
+                q += 1
+            if check not in expressionType:
+                print("REJECT")
+                exit(0)
+
         if "[" in token[x]:
             x += 1  # Accepts [
             expressionPrime()
@@ -1107,6 +1128,10 @@ def arguments(): #Rule 42
 
 
 def argumentsList(): #Rule 43
+    global parameter
+    global parameterMatch
+    parameterMatch = ""
+    parmeter = 1
     expressionPrime()
     argumentslistPrime()
 
@@ -1127,3 +1152,11 @@ def argumentslistPrime(): #Rule 44
 
 
 programDeclaration() #Starts parsing the
+
+print(variableDeclaration)
+print(functionDeclaration)
+
+if checkMain == 1 and checkLastMain == 1: #check if contains 1 main function
+    print("ACCEPT")
+else:
+    print("REJECT")
