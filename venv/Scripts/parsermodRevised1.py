@@ -860,17 +860,14 @@ def expressionPrime(): #Rule 28
             x += 1  # Accepts )
             termPrime()
             addExpressionPrime()
-            if comparisonSymbols in token[x]:
-                comparisonOperation()
-                addExpression()
+            if "==" in token[x] or "<=" in token[x] or ">=" in token[x] or "!=" in token[x] or "<" in token[x] or ">" in token[x]:
+                simpleExpressionPrime()
             elif addSubtractSymbols in token[x]:
                 addExpressionPrime()
-                if comparisonSymbols in token[x]:
-                    comparisonOperation()
-                    addExpression()
-            elif comparisonSymbols in token[x]:
-                comparisonOperation()
-                addExpression()
+                if "==" in token[x] or "<=" in token[x] or ">=" in token[x] or "!=" in token[x] or "<" in token[x] or ">" in token[x]:
+                    simpleExpressionPrime()
+            elif "==" in token[x] or "<=" in token[x] or ">=" in token[x] or "!=" in token[x] or "<" in token[x] or ">" in token[x]:
+                simpleExpressionPrime()
             else:
                 return
         else:
@@ -907,24 +904,21 @@ def expressionPrime(): #Rule 28
                 print("REJECT")
                 exit(0)
 
-            if 1 in exception0:
+            if leftExpression == 1:
                 if 1 is not cz and "float" in expressionType:
                     if "." not in token[x-1] and "E" not in token[x+1]:
                         print("REJECT")
                         exit(0)
         termPrime()
         addExpressionPrime()
-        if comparisonSymbols in token[x]:
-            comparisonOperation()
-            addExpression()
+        if "==" in token[x] or "<=" in token[x] or ">=" in token[x] or "!=" in token[x] or "<" in token[x] or ">" in token[x]:
+            simpleExpressionPrime()
         elif addSubtractSymbols in token[x]:
             addExpressionPrime()
-            if comparisonSymbols in token[x]:
-                comparisonOperation()
-                addExpression()
-        elif comparisonSymbols in token[x]:
-                comparisonOperation()
-                addExpression()
+            if "==" in token[x] or "<=" in token[x] or ">=" in token[x] or "!=" in token[x] or "<" in token[x] or ">" in token[x]:
+                simpleExpressionPrime()
+        elif "==" in token[x] or "<=" in token[x] or ">=" in token[x] or "!=" in token[x] or "<" in token[x] or ">" in token[x]:
+                simpleExpressionPrime()
         else:
             return
     else:
@@ -961,7 +955,7 @@ def simpleExpression(): #Rule 31
 
 
 def simpleExpressionPrime(): #Rule 32
-    if comparisonSymbols in token[x]:
+    if "==" in token[x] or "<=" in token[x] or ">=" in token[x] or "!=" in token[x] or "<" in token[x] or ">" in token[x]:
         comparisonOperation()
         addExpression()
     else:
@@ -970,7 +964,7 @@ def simpleExpressionPrime(): #Rule 32
 
 def comparisonOperation(): #Rule 33
     global x
-    if comparisonSymbols in token[x]:
+    if "==" in token[x] or "<=" in token[x] or ">=" in token[x] or "!=" in token[x] or "<" in token[x] or ">" in token[x]:
         x += 1  # Accepts <=, <, >, >=, ==, or !=
     else:
         return
@@ -982,7 +976,7 @@ def addExpression(): #Rule 34
 
 
 def addExpressionPrime(): #Rule 35
-    if addSubtractSymbols in token[x]:
+    if "-" in token[x] or "+" in token[x]:
         addOperation()
         term()
         addExpressionPrime()
@@ -992,7 +986,7 @@ def addExpressionPrime(): #Rule 35
 
 def addOperation(): #Rule 36
     global x
-    if addSubtractSymbols in token[x]:
+    if "-" in token[x] or "+" in token[x]:
         x += 1  # Accepts +, -
     else:
         return
@@ -1004,7 +998,7 @@ def term(): #Rule 37
 
 
 def termPrime(): #Rule 38
-    if multiplyDivideSymbols in token[x]:
+    if "/" in token[x] or "*" in token[x]:
         multiplyOperation()
         factor()
         termPrime()
@@ -1014,7 +1008,7 @@ def termPrime(): #Rule 38
 
 def multiplyOperation(): #Rule 39
     global x
-    if multiplyDivideSymbols in token[x]:
+    if "/" in token[x] or "*" in token[x]:
         x += 1  # Accepts *, /
     else:
         return
@@ -1029,7 +1023,7 @@ def factor(): #Rule 40
     if token[x] not in keywords and w is True:
         x += 1  # Accepts ID
 
-        if 1 in exceptionReturn:
+        if expressionReturn == 0:
             q = 0
             cz = 0
             for duplicates in vars: #get the type of the var for operand/operator checking
@@ -1049,7 +1043,7 @@ def factor(): #Rule 40
                 print("REJECT")
                 exit(0)
 
-        if 1 in exceptionReturn:
+        if expressionReturn == 1:
             q = 0
             for duplicates in vars: #get the type of the var for operand/operator checking
                 if token[i-1] in duplicates:

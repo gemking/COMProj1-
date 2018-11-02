@@ -6,16 +6,21 @@ with open(sys.argv[1], "r") as file: #opens file
 
 
 insideComment = 0
-keywords = ["if", "else", "while", "int", "float", "void", "return"] #denotes all keywords
+
+
+keywordchecklist = ["if", "else", "while", "int", "float", "void", "return"] #denotes all keywords
 symbols = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]" #denotes symbols used
-comparisonSymbols = "<" or "<=" or  ">" or ">=" or "==" or"!=" #holds relational operations
-addSubtractSymbols = "+" or "-" #holds addition and subtraction operations
-multiplyDivideSymbols = "*" or "/" #holds multiplication and division operations
+comparisionSymbol = "==|<=|>=|!=|<|>"
+comparisionSymbols = "(%s)" % (comparisionSymbol)
+additionSubtractionSymbol ="(%s)" %  "-|+"
+additionSubtractionSymbols = "(%s)" % (additionSubtractionSymbol)
+multiplicationDivisionSymbol = "(%s)" % "/|*"
+multiplicationDivisionSymbols = "(%s)" % (multiplicationDivisionSymbol)
 characters = "[a-zA-Z]+" #obtains all words for the IDs
 digits = "[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?" #gets all decimal values, including integer values 0-9
 errors = "\S" #reports errors
 token = []  # creates a list that holds all of the tokens
-x = 0  #value that holds the token counter for the parser
+i = 0  #value that holds the token counter for the parser
 
 for importantLines in filelines: #receiving importantlines from filelines
     importantLine = importantLines #sets importantLine to importantLines
@@ -28,7 +33,7 @@ for importantLines in filelines: #receiving importantlines from filelines
 
     for word in re.findall(list, importantLine): #finds list
         if re.match(characters, word[0]) and insideComment == 0: #matches characters and makes sure insideComment is 0
-            if word[0] in keywords:
+            if word[0] in keywordchecklist:
                 token.append(word[0]) #keyword is constructed out of characters a-zA-Z
             else:
                 token.append(word[0]) #appends character values that are not keywords
@@ -68,1095 +73,1058 @@ for importantLines in filelines: #receiving importantlines from filelines
 
                     # ----- end of lexer ----- #
 
-token.append("$")  #appended to determine when the program is done programming
-checkMain = 0 #checks if there is 1 main function
-checkLastMain = 0 #check if the last function is main
-finished = 0
-expressionLeft = 0
-exressionRight = 0
-expressionReturn = 0
-parameterMatch = 0
-parameter  = 0
+token.append("$")  # add to end to check if done parsing
+ismain = 0  # check for 1 main function
+lastmain = 0  # check if main is last function
+done = 0
+exc0 = 0
+exc1 = 0
+excret = 0
+parammatch = 0
+parm = 0
 
-variableDeclaration = [] #list which holds declared scope, type, and variables
-variableType = [] #list that holds the type of variables
-variableOperation = [] #checks for operator and operand agreement
-vars = [] #list to hold all of the declared variables
-varsScope = [] #list of all variable scopes
-varsScopeBlock = [] #list of all variable scopes in bllock number
-functionDeclaration =[] #list to hold declared functions with parms/arguments
-functionIndex = 0 #index to keep track of apramters/arguments
-functionCall = [] #functions called
-functionCallArguments = [] #list of argument types in a function's paramters
-functionNames = [] #list of all function names
-functionTypes = [] #list of all function types
-functionName = 0 #function name for scope
-functionType = 0 #function type and sees if ti needs return
-currentScope = 0 #current scope
-functionReturn = 0 # does function have a return?
-functionReturnIntFloat = 0 #check if int/float function has return
+vardec = []  # list to hold declared variables, type, and scope
+vartype = []  # list of type of variables
+varop = []  # check for operand and operator agreement, i.e. int x; x = "hi"
+vars = []  # list to hold all declared variables
+varscope = []  # list of all variable scopes, as in what functions they are in
+varscopen = []  # list of all variable scopes, as in block number
 
-                 # ----- beginning of parser ----- #
+fundec = []  # list to hold declared functions with parms/args
+fundeci = 0  # index to keep track of parameters/args for a function
+funcall = []  # functions called
+funcallargs = []  # list of argument types in a function's parameters
+funnames = []  # list of all function names
+funtypes = []  # list of all function types
+funname = 0  # function name, for scope
+funtype = 0  # function type, determine if it needs return
+curscope = 0  # current scope
+funret = 0  # does function have a return
+funret = 0  # check if int/float function has return
+
+# ---------------------------------- parsing functions ----------------------------------- #
+
 
 def hasnum(inputstring):
     return any(char.isdigit() for char in inputstring)
 
 
-def programDeclaration(): #runs program(Rule 1)
-    global completed
-    declarationList()
-    if "$" in token[x]:
-        finished = 1 #continues outside
+def program():  # 1
+    global done
+    dl()
+    if token[i] == "$":
+        done = 1
+        # continue outside
     else:
-        print ("REJECT") #if not, Reject
+        print("REJECT")
 
 
-def declarationList(): #Rule 2
+def dl():  # 2
     declaration()
-    declarationListPrime()
+    dlprime()
 
 
-def declarationListPrime(): #Rule 3
-    if "int" in token[x] or "void" in token[x] or "float" in token[x]:
+def dlprime():  # 3
+    if token[i] == "int" or token[i] == "void" or token[i] == "float":
         declaration()
-        declarationListPrime()
-    elif "$" in token[x]:
+        dlprime()
+    elif token[i] == "$":
         return
     else:
         return
 
 
-def declaration(): #Rule 4
-    global x
-    global checkMain
-    global checkLastMain
-    global currentScope
-    global functionName
-    global functionType
-    global functionReturn
-    typeSpecifier()
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        if "main" in token[x]: #if main is in the file
-            checkMain += 1
-            checkLastMain += 1
-        if token[x-1] != "void": #if void is not in the file
-            print("REJECT")
-            exit(0)
-        else:
-            checkLastMain = 0
-
-        x += 1  # Accepts ID
-        if ";" in token[x]:
-            x += 1  # Accepts ;
-            m = 0
-            for l in vars: #checking for duplicates of declared variables
-                if token[x-2] == l:
-                    if variableType[m] == token[x-3]:
-                        print("REJECT")
-                        exit(0)
-                m += 1
-
-            variableDeclaration.append(token[x-3] + " " + token[x-2] + " global 0")
-            vars.append(token[x-2])
-            variableType.append(token[x-3])
-            varsScope.append("global")
-            varsScopeBlock.append(0)
-
-            if "void" in token[x-3]:
+def declaration():  # 4
+    global i, ismain, funname, curscope, funtype, funret, lastmain
+    types()
+    x = token[i].isalpha()
+    if token[i] not in keywordchecklist and x is True:
+        if token[i] == "main":
+            ismain += 1
+            lastmain = 1
+            if token[i-1] != "void":
                 print("REJECT")
-                exit(0)
+                sys.exit(0)
+        else:
+            lastmain = 0
 
-        elif "[" in token[x]:
-            x += 1  # Accepts [
-            m = 0
-            for l in vars: #checking for duplicates of declared variables
-                if token[x-2] == l:
-                    if variableType[k] == token[x-3]:
+        i += 1  # Accept ID
+        if token[i] == ";":
+            i += 1  # Accept ;
+            k = 0
+            for v in vars:  # check for duplicate declared variables
+                if token[i-2] == v:
+                    if vartype[k] == token[i-3]:
                         print("REJECT")
-                        exit(0)
-                m += 1
+                        sys.exit(0)
+                k += 1
 
-                variableDeclaration.append(token[x - 3] + " " + token[x - 2] + " global 0")
-                vars.append(token[x - 2])
-                variableType.append(token[x - 3])
-                varsScope.append("global")
-                varsScopeBlock.append(0)
+            vardec.append(token[i-3] + " " + token[i-2] + " global 0")
+            vars.append(token[i-2])
+            vartype.append(token[i-3])
+            varscope.append("global")
+            varscopen.append(0)
 
-                if "void" in token[x-3]:
-                    print("REJECT")
-                    exit(0)
+            if token[i-3] == "void":
+                print("REJECT")
+                sys.exit(0)
 
-            z = hasnum(token[x])
-            if z is True:
-                x += 1  # Accepts NUM/FLOAT
-                declarationPrime()
-                if "]" in token[x]:
-                    x += 1  # Accepts ]
-                    if ";" in token[x]:
-                        x += 1  # Accepts ;
+        elif token[i] == "[":
+            i += 1  # Accept [
+            k = 0
+            for v in vars:  # check for duplicate declared variables
+                if token[i-2] == v:
+                    if vartype[k] == token[i-3]:
+                        print("REJECT")
+                        sys.exit(0)
+                k += 1
+
+            vardec.append(token[i-3] + " " + token[i-2] + " global 0")
+            vars.append(token[i-2])
+            vartype.append(token[i-3])
+            varscope.append("global")
+            varscopen.append(0)
+
+            if token[i-3] == "void":
+                print("REJECT")
+                sys.exit(0)
+
+            y = hasnum(token[i])
+            if y is True:
+                i += 1  # Accept NUM/FLOAT
+                if token[i] == "]":
+                    i += 1  # Accept ]
+                    if token[i] == ";":
+                        i += 1  # Accept ;
                     else:
                         print("REJECT")
-                        exit(0)
+                        sys.exit(0)
                 else:
                     print("REJECT")
-                    exit(0)
+                    sys.exit(0)
             else:
                 print("REJECT")
-                exit(0)
+                sys.exit(0)
+        elif token[i] == "(":
+            i += 1  # Accept (
+            for v in fundec:  # check for duplicate declared functions
+                if token[i-2] in v:
+                    print("REJECT")
+                    sys.exit(0)
+            fundec.append(token[i-3] + " " + token[i-2])
+            funname = token[i-2]
+            funnames.append(token[i-2])
+            funtypes.append(token[i-3])
+            funtype = token[i-3]
+            funret = 0
+            curscope = 0
 
-def declarationPrime(): #Rule 5
-    global x
-    typeSpecifier()
-    #variableDeclaration()
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        x += 1  # Accepts ID
-    else:
-        return
+            params()
 
-    if "(" in token[x]:
-        x += 1  # Accepts (
-        for l in functionDeclaration:  # check if there is duplicates of declared functions
-            if token[l-2] in l:
-                print("REJECT")
-                exit(0)
-        functionDeclaration.append(token[x - 3] + " " + token[x - 2])
-        functionName = token[x - 2]
-        functionNames.append(token[x - 2])
-        functionTypes.append(token[x - 3])
-        functionType = token[x - 3]
-        functionReturn = 0
-        currentScope = 0
+            if token[i] == ")":
+                i += 1  # Accept )
+                compoundstmt()
 
-        parameters()
+                if funret == 0 and funtype == "int":
+                    print("REJECT")
+                    sys.exit(0)
+                elif funret == 0 and funtype == "float":
+                    print("REJECT")
+                    sys.exit(0)
+                else:
+                    funret = 0
 
-        if ")" in token[x]:
-            x += 1 #Accepts )
-            compoundStatement()
-
-            if functionReturn == 0 and "int" in functionType:
-                print ("REJECT")
-                exit(0)
-            elif functionReturn == 0 and "float" in functionType:
-                print("REJECT")
-                exit(0)
             else:
-                functionReturn = 0
+                print("REJECT")
+                sys.exit(0)
         else:
             print("REJECT")
-            exit(0)
+            sys.exit(0)
     else:
         print("REJECT")
-        exit(0)
+        sys.exit(0)
 
-def variableDeclaration(): #Rule 6
-    global x
-    typeSpecifier()
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        x += 1  # Accepts ID
-        m = 0
-        for l in vars: #check for duplicated declared variables
-            if v == token[i-1]:
-                if functionName in varsScope[m]:
-                    if currentScope <= varsScopeBlock[m]:
-                        print ("REJECT")
-                        exit(0)
 
-            m += 1
-        variableDeclaration.append(token[x-2] + " " + token[x-1] + " " + str(functionName) + " " + str(currentScope))
-        vars.append(token[x-1])
-        variableType.append(token[x-2])
-        varsScope.append(functionName)
-        varsScopeBlock.append(currentScope)
+def vd():  # 5
+    global i, ismain
+    types()
 
-        if "void" in token[i-2]: # check if ID is type void
+    x = token[i].isalpha()
+    if token[i] not in keywordchecklist and x is True:
+        i += 1  # Accept ID
+        k = 0
+        for v in vars:  # check for duplicate declared variables
+            if token[i-1] == v:
+                if varscope[k] == funname:
+                    if varscopen[k] >= curscope:
+                        print("REJECT")
+                        sys.exit(0)
+            k += 1
+        vardec.append(token[i-2] + " " + token[i-1] + " " + str(funname) + " " + str(curscope))
+        vars.append(token[i-1])
+        vartype.append(token[i-2])
+        varscope.append(funname)
+        varscopen.append(curscope)
+
+        if token[i-2] == "void":  # check if ID is type void
             print("REJECT")
-            exit(0)
+            sys.exit(0)
     else:
         print("REJECT")
-        exit(0)
+        sys.exit(0)
 
-    variableDeclarationPrime()
-
-def variableDeclarationPrime(): #Rule 7
-    global x
-    if ";" in token[x]:
-        x += 1  # Accepts ;
-    elif "[" in token[x]:
-        x += 1  # Accepts [
-        w = hasnum(token[x])
-        if w is True:
-            x += 1  # Accepts NUM/FLOAT
-            if "." in token[x-1]: # check for float in the array declaration
+    if token[i] == ";":
+        i += 1  # Accept ;
+    elif token[i] == "[":
+        i += 1  # Accept [
+        x = hasnum(token[i])
+        if x is True:
+            i += 1  # Accept NUM/FLOAT
+            if "." in token[i-1]:  # check for float in array declaration
                 print("REJECT")
-                exit(0)
-            if "E" in token[x-1]: #check for float in the array declaration
+                sys.exit(0)
+            if "E" in token[i-1]:  # check for float in array declaration
                 print("REJECT")
-                exit(0)
-
-            if "]" in token[x]:
-                x += 1  # Accepts ]
-                if ";" in token[x]:
-                    x += 1  # Accepts ;
+                sys.exit(0)
+            if token[i] == "]":
+                i += 1  # Accept ]
+                if token[i] == ";":
+                    i += 1  # Accept ;
                     return
                 else:
                     print("REJECT")
-                    exit(0)
+                    sys.exit(0)
             else:
                 print("REJECT")
-                exit(0)
+                sys.exit(0)
         else:
             print("REJECT")
-            exit(0)
+            sys.exit(0)
     else:
         print("REJECT")
-        exit(0)
+        sys.exit(0)
 
-# checking to see if in keyword throws an error during the execution of the program
 
-def typeSpecifier(): #Rule 8
-    global x
-    if "int" in token[x] or "void" in token[x] or "float" in token[x]:
-        x += 1  # Accepts int/void/float
+def types():  # 6
+    global i
+    if token[i] == "int" or token[i] == "void" or token[i] == "float":
+        i += 1  # Accept int/void/float
     else:
         return
 
 
+def fd():  # 7
+    global i, ismain
+    types()
 
-def parameter(): #Rule 9
-    global x
-    typeSpecifier()
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        x += 1  # Accepts ID
+    x = token[i].isalpha()
+    if token[i] not in keywordchecklist and x is True:
+        if token[i] == "main":
+            ismain += 1
+        i += 1  # Accept ID
     else:
         return
 
-    parameterPrime()
+    if token[i] == "(":
+        i += 1  # Accept (
+    else:
+        print("REJECT")
+        sys.exit(0)
 
-def parameterPrime(): #Rule 10
-    global x
-    global currentScope
-    global functionName
-    typeSpecifier()
-    functionDeclaration[functionIndex] - functionDeclaration[functionIndex] + " " + token[x-1]
-    functionCallArguments.append("")
-    functionCallArguments[functionIndex] = functionCallArguments[functionIndex] + " " + token[x-1]
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        x += 1 #Accepts ID
-        functionDeclaration[functionIndex] = functionDeclaration[functionIndex] + " " + token[x-1]
+    params()
 
+    if token[i] == ")":
+        i += 1  # Accept )
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+    compoundstmt()
+
+
+def params():  # 8
+    global i, fundeci
+    if token[i] == "int" or token[i] == "float" or token[i] == "void":
+        paramslist()
+        fundeci += 1
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+
+def paramslist():  # 9
+    param()
+    paramslistprime()
+
+
+def paramslistprime():  # 10
+    global i
+    if token[i] == ",":
+        i += 1  # Accept ,
+        param()
+        paramslistprime()
+    elif token[i] == ")":
+        return
+    else:
+        return
+
+
+def param():  # 11
+    global i, funname, curscope
+    types()
+    fundec[fundeci] = fundec[fundeci] + " " + token[i-1]
+    funcallargs.append("")
+    funcallargs[fundeci] = funcallargs[fundeci] + " " + token[i-1]
+    x = token[i].isalpha()
+    if token[i] not in keywordchecklist and x is True:
+        i += 1  # Accept ID
+        fundec[fundeci] = fundec[fundeci] + " " + token[i-1]
+
+        k = 0
         m = 0
-        g = 0
-        gh = 0
-        cz = 0
-        for duplicates in vars: #check for duplicate declared variables and with scope
-            if duplicates in token[x-1]:
-                if "global" not in varsScope[m] and functionName not in varsScope[m]: #may not work
-                    cz = 1
+        mc = 0
+        ch = 0
+        for v in vars:  # check for duplicate declared variables and with scope
+            if token[i-1] == v:
+                if varscope[k] != "global" and varscope[k] != funname:
+                    ch = 1
                     continue
-                if "global" in varsScope[m]:
-                    m = g
-                    gh = 1
+                if varscope[k] == "global":
+                    m = k
+                    mc = 1
                     break
-            m += 1
-
-        currentScope = 1
-        if not varsScope:
-            cz = 1
-        if 0 in cz and "global" in varsScope[m] and 1 in gh:  #may not work
-            variableDeclaration.append(token[x-2] + " " + token[x-1] + " global 0")
-            vars.append(token[x-1])
-            vartype.append(token[x-2])
-            varsScope.append("global")
-            varsScopeBlock.append(0)
-        else:
-            variableDeclaration.append(token[i-2] + " " + token[i-1] + " " + str(functionName) + " " + str(currentScope))
-            vars.append(token[i-1])
-            variableType.append(token[i-2])
-            varsScope.append(functionName)
-            varsScopeBlock.append(currentScope)
-
-        currentScope = 0
-
-
-        if "[" in token[x]:
-            x += 1  # Accepts [
-            if "]" in token[x]:
-                x += 1  # Accepts ]
-                return
-            else:
-                print("REJECT")
-                exit(0)
-        else:
-            return
-    else:
-        if "void" in token[x-1]:
-            return
-        else:
-            print("REJECT")
-            exit(0)
-
-def parameters(): #Rule 11
-    global x
-    global functionIndex
-    if "int" in token[x] or "float" in token[x]:
-        parametersList()
-    elif "void" in token[x]:
-        x += 1  # Accepts void
-        parametersPrime()
-        functionIndex += 1
-    else:
-        print("REJECT")
-        exit(0)
-
-
-
-def parametersPrime(): #Rule 12
-    global x
-    typeSpecifier()
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        x += 1  # Accepts ID
-        parameterPrime()
-        parametersListPrime()
-    else:
-        return
-
-
-
-
-def parametersList(): #Rule 13
-    parameter()
-    parametersListPrime()
-
-
-def parametersListPrime(): #Rule 14
-    global x
-    if "," in token[x]:
-        x += 1  # Accepts ,
-        parameter()
-        parametersListPrime()
-    elif  ")" in token[x]:
-        return
-    else:
-        return
-
-
-
-
-
-def compoundStatement(): #Rule 15
-    global x
-    if "{" in token[x]:
-        x += 1  # Accepts {
-        currentScope += 1
-    else:
-        return
-
-    localDeclarations()
-    statementList()
-
-    if "}" in token[x]:
-        x += 1  # Accepts }
-    else:
-        print("REJECT")
-        exit(0)
-
-
-def localDeclarations(): #Rule 16
-    localDeclarationsPrime()
-
-
-def localDeclarationsPrime(): #Rule 17
-    if token[x] == "void" or token[x] == "float" or token[x] == "int":
-        variableDeclaration()
-        localDeclarationsPrime()
-    else:
-        return
-
-
-def statementList(): #Rule 18
-    statementListPrime()
-
-
-def statementListPrime(): #Rule 19
-    w = token[x].isalpha()
-    z = hasnum(token[x])
-    if token[x] not in keywords and w is True:
-        statement()
-        statementListPrime()
-    elif z is True:
-        statement()
-        statementListPrime()
-    elif "(" in token[x] or ";" in token[x] or "{" in token[x] or "if" in token[x] or "while" in token[x] or "return" in token[x]:
-        statement()
-        statementListPrime()
-    elif "}" in token[x]:
-        return
-    else:
-        return
-
-
-def statement(): #Rule 20
-    w = token[x].isalpha()
-    z = hasnum(token[x])
-    if token[x] not in keywords and w is True:
-        expressionStatement()
-    elif z is True:
-        expressionStatement()
-    elif "(" in token[x] or ";" in token[x]:
-        expressionStatement()
-    elif "{" in token[x]:
-        compoundStatement()
-    elif "if" in token[x]:
-        selectionStatement()
-    elif "while" in token[x]:
-        iterationStatement()
-    elif "return" in token[x]:
-        returnStatement()
-    else:
-        print("REJECT")
-        exit(0)
-
-
-def expressionStatement(): #Rule 21
-    global x
-    w = token[x].isalpha()
-    z = hasnum(token[x])
-    if token[x] not in keywords and w is True:
-        expressionPrime()
-        if ";" in token[x]:
-            x += 1  # Accepts ;
-        else:
-            print("REJECT")
-            exit(0)
-    elif z is True:
-        expressionPrime()
-        if ";" in token[x]:
-            x += 1  # Accepts ;
-        else:
-            print("REJECT")
-            exit(0)
-    elif "(" in token[x]:
-        expressionPrime()
-        if ";" in token[x]:
-            x += 1  # Accepts ;
-        else:
-            print("REJECT")
-            exit(0)
-    elif ";" in token[x]:
-        x += 1  # Accepts ;
-    else:
-        print("REJECT")
-        exit(0)
-
-
-def selectionStatement(): #Rule 22
-    global x
-    if "if" in token[x]:
-        x += 1  # Accepts if
-    else:
-        return
-
-    if "(" in token[x]:
-        x += 1  # Accepts (
-    else:
-        print("REJECT")
-        exit(0)
-
-    expressionPrime()
-
-    if ")" in token[x]:
-        x += 1  # Accepts )
-    else:
-        print("REJECT")
-        exit(0)
-
-    statement()
-    selectionStatementPrime()
-
-
-def selectionStatementPrime(): #Rule 23
-    global x
-    if "else" in token[x]:
-        x += 1  # Accepts else
-        statement()
-    else:
-        return
-
-
-def iterationStatement(): #Rule 24
-    global x
-    if "while" in token[x]:
-        x += 1  # Accepts while
-    else:
-        return
-
-    if "(" in token[x]:
-        x += 1  # Accepts (
-    else:
-        print("REJECT")
-        exit(0)
-
-    expressionPrime()
-
-    if ")" in token[x]:
-        x += 1  # Accepts )
-    else:
-        print("REJECT")
-        exit(0)
-
-    statement()
-
-
-def returnStatement(): #Rule 25
-    global x
-    global functionReturn
-    if "return" in token[x]:
-        x += 1  # Accepts return
-        if "int" in functionType:
-            functionReturn = 1
-        else:
-            functionReturn = 1
-    else:
-        return
-    returnStatementPrime()
-
-
-def returnStatementPrime(): #Rule 26
-    global x
-    global functionReturn
-    global expressionReturn
-    global expressionType
-    w = token[x].isalpha()
-    z = hasnum(token[x])
-    if ";" in token[x]:
-        x += 1  # Accepts ;
-        if "void" not in functionType: #may not work; check if int or float function does not return value
-            print("REJECT")
-            exit(0)
-        return
-    elif token[x] not in keywords and w is True:
-        if "void" in functionType: #Check if void has return with value
-            print("REJECT")
-            exit(0)
-
-        if "int" in functionType:
-            expressionType = "int"
-        else:
-            expressionType = "float"
-        expressionReturn = 1
-        expressionPrime()
-        expressionReturn = 0
-
-        if ";" in token[x]:
-            x += 1  # Accepts ;
-            return
-        else:
-            print("REJECT")
-            exit(0)
-    elif z is True:
-        if "void" in functionType: # check if void has return with value
-            print("REJECT")
-            exit(0)
-
-        if "int" in functionType:
-            expressionType = "int"
-        else:
-            expressionType = "float"
-        expressionReturn = 1
-        expressionPrime()
-        expressionReturn = 0
-        if ";" in token[x]:
-            x += 1  # Accepts ;
-            return
-        else:
-            print("REJECT")
-            exit(0)
-    elif "(" in token[x]:
-        expressionPrime()
-        if ";" in token[x]:
-            x += 1  # Accepts ;
-            return
-        else:
-            print("REJECT")
-            exit(0)
-    else:
-        print("REJECT")
-        exit(0)
-
-
-
-
-def expression(): #Rule 27
-    global x
-    global expressionLeft
-    global expressionRight
-    global expressionType
-    global parameter
-    global parameterMatch
-    if "=" in token[x]:
-        x += 1  # Accepts =
-        m = 0
-        for duplicates in vars: #find the type of the first ID for the expression
-            if v in token[x-2]:
-                expressionType = variableType[m]
-                exception0 = 1
             k += 1
-        expressionPrime()
-        expressionLeft = 0
-    elif "[" in token[x]:
-        x += 1  # Accepts [
-        expressionType = "int"
-        expressionRight = 1
-        expressionPrime()
-        expressionRight = 0
-        if "[" in token[x-1]:
-            print("REJECT")
-            exit(0)
-        if "]" in token[x]:
-            x += 1  # Accepts ]
-            if "=" in token[x]:
-                x += 1  # Accepts =
-                expressionPrime()
-            elif multiplyDivideSymbols in token[x]:
-                termPrime()
-                addExpressionPrime()
-                simpleExpressionPrime()
-            elif addSubtractSymbols in token[x]:
-                addExpressionPrime()
-                if comparisonSymbols in token[x]:
-                    comparisonOperation()
-                    addExpression()
-            elif comparisonSymbols in token[x]:
-                comparisonOperation()
-                addExpression()
-            else:
+
+        curscope = 1
+        if not varscope:
+            ch = 1
+        if ch == 0 and varscope[m] == "global" and mc == 1:
+            vardec.append(token[i-2] + " " + token[i-1] + " global 0")
+            vars.append(token[i-1])
+            vartype.append(token[i-2])
+            varscope.append("global")
+            varscopen.append(0)
+
+        else:
+            vardec.append(token[i-2] + " " + token[i-1] + " " + str(funname) + " " + str(curscope))
+            vars.append(token[i-1])
+            vartype.append(token[i-2])
+            varscope.append(funname)
+            varscopen.append(curscope)
+
+        curscope = 0
+
+        if token[i] == "[":
+            i += 1  # Accept [
+            if token[i] == "]":
+                i += 1  # Accept ]
                 return
+            else:
+                print("REJECT")
+                sys.exit(0)
+        else:
+            return
+    else:
+        if token[i-1] == "void":
+            return
         else:
             print("REJECT")
-            exit(0)
-    elif "(" in token[x]:
-        x += 1  # Accepts (
-        m = 0
-        for duplicates in functionNames:
-            if token[i-2] in v:
-                break
-            m += 1
-        arguments()
-        parameter = 0
-        r = 0
-        if not parameterMatch:
-            r = 1
-        if r == 0 and  parameterMatch not in functionCallArguments[m]:
-            print("REJECT")
-            exit(0)
-        if ")" in token[x]:
-            x += 1  # Accepts )
-            if multiplyDivideSymbols in token[x]:
-                termPrime()
-                addExpressionPrime()
-                simpleExpressionPrime()
-            elif addSubtractSymbols in token[x]:
-                addExpressionPrime()
-                if comparisonSymbols in token[x]:
-                    comparisonOperation()
-                    addExpression()
-            elif comparisonSymbols in token[x]:
-                comparisonOperation()
-                addExpression()
-            else:
-                return
-        else:
-            print("REJECT")
-            exit(0)
-    elif multiplyDivideSymbols in token[x]:
-        termPrime()
-        addExpressionPrime()
-        simpleExpressionPrime()
-        # error begins
-    elif addSubtractSymbols in token[x]:
-        addExpressionPrime()
-        simpleExpressionPrime()
-    elif comparisonSymbols in token[x]:
-        comparisonOperation()
-        addExpression()
+            sys.exit(0)
+
+
+def compoundstmt():  # 12
+    global i, curscope
+    if token[i] == "{":
+        i += 1  # Accept {
+        curscope += 1
+    else:
+        return
+
+    localdeclarations()
+    statementlist()
+
+    if token[i] == "}":
+        i += 1  # Accept }
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+
+def localdeclarations():  # 13
+    localdeclarationsprime()
+
+
+def localdeclarationsprime():  # 14
+    if token[i] == "int" or token[i] == "void" or token[i] == "float":
+        vd()
+        localdeclarationsprime()
     else:
         return
 
 
-def expressionPrime(): #Rule 28
-    global x
-    global expressionType
-    global exception0
-    global exception1
-    global exceptionReturn
-    global parameterMatch
-    global parameter
-    w = token[x].isalpha()
-    z = hasnum(token[x])
-    if token[x] not in keywords and w is True:
-        x += 1  # Accepts ID
-        if 1 in parameter:
-            q = 0
-            for duplicates in vars: #get the type of the var for operand/operator checking
-                if token[x-1] in duplicates:
-                    check = variableType[q]
-                q += 1
-            parameterMatch = parameterMatch + " " + check
-        if expressionLeft == 0 and parameter == 0:
-            if "(" in token[x]:
-                q = 0
+def statementlist():  # 15
+    statementlistprime()
+
+
+def statementlistprime():  # 16
+    x = token[i].isalpha()
+    y = hasnum(token[i])
+    if token[i] not in keywordchecklist and x is True:
+        statement()
+        statementlistprime()
+    elif y is True:
+        statement()
+        statementlistprime()
+    elif token[i] == "(" or token[i] == ";" or token[i] == "{" or token[i] == "if" or\
+                     token[i] == "while" or token[i] == "return":
+        statement()
+        statementlistprime()
+    elif token[i] == "}":
+        return
+    else:
+        return
+
+
+def statement():  # 17
+    x = token[i].isalpha()
+    y = hasnum(token[i])
+    if token[i] not in keywordchecklist and x is True:
+        expstmt()
+    elif y is True:
+        expstmt()
+    elif token[i] == "(" or token[i] == ";":
+        expstmt()
+    elif token[i] == "{":
+        compoundstmt()
+    elif token[i] == "if":
+        selectionstmt()
+    elif token[i] == "while":
+        itstmt()
+    elif token[i] == "return":
+        retstmt()
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+
+def expstmt():  # 18
+    global i
+    x = token[i].isalpha()
+    y = hasnum(token[i])
+    if token[i] not in keywordchecklist and x is True:
+        exp()
+        if token[i] == ";":
+            i += 1  # Accept ;
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif y is True:
+        exp()
+        if token[i] == ";":
+            i += 1  # Accept ;
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif token[i] == "(":
+        exp()
+        if token[i] == ";":
+            i += 1  # Accept ;
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif token[i] == ";":
+        i += 1  # Accept ;
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+
+def selectionstmt():  # 19
+    global i
+    if token[i] == "if":
+        i += 1  # Accept if
+    else:
+        return
+
+    if token[i] == "(":
+        i += 1  # Accept (
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+    exp()
+    if token[i] == ")":
+        i += 1  # Accept )
+    else:
+        print("REJECT")
+        sys.exit(0)
+    statement()
+    if token[i] == "else":
+        i += 1  # Accept else
+        statement()
+    else:
+        return
+
+
+def itstmt():  # 20
+    global i
+    if token[i] == "while":
+        i += 1  # Accept while
+    else:
+        return
+
+    if token[i] == "(":
+        i += 1  # Accept (
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+    exp()
+
+    if token[i] == ")":
+        i += 1  # Accept )
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+    statement()
+
+
+def retstmt():  # 21
+    global i, excret, exptype, funret
+    if token[i] == "return":
+        i += 1  # Accept return
+        if funtype == "int":
+            funret = 1
+        else:
+            funret = 1
+    else:
+        return
+    x = token[i].isalpha()
+    y = hasnum(token[i])
+    if token[i] == ";":
+        i += 1  # Accept ;
+        if funtype != "void":  # check if int or float function does not return a value
+            print("REJECT")
+            sys.exit(0)
+        return
+    elif token[i] not in keywordchecklist and x is True:
+        if funtype == "void":  # check if void has return with value
+            print("REJECT")
+            sys.exit(0)
+
+        if funtype == "int":
+            exptype = "int"
+        else:
+            exptype = "float"
+        excret = 1
+        exp()
+        excret = 0
+
+        if token[i] == ";":
+            i += 1  # Accept ;
+            return
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif y is True:
+        if funtype == "void":  # check if void has return with value
+            print("REJECT")
+            sys.exit(0)
+
+        if funtype == "int":
+            exptype = "int"
+        else:
+            exptype = "float"
+        excret = 1
+
+        exp()
+        excret = 0
+        if token[i] == ";":
+            i += 1  # Accept ;
+            return
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif token[i] == "(":
+        exp()
+        if token[i] == ";":
+            i += 1  # Accept ;
+            return
+        else:
+            print("REJECT")
+            sys.exit(0)
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+
+def exp():  # 22
+    global i, exptype, exc1, exc0, excret, parammatch, parm
+    x = token[i].isalpha()
+    y = hasnum(token[i])
+    if token[i] not in keywordchecklist and x is True:
+        i += 1  # Accept ID
+        if parm == 1:
+            o = 0
+            for v in vars:  # get the type of the var for operand/operator checking
+                if v == token[i-1]:
+                    check = vartype[o]
+                o += 1
+            parammatch = parammatch + " " + check
+
+        if exc0 == 1 and parm == 0:
+            if "(" in token[i]:
+                o = 0
                 check = 0
-                for duplicates in functionNames: #get the type of the function for operand/operator checking
-                    if token[x-1] in v:
-                        check = functionTypes[q]
-                    q += 1
-                if check not in expressionType:
+                for v in funnames:  # get the type of the function for operand/operator checking
+                    if v == token[i-1]:
+                        check = funtypes[o]
+                    o += 1
+                if exptype != check:
                     print("REJECT")
-                    exit(0)
-                if expressionReturn == 1:
-                    q = 0
-                    check = 0
-                    for duplicates in vars: #get the type of the var for operand/operator checking
-                        if token[x-1] in duplicates:
-                            check = variableType[q]
-                        q += 1
-                    if check not in expressionType:
-                        print("REJECT")
-                        exit(0)
+                    sys.exit(0)
 
-                    if "(" in token[x] and expressionReturn == 0 and parameter == 0:
-                        if token[x-1] not in functionNames:
-                            print("REJECT")
-                            exit(0)
-
-                    cz = 0
-                    m = 0
-                    for duplicates in vars: #check for duplicate declared variables
-                        if v in token[x-1]:
-                            if functioName not in varsScope[m] and "global" not in varsScope[m]:
-                                cz = 1
-                            if functionName in varsScope[m]:
-                                cz = 0
-                        m += 1
-                    if token[x-1] not in vars and "(" not in token[x]:
-                        print("REJECT")
-                        exit(0)
-                    if cz == 1:
-                        print("REJECT")
-                        exit(0)
-
-                    expression()
-
-    elif "(" in token[x]:
-        x += 1  # Accepts (
-        expressionPrime()
-        if ")" in token[x]:
-            x += 1  # Accepts )
-            termPrime()
-            addExpressionPrime()
-            if comparisonSymbols in token[x]:
-                comparisonOperation()
-                addExpression()
-            elif addSubtractSymbols in token[x]:
-                addExpressionPrime()
-                if comparisonSymbols in token[x]:
-                    comparisonOperation()
-                    addExpression()
-            elif comparisonSymbols in token[x]:
-                comparisonOperation()
-                addExpression()
             else:
-                return
+                o = 0
+                ch = 0
+                check = 0
+                for v in vars:  # check variable before checking if operator/operand agree
+                    if v == token[i-1]:
+                        if varscope[o] != "global" and varscope[o] != funname:
+                            ch = 1
+                        if varscope[o] == funname:
+                            ch = 0
+                            check = vartype[o]
+                            break
+                        check = vartype[o]
+                    o += 1
+                if ch == 1:
+                    print("REJECT")
+                    sys.exit(0)
+                if exptype != check:
+                    print("REJECT")
+                    sys.exit(0)
+
+        if exc1 == 1:
+            o = 0
+            for v in vars:  # get the type of the var for operand/operator checking
+                if v == token[i-1]:
+                    check = vartype[o]
+                o += 1
+            if exptype != check:
+                print("REJECT")
+                sys.exit(0)
+
+        if excret == 1:
+            o = 0
+            check = 0
+            for v in vars:  # get the type of the var for operand/operator checking
+                if v == token[i-1]:
+                    check = vartype[o]
+                o += 1
+            if exptype != check:
+                print("REJECT")
+                sys.exit(0)
+
+        if "(" in token[i] and exc0 == 0 and parm == 0:
+            if token[i-1] not in funnames:
+                print("REJECT")
+                sys.exit(0)
+
+        ch = 0
+        k = 0
+        for v in vars:  # check for duplicate declared variables
+            if token[i-1] == v:
+                if varscope[k] != funname and varscope[k] != "global":
+                    ch = 1
+                if varscope[k] == funname:
+                    ch = 0
+            k += 1
+
+        if token[i-1] not in vars and token[i] != "(":
+            print("REJECT")
+            sys.exit(0)
+
+        if ch == 1:
+            print("REJECT")
+            sys.exit(0)
+
+        ex()
+
+    elif token[i] == "(":
+        i += 1  # Accept (
+        exp()
+        if token[i] == ")":
+            i += 1  # Accept )
+            termprime()
+            addexpprime()
+            if comparisionSymbols in token[i]:
+                simexpprime()
+            elif additionSubtractionSymbols in token[i]:
+                addexpprime()
+                if comparisionSymbols in token[i]:
+                    simexpprime()
+            elif comparisionSymbols in token[i]:
+                simexpprime()
         else:
             print("REJECT")
-            exit(0)
-    elif z is True:
-        x += 1  # Accepts NUM/FLOAT
-        if parameter == 1:
-            if "." in token[x-1]:
-                parameterMatch = parameterMatch + " float"
-            elif "E" in token[x-1]:
-                parameterMatch = parameterMatch + "float"
+            sys.exit(0)
+    elif y is True:
+        i += 1  # Accept NUM/FLOAT
+        if parm == 1:
+            if "." in token[i-1]:
+                parammatch = parammatch + " float"
+            elif "E" in token[i-1]:
+                parammatch = parammatch + " float"
             else:
-                parameterMatch = parameterMatch + " int"
+                parammatch = parammatch + " int"
 
-            cz = 0
-            if "." in token[x-1]:
-                cz = 1
-            if "E" in token[x-1]:
-                cz = 1
+        ch = 0
+        if "." in token[i-1]:
+            ch = 1
+        if "E" in token[i-1]:
+            ch = 1
 
-            if exceptionReturn == 1 and cz == 1:
-                if "float" not in expressionType:
-                    print("REJECT")
-                    exit(0)
-            if expressionReturn == 1 and cz == 0:
-                if "int" not in expressionType:
-                    print("REJECT")
-                    exit(0)
-            if expressionRight == 1 and "E" in token[x-1]:
+        if excret == 1 and ch == 1:
+            if exptype != "float":
                 print("REJECT")
-                exit(0)
-            if expressionRight == 1 and "." in token[x-1]:
-                print("REJECT")
-                exit(0)
+                sys.exit(0)
 
-            if expressionLeft == 1:
-                if cz != 1 and "float" in expressionType:
-                    if "." not in token[x-1] and "E" not in token[x+1]:
-                        print("REJECT")
-                        exit(0)
-        termPrime()
-        addExpressionPrime()
-        if comparisonSymbols in token[x]:
-            comparisonOperation()
-            addExpression()
-        elif addSubtractSymbols in token[x]:
-            addExpressionPrime()
-            if comparisonSymbols in token[x]:
-                comparisonOperation()
-                addExpression()
-        elif comparisonSymbols in token[x]:
-                comparisonOperation()
-                addExpression()
-        else:
-            return
+        if excret == 1 and ch == 0:
+            if exptype != "int":
+                print("REJECT")
+                sys.exit(0)
+
+        if exc1 == 1 and "E" in token[i-1]:
+            print("REJECT")
+            sys.exit(0)
+        if exc1 == 1 and "." in token[i-1]:
+            print("REJECT")
+            sys.exit(0)
+
+        if exc0 == 1:
+            if ch != 1 and exptype == "float":
+                if "." not in token[i+1] and "E" not in token[i+1]:
+                    print("REJECT")
+                    sys.exit(0)
+
+        termprime()
+        addexpprime()
+        if comparisionSymbols in token[i]:
+            simexpprime()
+        elif additionSubtractionSymbols in token[i]:
+            addexpprime()
+            if comparisionSymbols in token[i]:
+                simexpprime()
+        elif comparisionSymbols in token[i]:
+                simexpprime()
     else:
         print("REJECT")
-        exit(0)
+        sys.exit(0)
 
 
-
-def variable(): #Rule 29
-    global x
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        x += 1  # Accepts ID
-    else:
-        return
-    variablePrime()
-
-def variablePrime(): #Rule 30
-    if "[" in token[x]:
-        x += 1  # Accepts [
-        expressionPrime()
-        if "]" in token[x]:
-            x += 1  # Accepts ]
+def ex():  # 22X
+    global i, exptype, exc1, exc0, parm, parammatch
+    if token[i] == "=":
+        i += 1  # Accept =
+        k = 0
+        for v in vars:  # find the type of the first ID for the exp
+            if token[i-2] == v:
+                exptype = vartype[k]
+                exc0 = 1
+            k += 1
+        exp()
+        exc0 = 0
+    elif token[i] == "[":
+        i += 1  # Accept [
+        exptype = "int"
+        exc1 = 1
+        exp()
+        exc1 = 0
+        if token[i-1] == "[":
+            print("REJECT")
+            sys.exit(0)
+        if token[i] == "]":
+            i += 1  # Accept ]
+            if token[i] == "=":
+                i += 1  # Accept =
+                exp()
+            elif multiplicationDivisionSymbols in token[i]:
+                termprime()
+                addexpprime()
+                if comparisionSymbols in token[i]:
+                    simexpprime()
+            elif additionSubtractionSymbols in token[i]:
+                addexpprime()
+                if comparisionSymbols in token[i]:
+                   simexpprime()
+            elif  "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
+                simexpprime()
         else:
             print("REJECT")
-            exit(0)
+            sys.exit(0)
+    elif token[i] == "(":
+        i += 1  # Accept (
+        k = 0
+        for v in funnames:
+            if v == token[i-2]:
+                break
+            k += 1
+        args()
+        parm = 0
+        u = 0
+        if not parammatch:
+            u = 1
+        if u == 0 and funcallargs[k] != parammatch:
+            print("REJECT")
+            sys.exit(0)
+
+        if token[i] == ")":
+            i += 1  # Accept )
+            if multiplicationDivisionSymbols in token[i]:
+                termprime()
+                addexpprime()
+                if  "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">"  in token[i]:
+                    simexpprime()
+            elif additionSubtractionSymbols in token[i]:
+                addexpprime()
+                if  "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
+                    simexpprime()
+            elif  "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
+                simexpprime()
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif "/" in token[i] or "*" in token[i]:
+        termprime()
+        addexpprime()
+        if comparisionSymbols in token[i]:
+             simexpprime()
+    elif "-" in token[i] or "+" in token[i]:
+        addexpprime()
+        if comparisionSymbols in token[i]:
+            simexpprime()
+    elif "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
+            simexpprime()
+
+
+def var():  # 23
+    global i
+    x = token[i].isalpha()
+    if token[i] not in keywordchecklist and x is True:
+        i += 1  # Accept ID
+    else:
+        return
+    if "[" in token[i]:
+        i += 1  # Accept [
+        exp()
+        if "]" in token[i]:
+            i += 1  # Accept ]
+        else:
+            print("REJECT")
+            sys.exit(0)
     else:
         return
 
 
-def simpleExpression(): #Rule 31
-    addExpression()
-    simpleExpressionPrime()
+def simexp():  # 24
+    addexp()
+    simexpprime()
 
-
-def simpleExpressionPrime(): #Rule 32
-    if comparisonSymbols in token[x]:
-        comparisonOperation()
-        addExpression()
+def simexpprime():
+    if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
+        relop()
+        addexp()
     else:
         return
 
 
-def comparisonOperation(): #Rule 33
-    global x
-    if comparisonSymbols in token[x]:
-        x += 1  # Accepts <=, <, >, >=, ==, or !=
+def relop():  # 25
+    global i
+    if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
+        i += 1  # Accept <=, <, >, >=, ==, or !=
     else:
         return
 
 
-def addExpression(): #Rule 34
+def addexp():  # 26
     term()
-    addExpressionPrime()
+    addexpprime()
 
 
-def addExpressionPrime(): #Rule 35
-    if addSubtractSymbols in token[x]:
-        addOperation()
+def addexpprime():  # 27
+    if "-" in token[i] or "+" in token[i]:
+        addop()
         term()
-        addExpressionPrime()
+        addexpprime()
     else:
         return
 
 
-def addOperation(): #Rule 36
-    global x
-    if addSubtractSymbols in token[x]:
-        x += 1  # Accepts +, -
+def addop():  # 28
+    global i
+    if "-" in token[i] or "+" in token[i]:
+        i += 1  # Accept +, -
     else:
         return
 
 
-def term(): #Rule 37
+def term():  # 29
     factor()
-    termPrime()
+    termprime()
 
 
-def termPrime(): #Rule 38
-    if multiplyDivideSymbols in token[x]:
-        multiplyOperation()
+def termprime():  # 30
+    if "/" in token[i] or "*" in token[i]:
+        mulop()
         factor()
-        termPrime()
+        termprime()
     else:
         return
 
 
-def multiplyOperation(): #Rule 39
-    global x
-    if multiplyDivideSymbols in token[x]:
-        x += 1  # Accepts *, /
+def mulop():  # 31
+    global i
+    if "/" in token[i] or "*" in token[i]:
+        i += 1  # Accept *, /
     else:
         return
 
 
-def factor(): #Rule 40
-    global x
-    global expressionReturn
-    global expressionLeft
-    w = token[x].isalpha()
-    z = hasnum(token[x])
-    if token[x] not in keywords and w is True:
-        x += 1  # Accepts ID
+def factor():  # 32
+    global i, exc0, excret
+    x = token[i].isalpha()
+    y = hasnum(token[i])
+    if token[i] not in keywordchecklist and x is True:
+        i += 1  # Accept ID
 
-        if expressionReturn == 1:
-            q = 0
-            cz = 0
-            for duplicates in vars: #get the type of the var for operand/operator checking
-                if token[x-1] in v:
-                    if "global" not in varsScope[q] and functionName not in varsScope[q]:
-                        cz = 1
-                    if functionName in varsScope[q]:
-                        cz = 0
-                        check = variableType[q]
+        if exc0 == 1:
+            o = 0
+            ch = 0
+            for v in vars:  # get the type of the var for operand/operator checking
+                if v == token[i-1]:
+                    if varscope[o] != "global" and varscope[o] != funname:
+                        ch = 1
+                    if varscope[o] == funname:
+                        ch = 0
+                        check = vartype[o]
                         break
-                    check = variableType[q]
-                q += 1
-            if check not in expressionType:
+                    check = vartype[o]
+                o += 1
+            if exptype != check:
                 print("REJECT")
-                exit(0)
-            if cz == 1:
+                sys.exit(0)
+            if ch == 1:
                 print("REJECT")
-                exit(0)
+                sys.exit(0)
 
-        if expressionReturn == 1:
-            q = 0
-            for duplicates in vars: #get the type of the var for operand/operator checking
-                if token[i-1] in duplicates:
-                    check = variableType[q]
-                q += 1
-            if check not in expressionType:
+        if excret == 1:
+            o = 0
+            for v in vars:  # get the type of the var for operand/operator checking
+                if v == token[i-1]:
+                    check = vartype[o]
+                o += 1
+            if exptype != check:
                 print("REJECT")
-                exit(0)
+                sys.exit(0)
 
-        if "[" in token[x]:
-            x += 1  # Accepts [
-            expressionPrime()
-            if "]" in token[x]:
-                x += 1  # Accepts ]
+
+        if "[" in token[i]:
+            i += 1  # Accept [
+            exp()
+            if "]" in token[i]:
+                i += 1  # Accept ]
             else:
                 return
-        elif "(" in token[x]:
-            x += 1  # Accepts (
-            arguments()
-            if ")" in token[x]:
-                x += 1  # Accepts )
+        elif "(" in token[i]:
+            i += 1  # Accept (
+            args()
+            if ")" in token[i]:
+                i += 1  # Accept )
             else:
                 return
         else:
             return
-    elif z is True:
-        x += 1  # Accepts NUM/FLOAT
-    elif "(" in token[x]:
-        x += 1  # Accepts (
-        expressionPrime()
-        if ")" in token[x]:
-            x += 1  # Accepts )
+    elif y is True:
+        i += 1  # Accept NUM/FLOAT
+    elif "(" in token[i]:
+        i += 1  # Accept (
+        exp()
+        if ")" in token[i]:
+            i += 1  # Accept )
         else:
             return
     else:
         print("REJECT")
-        exit(0)
+        sys.exit(0)
 
 
-def factorPrime(): #Rule 41
-    global x
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        x += 1  # Accepts ID
-        if "(" in token[x]:
-            x += 1  # Accepts (
-            arguments()
-            if ")" in token[x]:
-                x += 1  # Accepts )
+def factorprime():  # 33
+    global i
+    x = token[i].isalpha()
+    if token[i] not in keywordchecklist and x is True:
+        i += 1  # Accept ID
+        if "(" in token[i]:
+            i += 1  # Accept (
+            args()
+            if ")" in token[i]:
+                i += 1  # Accept )
             else:
                 print("REJECT")
-                exit(0)
+                sys.exit(0)
         else:
             print("REJECT")
-            exit(0)
-    else:
-        return
-
-    variablePrime()
-
-
-def arguments(): #Rule 42
-    global x
-    w = token[x].isalpha()
-    z = hasnum(token[x])
-    if token[x] not in keywords and w is True:
-        argumentsList()
-    elif z is True:
-        argumentsList()
-    elif "(" in token[x]:
-        argumentsList()
-    elif ")" in token[x]:
-        return
+            sys.exit(0)
     else:
         return
 
 
-def argumentsList(): #Rule 43
-    global parameter
-    global parameterMatch
-    parameterMatch = ""
-    parmeter = 1
-    expressionPrime()
-    argumentslistPrime()
-
-
-def argumentslistPrime(): #Rule 44
-    global x
-    if "," in token[x]:
-        x += 1  # Accepts ,
-        expressionPrime()
-        argumentslistPrime()
-    elif ")" in token[x]:
+def args():  # 34
+    global i
+    x = token[i].isalpha()
+    y = hasnum(token[i])
+    if token[i] not in keywordchecklist and x is True:
+        arglist()
+    elif y is True:
+        arglist()
+    elif "(" in token[i]:
+        arglist()
+    elif ")" in token[i]:
         return
     else:
         return
 
 
-                        # ----- end of parser ------ #
+def arglist():  # 35
+    global parammatch, parm
+    parm = 1
+    parammatch = ""
+    exp()
+    arglistprime()
 
 
-programDeclaration() #Starts parsing the
+def arglistprime():  # 36
+    global i
+    if "," in token[i]:
+        i += 1  # Accept ,
+        exp()
+        arglistprime()
+    elif ")" in token[i]:
+        return
+    else:
+        return
 
-print(variableDeclaration)
-print(functionDeclaration)
 
-if checkMain == 1 and checkLastMain == 1: #check if contains 1 main function
+# ----------------------------- end of parsing functions --------------------------------- #
+
+# begin parsing
+program()
+
+print(vardec)
+print(fundec)
+
+if ismain == 1 and lastmain == 1:  # check if contains 1 main function
     print("ACCEPT")
 else:
     print("REJECT")
