@@ -6,6 +6,10 @@ with open(sys.argv[1], "r") as file: #opens file
 
 
 insideComment = 0
+relationSymbols = str(["==","<=", ">=","!=","<" ,">"])
+additionSubtractionSymbols = str(["-", "+"])
+multiplicationDivisionSymbols = str(["/", "*"])
+
 keywordchecklist = ["if", "else", "while", "int", "float", "void", "return"] #denotes all keywords
 symbols = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]" #denotes symbols used
 comparisonSymbols = "<" or "<=" or  ">" or ">=" or "==" or"!=" #holds relational operations

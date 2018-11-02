@@ -44,14 +44,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="23" />
-          <entry key="py" value="39065" />
+          <entry key="py" value="39379" />
           <entry key="txt" value="561" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="584" />
-          <entry key="Python" value="39064" />
+          <entry key="Python" value="39378" />
           <entry key="RegExp" value="1" />
         </counts>
       </usages-collector>
@@ -74,7 +74,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/FirstSemanticAnalyzer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-642">
+            <state relative-caret-position="3387">
               <caret line="1015" column="12" lean-forward="true" selection-start-line="1015" selection-start-column="12" selection-end-line="1015" selection-end-column="12" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -86,13 +86,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1717">
-              <caret line="913" column="23" lean-forward="true" selection-start-line="913" selection-start-column="23" selection-end-line="913" selection-end-column="23" />
+            <state relative-caret-position="-14997">
+              <caret line="8" column="54" lean-forward="true" selection-start-line="8" selection-start-column="54" selection-end-line="8" selection-end-column="54" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-                <marker date="1541191152655" expanded="true" signature="27444:27628" ph="..." />
-                <marker date="1541191152655" expanded="true" signature="27640:27651" ph="..." />
-                <marker date="1541191152655" expanded="true" signature="28187:28190" ph="..." />
+                <marker date="1541192368734" expanded="true" signature="27593:27777" ph="..." />
+                <marker date="1541192368734" expanded="true" signature="27789:27800" ph="..." />
+                <marker date="1541192368734" expanded="true" signature="28336:28339" ph="..." />
               </folding>
             </state>
           </provider>
@@ -225,10 +225,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="68" />
-    <option name="y" value="61" />
+    <option name="x" value="-11" />
+    <option name="y" value="77" />
     <option name="width" value="1364" />
-    <option name="height" value="949" />
+    <option name="height" value="927" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -472,7 +472,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="78" y="36" width="1364" height="949" extended-state="0" />
+    <frame x="-11" y="77" width="1364" height="927" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4990403" visible="true" weight="0.22096531" />
@@ -480,7 +480,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.25398773" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.26103404" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3655793" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -535,7 +535,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py</url>
-          <line>973</line>
+          <line>977</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
@@ -691,7 +691,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/FirstSemanticAnalyzer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-642">
+        <state relative-caret-position="3387">
           <caret line="1015" column="12" lean-forward="true" selection-start-line="1015" selection-start-column="12" selection-end-line="1015" selection-end-column="12" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -701,13 +701,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1717">
-          <caret line="913" column="23" lean-forward="true" selection-start-line="913" selection-start-column="23" selection-end-line="913" selection-end-column="23" />
+        <state relative-caret-position="-14997">
+          <caret line="8" column="54" lean-forward="true" selection-start-line="8" selection-start-column="54" selection-end-line="8" selection-end-column="54" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <marker date="1541191152655" expanded="true" signature="27444:27628" ph="..." />
-            <marker date="1541191152655" expanded="true" signature="27640:27651" ph="..." />
-            <marker date="1541191152655" expanded="true" signature="28187:28190" ph="..." />
+            <marker date="1541192368734" expanded="true" signature="27593:27777" ph="..." />
+            <marker date="1541192368734" expanded="true" signature="27789:27800" ph="..." />
+            <marker date="1541192368734" expanded="true" signature="28336:28339" ph="..." />
           </folding>
         </state>
       </provider>
