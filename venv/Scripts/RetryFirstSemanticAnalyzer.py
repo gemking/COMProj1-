@@ -755,18 +755,13 @@ def exp():  # 22
             termprime()
             addexpprime()
             if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-                relop()
-                addexp()
+                simexpprime()
             elif "-" in token[i] or "+" in token[i]:
                 addexpprime()
                 if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-                    relop()
-                    addexp()
+                    simexpprime()
             elif "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-                relop()
-                addexp()
-            else:
-                return
+                simexpprime()
         else:
             print("REJECT")
             sys.exit(0)
@@ -812,18 +807,13 @@ def exp():  # 22
         termprime()
         addexpprime()
         if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-            relop()
-            addexp()
+            simexpprime()
         elif "-" in token[i] or "+" in token[i]:
             addexpprime()
             if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-                relop()
-                addexp()
+                simexpprime()
         elif "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-                relop()
-                addexp()
-        else:
-            return
+                simexpprime()
     else:
         print("REJECT")
         sys.exit(0)
@@ -859,20 +849,13 @@ def ex():  # 22X
                 termprime()
                 addexpprime()
                 if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-                    relop()
-                    addexp()
-                else:
-                    return
+                    simexpprime()
             elif "-" in token[i] or "+" in token[i]:
                 addexpprime()
                 if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-                    relop()
-                    addexp()
+                   simexpprime()
             elif "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-                relop()
-                addexp()
-            else:
-                return
+                simexpprime()
         else:
             print("REJECT")
             sys.exit(0)
@@ -898,20 +881,13 @@ def ex():  # 22X
                 termprime()
                 addexpprime()
                 if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-                    relop()
-                    addexp()
-                else:
-                    return
+                    simexpprime()
             elif "-" in token[i] or "+" in token[i]:
                 addexpprime()
                 if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-                    relop()
-                    addexp()
+                    simexpprime()
             elif "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-                relop()
-                addexp()
-            else:
-                return
+                simexpprime()
         else:
             print("REJECT")
             sys.exit(0)
@@ -919,22 +895,13 @@ def ex():  # 22X
         termprime()
         addexpprime()
         if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-            relop()
-            addexp()
-        else:
-            return
+             simexpprime()
     elif "-" in token[i] or "+" in token[i]:
         addexpprime()
         if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-            relop()
-            addexp()
-        else:
-            return
+            simexpprime()
     elif "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
-        relop()
-        addexp()
-    else:
-        return
+            simexpprime()
 
 
 def var():  # 23

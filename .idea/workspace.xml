@@ -44,14 +44,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="23" />
-          <entry key="py" value="39031" />
+          <entry key="py" value="39065" />
           <entry key="txt" value="561" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="584" />
-          <entry key="Python" value="39030" />
+          <entry key="Python" value="39064" />
           <entry key="RegExp" value="1" />
         </counts>
       </usages-collector>
@@ -86,13 +86,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="936" column="14" lean-forward="true" selection-start-line="936" selection-start-column="14" selection-end-line="936" selection-end-column="14" />
+            <state relative-caret-position="1717">
+              <caret line="913" column="23" lean-forward="true" selection-start-line="913" selection-start-column="23" selection-end-line="913" selection-end-column="23" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-                <marker date="1541190913653" expanded="true" signature="28070:28254" ph="..." />
-                <marker date="1541190913653" expanded="true" signature="28266:28277" ph="..." />
-                <marker date="1541190913653" expanded="true" signature="28813:28816" ph="..." />
+                <marker date="1541191152655" expanded="true" signature="27444:27628" ph="..." />
+                <marker date="1541191152655" expanded="true" signature="27640:27651" ph="..." />
+                <marker date="1541191152655" expanded="true" signature="28187:28190" ph="..." />
               </folding>
             </state>
           </provider>
@@ -225,8 +225,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="78" />
-    <option name="y" value="36" />
+    <option name="x" value="68" />
+    <option name="y" value="61" />
     <option name="width" value="1364" />
     <option name="height" value="949" />
   </component>
@@ -535,7 +535,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py</url>
-          <line>1006</line>
+          <line>973</line>
           <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
@@ -701,13 +701,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="936" column="14" lean-forward="true" selection-start-line="936" selection-start-column="14" selection-end-line="936" selection-end-column="14" />
+        <state relative-caret-position="1717">
+          <caret line="913" column="23" lean-forward="true" selection-start-line="913" selection-start-column="23" selection-end-line="913" selection-end-column="23" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <marker date="1541190913653" expanded="true" signature="28070:28254" ph="..." />
-            <marker date="1541190913653" expanded="true" signature="28266:28277" ph="..." />
-            <marker date="1541190913653" expanded="true" signature="28813:28816" ph="..." />
+            <marker date="1541191152655" expanded="true" signature="27444:27628" ph="..." />
+            <marker date="1541191152655" expanded="true" signature="27640:27651" ph="..." />
+            <marker date="1541191152655" expanded="true" signature="28187:28190" ph="..." />
           </folding>
         </state>
       </provider>
