@@ -69,7 +69,32 @@ for importantLines in filelines: #receiving importantlines from filelines
                     # ----- end of lexer ----- #
 
 token.append("$")  #appended to determine when the program is done programming
+checkMain = 0 #checks if there is 1 main function
+checkLastMain = 0 #check if the last function is main
+finished = 0
+exception0 = 0
+exception1 = 0
+exceptionReturn = 0
+parameterMatch = 0
+parameter  = 0
 
+variableDeclaration = [] #list which holds declared scope, type, and variables
+variableType = [] #list that holds the type of variables
+variableOperation = [] #checks for operator and operand agreement
+vars = [] #list to hold all of the declared variables
+varsScope = [] #list of all variable scopes
+varsScopeBlock = [] #list of all variable scopes in bllock number
+functionDeclaration =[] #list to hold declared functions with parms/arguments
+functionIndex = 0 #index to keep track of apramters/arguments
+functionCall = [] #functions called
+functionCallArguments = [] #list of argument types in a function's paramters
+FunctionNames = [] #list of all function names
+functionTypes = [] #list of all function types
+functionName = 0 #function name for scope
+functionType = 0 #function type and sees if ti needs return
+currentScope = 0 #current scope
+functionReturn = 0 # does function have a return?
+functionReturnIntFloat = 0 #check if int/float function has return
 
                  # ----- beginning of parser ----- #
 

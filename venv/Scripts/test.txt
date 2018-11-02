@@ -1,29 +1,42 @@
-int q;
-void monkey(void)
-{
-int q;
-void a[4];
-int b;
-void c;
+/* test for basic functionality of proj 3 - pass */
+/* test 14 - test param id types */
 
-b=b/2;
-while (b==3)
-{
 int x;
-x=q+2;
-}
-if (c==b)
-{
-a[car(1)]=3;
-a[2+1]=3;
-c=car(4);
-}
-}
-int d;
-int car(int j)
-{
-int q[3];
+int y;
 
-q=j+4;
+
+int my ( float b, int c)
+{
+	int z;
+
+	z = z+c;
+
+	return z+c;
 }
 
+
+
+int something( int z, int q)
+{
+	int why;
+
+	why = z+q;
+
+	return why;
+
+}
+
+void main( int x, int y )
+{
+	float q;
+	int z;
+	x=1;
+	y=2;
+	z = x + y;
+	if (z < 5)
+	{
+		z=my(q,z);
+
+	}
+
+}
