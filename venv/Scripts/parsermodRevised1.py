@@ -88,7 +88,7 @@ functionDeclaration =[] #list to hold declared functions with parms/arguments
 functionIndex = 0 #index to keep track of apramters/arguments
 functionCall = [] #functions called
 functionCallArguments = [] #list of argument types in a function's paramters
-FunctionNames = [] #list of all function names
+functionNames = [] #list of all function names
 functionTypes = [] #list of all function types
 functionName = 0 #function name for scope
 functionType = 0 #function type and sees if ti needs return
@@ -157,13 +157,13 @@ def declaration(): #Rule 4
                         exit(0)
                 m += 1
 
-            variableDeclaration.append(token[i-3] + " " + token[i-2] + " global 0")
-            vars.append(token[i-2])
-            variableType.append(token[i-3])
+            variableDeclaration.append(token[x-3] + " " + token[x-2] + " global 0")
+            vars.append(token[x-2])
+            variableType.append(token[x-3])
             varsScope.append("global")
             varsScopeBlock.append(0)
 
-            if "void" in token[i-3]:
+            if "void" in token[x-3]:
                 print("REJECT")
                 exit(0)
 
@@ -176,7 +176,17 @@ def declaration(): #Rule 4
                         print("REJECT")
                         exit(0)
                 m += 1
-                
+
+                variableDeclaration.append(token[x - 3] + " " + token[x - 2] + " global 0")
+                vars.append(token[x - 2])
+                variableType.append(token[x - 3])
+                varsScope.append("global")
+                varsScopeBlock.append(0)
+
+                if "void" in token[x-3]:
+                    print("REJECT")
+                    exit(0)
+
             z = hasnum(token[x])
             if z is True:
                 x += 1  # Accepts NUM/FLOAT
@@ -195,11 +205,32 @@ def declaration(): #Rule 4
                 exit(0)
         elif "(" in token[x]:
             x += 1  # Accepts (
+            for duplicates in functionDeclaration: #check if there is duplicates of declared functions
+                if duplicates in token[x-2]:
+                    print("REJECT")
+                    exit(0)
+            functionDeclaration.append(token[x-3] + " " + token[x-2])
+            functionName = token[x-2]
+            functionNames.append(token[x-2])
+            functionTypes.append(token[x-3])
+            functionType = token[x-3]
+            functionReturn = 0
+            currentScope = 0
+
             parameters()
 
             if ")" in token[x]:
                 x += 1  # Accepts )
                 compoundStatement()
+
+                if 0 in functionReturn and "int" in functionType: #0 in functionReturn may screw up
+                    print("REJECT")
+                    exit(0)
+                elif 0 in functionReturn and "float" in functionType:
+                    print("REJECT")
+                    exit(0)
+                else:
+                    functionReturn = 0
             else:
                 print("REJECT")
                 exit(0)
