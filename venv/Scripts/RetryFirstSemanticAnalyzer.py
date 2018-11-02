@@ -8,16 +8,18 @@ with open(sys.argv[1], "r") as file: #opens file
 insideComment = 0
 
 
-keywordchecklist = ["if", "else", "while", "int", "float", "void", "return"] #denotes all keywords
+keywords = ["if", "else", "while", "int", "float", "void", "return"] #denotes all keywords
 symbols = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]" #denotes symbols used
 comparisionSymbols = ["==","<=",">=","!=","<",">"]
 additionSubtractionSymbols = ["-","+"]
 multiplicationDivisionSymbols = ["/", "*"]
+miniKeywords = ["void", "int", "float"]
+miniKeywordsTwo = ["while", "if", "return", "(", ";", "{"]
 characters = "[a-zA-Z]+" #obtains all words for the IDs
 digits = "[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?" #gets all decimal values, including integer values 0-9
 errors = "\S" #reports errors
 token = []  # creates a list that holds all of the tokens
-i = 0  #value that holds the token counter for the parser
+x = 0  #value that holds the token counter for the parser
 
 for importantLines in filelines: #receiving importantlines from filelines
     importantLine = importantLines #sets importantLine to importantLines
@@ -30,7 +32,7 @@ for importantLines in filelines: #receiving importantlines from filelines
 
     for word in re.findall(list, importantLine): #finds list
         if re.match(characters, word[0]) and insideComment == 0: #matches characters and makes sure insideComment is 0
-            if word[0] in keywordchecklist:
+            if word[0] in keywords:
                 token.append(word[0]) #keyword is constructed out of characters a-zA-Z
             else:
                 token.append(word[0]) #appends character values that are not keywords
@@ -106,93 +108,92 @@ def hasnum(inputstring):
     return any(char.isdigit() for char in inputstring)
 
 
-def program():  # 1
+def programDeclaration(): #runs program(Rule 1)
     global done
-    dl()
-    if token[i] == "$":
-        done = 1
-        # continue outside
+    declarationList()
+    if "$" in token[x]:
+        done = 1 #continues outside
     else:
-        print("REJECT")
+        print ("REJECT") #if not, Reject
 
 
-def dl():  # 2
+def declarationList(): #Rule 2
     declaration()
-    dlprime()
+    declarationListPrime()
 
 
-def dlprime():  # 3
-    if token[i] == "int" or token[i] == "void" or token[i] == "float":
+def declarationListPrime(): #Rule 3
+    if token[x] in miniKeywords:
         declaration()
-        dlprime()
-    elif token[i] == "$":
+        declarationListPrime()
+    elif "$" in token[x]:
         return
     else:
         return
 
 
 def declaration():  # 4
-    global i, ismain, funname, curscope, funtype, funret, lastmain
+    global x, ismain, funname, curscope, funtype, funret, lastmain
     types()
-    x = token[i].isalpha()
-    if token[i] not in keywordchecklist and x is True:
-        if token[i] == "main":
+    w = token[x].isalpha()
+    if token[x] not in keywords and w is True:
+        if "main" in token[x]:
             ismain += 1
             lastmain = 1
-            if token[i-1] != "void":
+            if token[x-1] != "void":
                 print("REJECT")
                 sys.exit(0)
         else:
             lastmain = 0
 
-        i += 1  # Accept ID
-        if token[i] == ";":
-            i += 1  # Accept ;
+        x += 1  # Accept ID
+        if ";" in token[x]:
+            x += 1  # Accept ;
             k = 0
             for v in vars:  # check for duplicate declared variables
-                if token[i-2] == v:
-                    if vartype[k] == token[i-3]:
+                if token[x-2] == v:
+                    if vartype[k] == token[x-3]:
                         print("REJECT")
                         sys.exit(0)
                 k += 1
 
-            vardec.append(token[i-3] + " " + token[i-2] + " global 0")
-            vars.append(token[i-2])
-            vartype.append(token[i-3])
+            vardec.append(token[x-3] + " " + token[x-2] + " global 0")
+            vars.append(token[x-2])
+            vartype.append(token[x-3])
             varscope.append("global")
             varscopen.append(0)
 
-            if token[i-3] == "void":
+            if token[x-3] == "void":
                 print("REJECT")
                 sys.exit(0)
 
-        elif token[i] == "[":
-            i += 1  # Accept [
+        elif token[x] == "[":
+            x += 1  # Accept [
             k = 0
             for v in vars:  # check for duplicate declared variables
-                if token[i-2] == v:
-                    if vartype[k] == token[i-3]:
+                if token[x-2] == v:
+                    if vartype[k] == token[x-3]:
                         print("REJECT")
                         sys.exit(0)
                 k += 1
 
-            vardec.append(token[i-3] + " " + token[i-2] + " global 0")
-            vars.append(token[i-2])
-            vartype.append(token[i-3])
+            vardec.append(token[x-3] + " " + token[x-2] + " global 0")
+            vars.append(token[x-2])
+            vartype.append(token[x-3])
             varscope.append("global")
             varscopen.append(0)
 
-            if token[i-3] == "void":
+            if token[x-3] == "void":
                 print("REJECT")
                 sys.exit(0)
 
-            y = hasnum(token[i])
-            if y is True:
-                i += 1  # Accept NUM/FLOAT
-                if token[i] == "]":
-                    i += 1  # Accept ]
-                    if token[i] == ";":
-                        i += 1  # Accept ;
+            z = hasnum(token[x])
+            if z is True:
+                x += 1  # Accept NUM/FLOAT
+                if token[x] == "]":
+                    x += 1  # Accept ]
+                    if token[x] == ";":
+                        x += 1  # Accept ;
                     else:
                         print("REJECT")
                         sys.exit(0)
@@ -202,24 +203,24 @@ def declaration():  # 4
             else:
                 print("REJECT")
                 sys.exit(0)
-        elif token[i] == "(":
-            i += 1  # Accept (
+        elif token[x] == "(":
+            x += 1  # Accept (
             for v in fundec:  # check for duplicate declared functions
-                if token[i-2] in v:
+                if token[x-2] in v:
                     print("REJECT")
                     sys.exit(0)
-            fundec.append(token[i-3] + " " + token[i-2])
-            funname = token[i-2]
-            funnames.append(token[i-2])
-            funtypes.append(token[i-3])
-            funtype = token[i-3]
+            fundec.append(token[x-3] + " " + token[x-2])
+            funname = token[x-2]
+            funnames.append(token[x-2])
+            funtypes.append(token[x-3])
+            funtype = token[x-3]
             funret = 0
             curscope = 0
 
             params()
 
-            if token[i] == ")":
-                i += 1  # Accept )
+            if token[x] == ")":
+                x += 1  # Accept )
                 compoundstmt()
 
                 if funret == 0 and funtype == "int":
@@ -243,50 +244,50 @@ def declaration():  # 4
 
 
 def vd():  # 5
-    global i, ismain
+    global x, ismain
     types()
 
-    x = token[i].isalpha()
-    if token[i] not in keywordchecklist and x is True:
-        i += 1  # Accept ID
+    w = token[x].isalpha()
+    if token[x] not in keywords and w is True:
+        x += 1  # Accept ID
         k = 0
         for v in vars:  # check for duplicate declared variables
-            if token[i-1] == v:
+            if token[x-1] == v:
                 if varscope[k] == funname:
                     if varscopen[k] >= curscope:
                         print("REJECT")
                         sys.exit(0)
             k += 1
-        vardec.append(token[i-2] + " " + token[i-1] + " " + str(funname) + " " + str(curscope))
-        vars.append(token[i-1])
-        vartype.append(token[i-2])
+        vardec.append(token[x-2] + " " + token[x-1] + " " + str(funname) + " " + str(curscope))
+        vars.append(token[x-1])
+        vartype.append(token[x-2])
         varscope.append(funname)
         varscopen.append(curscope)
 
-        if token[i-2] == "void":  # check if ID is type void
+        if token[x-2] == "void":  # check if ID is type void
             print("REJECT")
             sys.exit(0)
     else:
         print("REJECT")
         sys.exit(0)
 
-    if token[i] == ";":
-        i += 1  # Accept ;
-    elif token[i] == "[":
-        i += 1  # Accept [
-        x = hasnum(token[i])
-        if x is True:
-            i += 1  # Accept NUM/FLOAT
-            if "." in token[i-1]:  # check for float in array declaration
+    if token[x] == ";":
+        x += 1  # Accept ;
+    elif token[x] == "[":
+        x += 1  # Accept [
+        w = hasnum(token[x])
+        if w is True:
+            x += 1  # Accept NUM/FLOAT
+            if "." in token[x-1]:  # check for float in array declaration
                 print("REJECT")
                 sys.exit(0)
-            if "E" in token[i-1]:  # check for float in array declaration
+            if "E" in token[x-1]:  # check for float in array declaration
                 print("REJECT")
                 sys.exit(0)
-            if token[i] == "]":
-                i += 1  # Accept ]
-                if token[i] == ";":
-                    i += 1  # Accept ;
+            if token[x] == "]":
+                x += 1  # Accept ]
+                if token[x] == ";":
+                    x += 1  # Accept ;
                     return
                 else:
                     print("REJECT")
@@ -303,35 +304,35 @@ def vd():  # 5
 
 
 def types():  # 6
-    global i
-    if token[i] == "int" or token[i] == "void" or token[i] == "float":
-        i += 1  # Accept int/void/float
+    global x
+    if token[x] in miniKeywords:
+        x += 1  # Accept int/void/float
     else:
         return
 
 
 def fd():  # 7
-    global i, ismain
+    global x, ismain
     types()
 
-    x = token[i].isalpha()
-    if token[i] not in keywordchecklist and x is True:
-        if token[i] == "main":
+    w = token[x].isalpha()
+    if token[x] not in keywordchecklist and w is True:
+        if token[x] == "main":
             ismain += 1
-        i += 1  # Accept ID
+        x += 1  # Accept ID
     else:
         return
 
-    if token[i] == "(":
-        i += 1  # Accept (
+    if token[x] == "(":
+        x += 1  # Accept (
     else:
         print("REJECT")
         sys.exit(0)
 
     params()
 
-    if token[i] == ")":
-        i += 1  # Accept )
+    if token[x] == ")":
+        x += 1  # Accept )
     else:
         print("REJECT")
         sys.exit(0)
@@ -340,8 +341,8 @@ def fd():  # 7
 
 
 def params():  # 8
-    global i, fundeci
-    if token[i] == "int" or token[i] == "float" or token[i] == "void":
+    global x, fundeci
+    if token[x] in miniKeywords:
         paramslist()
         fundeci += 1
     else:
@@ -355,34 +356,34 @@ def paramslist():  # 9
 
 
 def paramslistprime():  # 10
-    global i
-    if token[i] == ",":
-        i += 1  # Accept ,
+    global x
+    if token[x] == ",":
+        x += 1  # Accept ,
         param()
         paramslistprime()
-    elif token[i] == ")":
+    elif token[x] == ")":
         return
     else:
         return
 
 
 def param():  # 11
-    global i, funname, curscope
+    global x, funname, curscope
     types()
-    fundec[fundeci] = fundec[fundeci] + " " + token[i-1]
+    fundec[fundeci] = fundec[fundeci] + " " + token[x-1]
     funcallargs.append("")
-    funcallargs[fundeci] = funcallargs[fundeci] + " " + token[i-1]
-    x = token[i].isalpha()
-    if token[i] not in keywordchecklist and x is True:
-        i += 1  # Accept ID
-        fundec[fundeci] = fundec[fundeci] + " " + token[i-1]
+    funcallargs[fundeci] = funcallargs[fundeci] + " " + token[x-1]
+    w = token[x].isalpha()
+    if token[x] not in keywords and w is True:
+        x += 1  # Accept ID
+        fundec[fundeci] = fundec[fundeci] + " " + token[x-1]
 
         k = 0
         m = 0
         mc = 0
         ch = 0
         for v in vars:  # check for duplicate declared variables and with scope
-            if token[i-1] == v:
+            if token[x-1] == v:
                 if varscope[k] != "global" and varscope[k] != funname:
                     ch = 1
                     continue
@@ -396,25 +397,25 @@ def param():  # 11
         if not varscope:
             ch = 1
         if ch == 0 and varscope[m] == "global" and mc == 1:
-            vardec.append(token[i-2] + " " + token[i-1] + " global 0")
-            vars.append(token[i-1])
-            vartype.append(token[i-2])
+            vardec.append(token[x-2] + " " + token[x-1] + " global 0")
+            vars.append(token[x-1])
+            vartype.append(token[x-2])
             varscope.append("global")
             varscopen.append(0)
 
         else:
-            vardec.append(token[i-2] + " " + token[i-1] + " " + str(funname) + " " + str(curscope))
-            vars.append(token[i-1])
-            vartype.append(token[i-2])
+            vardec.append(token[x-2] + " " + token[x-1] + " " + str(funname) + " " + str(curscope))
+            vars.append(token[x-1])
+            vartype.append(token[x-2])
             varscope.append(funname)
             varscopen.append(curscope)
 
         curscope = 0
 
-        if token[i] == "[":
-            i += 1  # Accept [
-            if token[i] == "]":
-                i += 1  # Accept ]
+        if token[x] == "[":
+            x += 1  # Accept [
+            if token[x] == "]":
+                x += 1  # Accept ]
                 return
             else:
                 print("REJECT")
@@ -422,7 +423,7 @@ def param():  # 11
         else:
             return
     else:
-        if token[i-1] == "void":
+        if token[x-1] == "void":
             return
         else:
             print("REJECT")
@@ -430,9 +431,9 @@ def param():  # 11
 
 
 def compoundstmt():  # 12
-    global i, curscope
-    if token[i] == "{":
-        i += 1  # Accept {
+    global x, curscope
+    if token[x] == "{":
+        x += 1  # Accept {
         curscope += 1
     else:
         return
@@ -440,8 +441,8 @@ def compoundstmt():  # 12
     localdeclarations()
     statementlist()
 
-    if token[i] == "}":
-        i += 1  # Accept }
+    if token[x] == "}":
+        x += 1  # Accept }
     else:
         print("REJECT")
         sys.exit(0)
@@ -452,7 +453,7 @@ def localdeclarations():  # 13
 
 
 def localdeclarationsprime():  # 14
-    if token[i] == "int" or token[i] == "void" or token[i] == "float":
+    if token[x] in miniKeywords:
         vd()
         localdeclarationsprime()
     else:
@@ -464,40 +465,39 @@ def statementlist():  # 15
 
 
 def statementlistprime():  # 16
-    x = token[i].isalpha()
-    y = hasnum(token[i])
-    if token[i] not in keywordchecklist and x is True:
+    w = token[x].isalpha()
+    z = hasnum(token[x])
+    if token[x] not in keywords and w is True:
         statement()
         statementlistprime()
-    elif y is True:
+    elif z is True:
         statement()
         statementlistprime()
-    elif token[i] == "(" or token[i] == ";" or token[i] == "{" or token[i] == "if" or\
-                     token[i] == "while" or token[i] == "return":
+    elif token[x] in miniKeywordsTwo:
         statement()
         statementlistprime()
-    elif token[i] == "}":
+    elif token[x] == "}":
         return
     else:
         return
 
 
 def statement():  # 17
-    x = token[i].isalpha()
-    y = hasnum(token[i])
-    if token[i] not in keywordchecklist and x is True:
+    w = token[x].isalpha()
+    z = hasnum(token[x])
+    if token[x] not in keywords and w is True:
         expstmt()
-    elif y is True:
+    elif z is True:
         expstmt()
-    elif token[i] == "(" or token[i] == ";":
+    elif token[x] == "(" or token[x] == ";":
         expstmt()
-    elif token[i] == "{":
+    elif token[x] == "{":
         compoundstmt()
-    elif token[i] == "if":
+    elif token[x] == "if":
         selectionstmt()
-    elif token[i] == "while":
+    elif token[x] == "while":
         itstmt()
-    elif token[i] == "return":
+    elif token[x] == "return":
         retstmt()
     else:
         print("REJECT")
@@ -505,81 +505,81 @@ def statement():  # 17
 
 
 def expstmt():  # 18
-    global i
-    x = token[i].isalpha()
-    y = hasnum(token[i])
-    if token[i] not in keywordchecklist and x is True:
+    global x
+    w = token[x].isalpha()
+    z = hasnum(token[x])
+    if token[x] not in keywords and w is True:
         exp()
-        if token[i] == ";":
-            i += 1  # Accept ;
+        if token[x] == ";":
+            x += 1  # Accept ;
         else:
             print("REJECT")
             sys.exit(0)
-    elif y is True:
+    elif z is True:
         exp()
-        if token[i] == ";":
-            i += 1  # Accept ;
+        if token[x] == ";":
+            x += 1  # Accept ;
         else:
             print("REJECT")
             sys.exit(0)
-    elif token[i] == "(":
+    elif token[x] == "(":
         exp()
-        if token[i] == ";":
-            i += 1  # Accept ;
+        if token[x] == ";":
+            x += 1  # Accept ;
         else:
             print("REJECT")
             sys.exit(0)
-    elif token[i] == ";":
-        i += 1  # Accept ;
+    elif token[x] == ";":
+        x += 1  # Accept ;
     else:
         print("REJECT")
         sys.exit(0)
 
 
 def selectionstmt():  # 19
-    global i
-    if token[i] == "if":
-        i += 1  # Accept if
+    global x
+    if token[x] == "if":
+        x += 1  # Accept if
     else:
         return
 
-    if token[i] == "(":
-        i += 1  # Accept (
+    if token[x] == "(":
+        x += 1  # Accept (
     else:
         print("REJECT")
         sys.exit(0)
 
     exp()
-    if token[i] == ")":
-        i += 1  # Accept )
+    if token[x] == ")":
+        x += 1  # Accept )
     else:
         print("REJECT")
         sys.exit(0)
     statement()
-    if token[i] == "else":
-        i += 1  # Accept else
+    if token[x] == "else":
+        x += 1  # Accept else
         statement()
     else:
         return
 
 
 def itstmt():  # 20
-    global i
-    if token[i] == "while":
-        i += 1  # Accept while
+    global x
+    if token[x] == "while":
+        x += 1  # Accept while
     else:
         return
 
-    if token[i] == "(":
-        i += 1  # Accept (
+    if token[x] == "(":
+        x += 1  # Accept (
     else:
         print("REJECT")
         sys.exit(0)
 
     exp()
 
-    if token[i] == ")":
-        i += 1  # Accept )
+    if token[x] == ")":
+        x += 1  # Accept )
     else:
         print("REJECT")
         sys.exit(0)
@@ -588,24 +588,24 @@ def itstmt():  # 20
 
 
 def retstmt():  # 21
-    global i, excret, exptype, funret
-    if token[i] == "return":
-        i += 1  # Accept return
+    global x, excret, exptype, funret
+    if token[x] == "return":
+        x += 1  # Accept return
         if funtype == "int":
             funret = 1
         else:
             funret = 1
     else:
         return
-    x = token[i].isalpha()
-    y = hasnum(token[i])
-    if token[i] == ";":
-        i += 1  # Accept ;
+    w = token[x].isalpha()
+    z = hasnum(token[x])
+    if token[x] == ";":
+        x += 1  # Accept ;
         if funtype != "void":  # check if int or float function does not return a value
             print("REJECT")
             sys.exit(0)
         return
-    elif token[i] not in keywordchecklist and x is True:
+    elif token[x] not in keywords and w is True:
         if funtype == "void":  # check if void has return with value
             print("REJECT")
             sys.exit(0)
@@ -618,13 +618,13 @@ def retstmt():  # 21
         exp()
         excret = 0
 
-        if token[i] == ";":
-            i += 1  # Accept ;
+        if token[x] == ";":
+            x += 1  # Accept ;
             return
         else:
             print("REJECT")
             sys.exit(0)
-    elif y is True:
+    elif z is True:
         if funtype == "void":  # check if void has return with value
             print("REJECT")
             sys.exit(0)
@@ -637,16 +637,16 @@ def retstmt():  # 21
 
         exp()
         excret = 0
-        if token[i] == ";":
-            i += 1  # Accept ;
+        if token[x] == ";":
+            x += 1  # Accept ;
             return
         else:
             print("REJECT")
             sys.exit(0)
-    elif token[i] == "(":
+    elif token[x] == "(":
         exp()
-        if token[i] == ";":
-            i += 1  # Accept ;
+        if token[x] == ";":
+            x += 1  # Accept ;
             return
         else:
             print("REJECT")
@@ -657,25 +657,25 @@ def retstmt():  # 21
 
 
 def exp():  # 22
-    global i, exptype, exc1, exc0, excret, parammatch, parm
-    x = token[i].isalpha()
-    y = hasnum(token[i])
-    if token[i] not in keywordchecklist and x is True:
-        i += 1  # Accept ID
+    global x, exptype, exc1, exc0, excret, parammatch, parm
+    w = token[x].isalpha()
+    z = hasnum(token[x])
+    if token[x] not in keywords and w is True:
+        x += 1  # Accept ID
         if parm == 1:
             o = 0
             for v in vars:  # get the type of the var for operand/operator checking
-                if v == token[i-1]:
+                if v == token[x-1]:
                     check = vartype[o]
                 o += 1
             parammatch = parammatch + " " + check
 
         if exc0 == 1 and parm == 0:
-            if "(" in token[i]:
+            if "(" in token[x]:
                 o = 0
                 check = 0
                 for v in funnames:  # get the type of the function for operand/operator checking
-                    if v == token[i-1]:
+                    if v == token[x-1]:
                         check = funtypes[o]
                     o += 1
                 if exptype != check:
@@ -687,7 +687,7 @@ def exp():  # 22
                 ch = 0
                 check = 0
                 for v in vars:  # check variable before checking if operator/operand agree
-                    if v == token[i-1]:
+                    if v == token[x-1]:
                         if varscope[o] != "global" and varscope[o] != funname:
                             ch = 1
                         if varscope[o] == funname:
@@ -706,7 +706,7 @@ def exp():  # 22
         if exc1 == 1:
             o = 0
             for v in vars:  # get the type of the var for operand/operator checking
-                if v == token[i-1]:
+                if v == token[x-1]:
                     check = vartype[o]
                 o += 1
             if exptype != check:
@@ -717,29 +717,29 @@ def exp():  # 22
             o = 0
             check = 0
             for v in vars:  # get the type of the var for operand/operator checking
-                if v == token[i-1]:
+                if v == token[x-1]:
                     check = vartype[o]
                 o += 1
             if exptype != check:
                 print("REJECT")
                 sys.exit(0)
 
-        if "(" in token[i] and exc0 == 0 and parm == 0:
-            if token[i-1] not in funnames:
+        if "(" in token[x] and exc0 == 0 and parm == 0:
+            if token[x-1] not in funnames:
                 print("REJECT")
                 sys.exit(0)
 
         ch = 0
         k = 0
         for v in vars:  # check for duplicate declared variables
-            if token[i-1] == v:
+            if token[x-1] == v:
                 if varscope[k] != funname and varscope[k] != "global":
                     ch = 1
                 if varscope[k] == funname:
                     ch = 0
             k += 1
 
-        if token[i-1] not in vars and token[i] != "(":
+        if token[x-1] not in vars and token[x] != "(":
             print("REJECT")
             sys.exit(0)
 
@@ -749,38 +749,38 @@ def exp():  # 22
 
         ex()
 
-    elif token[i] == "(":
-        i += 1  # Accept (
+    elif token[x] == "(":
+        x += 1  # Accept (
         exp()
-        if token[i] == ")":
-            i += 1  # Accept )
+        if token[x] == ")":
+            x += 1  # Accept )
             termprime()
             addexpprime()
-            if token[i] in comparisionSymbols:
+            if token[x] in comparisionSymbols:
                 simexpprime()
-            elif token[i] in additionSubtractionSymbols:
+            elif token[x] in additionSubtractionSymbols:
                 addexpprime()
-                if token[i] in comparisionSymbols:
+                if token[x] in comparisionSymbols:
                     simexpprime()
-            elif token[i] in comparisionSymbols:
+            elif token[x] in comparisionSymbols:
                 simexpprime()
         else:
             print("REJECT")
             sys.exit(0)
-    elif y is True:
-        i += 1  # Accept NUM/FLOAT
+    elif z is True:
+        x += 1  # Accept NUM/FLOAT
         if parm == 1:
-            if "." in token[i-1]:
+            if "." in token[x-1]:
                 parammatch = parammatch + " float"
-            elif "E" in token[i-1]:
+            elif "E" in token[x-1]:
                 parammatch = parammatch + " float"
             else:
                 parammatch = parammatch + " int"
 
         ch = 0
-        if "." in token[i-1]:
+        if "." in token[x-1]:
             ch = 1
-        if "E" in token[i-1]:
+        if "E" in token[x-1]:
             ch = 1
 
         if excret == 1 and ch == 1:
@@ -793,28 +793,28 @@ def exp():  # 22
                 print("REJECT")
                 sys.exit(0)
 
-        if exc1 == 1 and "E" in token[i-1]:
+        if exc1 == 1 and "E" in token[x-1]:
             print("REJECT")
             sys.exit(0)
-        if exc1 == 1 and "." in token[i-1]:
+        if exc1 == 1 and "." in token[x-1]:
             print("REJECT")
             sys.exit(0)
 
         if exc0 == 1:
             if ch != 1 and exptype == "float":
-                if "." not in token[i+1] and "E" not in token[i+1]:
+                if "." not in token[x+1] and "E" not in token[x+1]:
                     print("REJECT")
                     sys.exit(0)
 
         termprime()
         addexpprime()
-        if token[i] in comparisionSymbols:
+        if token[x] in comparisionSymbols:
             simexpprime()
-        elif token[i] in additionSubtractionSymbols:
+        elif token[x] in additionSubtractionSymbols:
             addexpprime()
-            if token[i] in comparisionSymbols:
+            if token[x] in comparisionSymbols:
                 simexpprime()
-        elif token[i] in comparisionSymbols:
+        elif token[x] in comparisionSymbols:
                 simexpprime()
     else:
         print("REJECT")
@@ -822,50 +822,50 @@ def exp():  # 22
 
 
 def ex():  # 22X
-    global i, exptype, exc1, exc0, parm, parammatch
-    if token[i] == "=":
-        i += 1  # Accept =
+    global x, exptype, exc1, exc0, parm, parammatch
+    if token[x] == "=":
+        x += 1  # Accept =
         k = 0
         for v in vars:  # find the type of the first ID for the exp
-            if token[i-2] == v:
+            if token[x-2] == v:
                 exptype = vartype[k]
                 exc0 = 1
             k += 1
         exp()
         exc0 = 0
-    elif token[i] == "[":
-        i += 1  # Accept [
+    elif token[x] == "[":
+        x += 1  # Accept [
         exptype = "int"
         exc1 = 1
         exp()
         exc1 = 0
-        if token[i-1] == "[":
+        if token[x-1] == "[":
             print("REJECT")
             sys.exit(0)
-        if token[i] == "]":
-            i += 1  # Accept ]
-            if token[i] == "=":
-                i += 1  # Accept =
+        if token[x] == "]":
+            x += 1  # Accept ]
+            if token[x] == "=":
+                x += 1  # Accept =
                 exp()
-            elif token[i] in multiplicationDivisionSymbols:
+            elif token[x] in multiplicationDivisionSymbols:
                 termprime()
                 addexpprime()
-                if token[i] in comparisionSymbols:
+                if token[x] in comparisionSymbols:
                     simexpprime()
-            elif token[i] in additionSubtractionSymbols:
+            elif token[x] in additionSubtractionSymbols:
                 addexpprime()
-                if token[i] in comparisionSymbols:
+                if token[x] in comparisionSymbols:
                    simexpprime()
-            elif token[i] in comparisionSymbols:
+            elif token[x] in comparisionSymbols:
                 simexpprime()
         else:
             print("REJECT")
             sys.exit(0)
-    elif "(" in token[i]:
-        i += 1  # Accept (
+    elif "(" in token[x]:
+        x += 1  # Accept (
         k = 0
         for v in funnames:
-            if v == token[i-2]:
+            if v == token[x-2]:
                 break
             k += 1
         args()
@@ -877,47 +877,47 @@ def ex():  # 22X
             print("REJECT")
             sys.exit(0)
 
-        if ")" in token[i]:
-            i += 1  # Accept )
-            if token[i] in multiplicationDivisionSymbols:
+        if ")" in token[x]:
+            x += 1  # Accept )
+            if token[x] in multiplicationDivisionSymbols:
                 termprime()
                 addexpprime()
-                if token[i] in comparisionSymbols:
+                if token[x] in comparisionSymbols:
                     simexpprime()
-            elif token[i] in additionSubtractionSymbols:
+            elif token[x] in additionSubtractionSymbols:
                 addexpprime()
-                if token[i] in comparisionSymbols:
+                if token[x] in comparisionSymbols:
                     simexpprime()
-            elif token[i] in comparisionSymbols:
+            elif token[x] in comparisionSymbols:
                 simexpprime()
         else:
             print("REJECT")
             sys.exit(0)
-    elif token[i] in multiplicationDivisionSymbols:
+    elif token[x] in multiplicationDivisionSymbols:
         termprime()
         addexpprime()
-        if token[i] in comparisionSymbols:
+        if token[x] in comparisionSymbols:
              simexpprime()
-    elif token[i] in additionSubtractionSymbols:
+    elif token[x] in additionSubtractionSymbols:
         addexpprime()
-        if token[i] in comparisionSymbols:
+        if token[x] in comparisionSymbols:
             simexpprime()
-    elif token[i] in comparisionSymbols:
+    elif token[x] in comparisionSymbols:
             simexpprime()
 
 
 def var():  # 23
-    global i
-    x = token[i].isalpha()
-    if token[i] not in keywordchecklist and x is True:
-        i += 1  # Accept ID
+    global x
+    w = token[x].isalpha()
+    if token[x] not in keywordchecklist and w is True:
+        x += 1  # Accept ID
     else:
         return
-    if "[" in token[i]:
-        i += 1  # Accept [
+    if "[" in token[x]:
+        x += 1  # Accept [
         exp()
-        if "]" in token[i]:
-            i += 1  # Accept ]
+        if "]" in token[x]:
+            x += 1  # Accept ]
         else:
             print("REJECT")
             sys.exit(0)
@@ -930,7 +930,7 @@ def simexp():  # 24
     simexpprime()
 
 def simexpprime():
-    if token[i] in comparisionSymbols:
+    if token[x] in comparisionSymbols:
         relop()
         addexp()
     else:
@@ -938,9 +938,9 @@ def simexpprime():
 
 
 def relop():  # 25
-    global i
-    if token[i] in comparisionSymbols:
-        i += 1  # Accept <=, <, >, >=, ==, or !=
+    global x
+    if token[x] in comparisionSymbols:
+        x += 1  # Accept <=, <, >, >=, ==, or !=
     else:
         return
 
@@ -951,7 +951,7 @@ def addexp():  # 26
 
 
 def addexpprime():  # 27
-    if token[i] in additionSubtractionSymbols:
+    if token[x] in additionSubtractionSymbols:
         addop()
         term()
         addexpprime()
@@ -960,9 +960,9 @@ def addexpprime():  # 27
 
 
 def addop():  # 28
-    global i
-    if token[i] in additionSubtractionSymbols:
-        i += 1  # Accept +, -
+    global x
+    if token[x] in additionSubtractionSymbols:
+        x += 1  # Accept +, -
     else:
         return
 
@@ -973,7 +973,7 @@ def term():  # 29
 
 
 def termprime():  # 30
-    if token[i] in multiplicationDivisionSymbols:
+    if token[x] in multiplicationDivisionSymbols:
         mulop()
         factor()
         termprime()
@@ -982,25 +982,25 @@ def termprime():  # 30
 
 
 def mulop():  # 31
-    global i
-    if token[i] in multiplicationDivisionSymbols:
-        i += 1  # Accept *, /
+    global x
+    if token[x] in multiplicationDivisionSymbols:
+        x += 1  # Accept *, /
     else:
         return
 
 
 def factor():  # 32
-    global i, exc0, excret
-    x = token[i].isalpha()
-    y = hasnum(token[i])
-    if token[i] not in keywordchecklist and x is True:
-        i += 1  # Accept ID
+    global x, exc0, excret
+    w = token[x].isalpha()
+    z = hasnum(token[x])
+    if token[x] not in keywords and w is True:
+        x += 1  # Accept ID
 
         if exc0 == 1:
             o = 0
             ch = 0
             for v in vars:  # get the type of the var for operand/operator checking
-                if v == token[i-1]:
+                if v == token[x-1]:
                     if varscope[o] != "global" and varscope[o] != funname:
                         ch = 1
                     if varscope[o] == funname:
@@ -1019,7 +1019,7 @@ def factor():  # 32
         if excret == 1:
             o = 0
             for v in vars:  # get the type of the var for operand/operator checking
-                if v == token[i-1]:
+                if v == token[x-1]:
                     check = vartype[o]
                 o += 1
             if exptype != check:
@@ -1027,29 +1027,29 @@ def factor():  # 32
                 sys.exit(0)
 
 
-        if "[" in token[i]:
-            i += 1  # Accept [
+        if "[" in token[x]:
+            x += 1  # Accept [
             exp()
-            if "]" in token[i]:
-                i += 1  # Accept ]
+            if "]" in token[x]:
+                x += 1  # Accept ]
             else:
                 return
-        elif "(" in token[i]:
-            i += 1  # Accept (
+        elif "(" in token[x]:
+            x += 1  # Accept (
             args()
-            if ")" in token[i]:
-                i += 1  # Accept )
+            if ")" in token[x]:
+                x += 1  # Accept )
             else:
                 return
         else:
             return
-    elif y is True:
-        i += 1  # Accept NUM/FLOAT
-    elif "(" in token[i]:
-        i += 1  # Accept (
+    elif z is True:
+        x += 1  # Accept NUM/FLOAT
+    elif "(" in token[x]:
+        x += 1  # Accept (
         exp()
-        if ")" in token[i]:
-            i += 1  # Accept )
+        if ")" in token[x]:
+            x += 1  # Accept )
         else:
             return
     else:
@@ -1058,15 +1058,15 @@ def factor():  # 32
 
 
 def factorprime():  # 33
-    global i
-    x = token[i].isalpha()
-    if token[i] not in keywordchecklist and x is True:
-        i += 1  # Accept ID
-        if "(" in token[i]:
-            i += 1  # Accept (
+    global x
+    w = token[x].isalpha()
+    if token[x] not in keywordchecklist and w is True:
+        x += 1  # Accept ID
+        if "(" in token[x]:
+            x += 1  # Accept (
             args()
-            if ")" in token[i]:
-                i += 1  # Accept )
+            if ")" in token[x]:
+                x += 1  # Accept )
             else:
                 print("REJECT")
                 sys.exit(0)
@@ -1078,16 +1078,16 @@ def factorprime():  # 33
 
 
 def args():  # 34
-    global i
-    x = token[i].isalpha()
-    y = hasnum(token[i])
-    if token[i] not in keywordchecklist and x is True:
+    global x
+    w = token[x].isalpha()
+    z = hasnum(token[x])
+    if token[x] not in keywords and w is True:
         arglist()
-    elif y is True:
+    elif z is True:
         arglist()
-    elif "(" in token[i]:
+    elif "(" in token[x]:
         arglist()
-    elif ")" in token[i]:
+    elif ")" in token[x]:
         return
     else:
         return
@@ -1102,12 +1102,12 @@ def arglist():  # 35
 
 
 def arglistprime():  # 36
-    global i
-    if "," in token[i]:
-        i += 1  # Accept ,
+    global x
+    if "," in token[x]:
+        x += 1  # Accept ,
         exp()
         arglistprime()
-    elif ")" in token[i]:
+    elif ")" in token[x]:
         return
     else:
         return
@@ -1116,7 +1116,7 @@ def arglistprime():  # 36
 # ----------------------------- end of parsing functions --------------------------------- #
 
 # begin parsing
-program()
+programDeclaration()
 
 print(vardec)
 print(fundec)
