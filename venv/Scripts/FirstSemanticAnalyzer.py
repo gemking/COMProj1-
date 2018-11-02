@@ -145,7 +145,7 @@ def declaration():  # 4
         if token[i] == "main":
             ismain += 1
             lastmain = 1
-            if token[i-1] != "void" or token[i+2] != "void":
+            if token[i-1] != "void":
                 print("REJECT")
                 sys.exit(0)
         else:

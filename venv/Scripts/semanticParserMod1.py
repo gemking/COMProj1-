@@ -69,7 +69,32 @@ for importantLines in filelines: #receiving importantlines from filelines
                     # ----- end of lexer ----- #
 
 token.append("$")  #appended to determine when the program is done programming
+checkMain = 0 #checks if there is 1 main function
+checkLastMain = 0 #check if the last function is main
+finished = 0
+expressionLeft = 0
+exressionRight = 0
+expressionReturn = 0
+parameterMatch = 0
+parameter  = 0
 
+variableDeclaration = [] #list which holds declared scope, type, and variables
+variableType = [] #list that holds the type of variables
+variableOperation = [] #checks for operator and operand agreement
+vars = [] #list to hold all of the declared variables
+varsScope = [] #list of all variable scopes
+varsScopeBlock = [] #list of all variable scopes in bllock number
+functionDeclaration =[] #list to hold declared functions with parms/arguments
+functionIndex = 0 #index to keep track of apramters/arguments
+functionCall = [] #functions called
+functionCallArguments = [] #list of argument types in a function's paramters
+functionNames = [] #list of all function names
+functionTypes = [] #list of all function types
+functionName = 0 #function name for scope
+functionType = 0 #function type and sees if ti needs return
+currentScope = 0 #current scope
+functionReturn = 0 # does function have a return?
+functionReturnIntFloat = 0 #check if int/float function has return
 
                  # ----- beginning of parser ----- #
 
@@ -78,9 +103,10 @@ def hasnum(inputstring):
 
 
 def programDeclaration(): #runs program(Rule 1)
+    global completed
     declarationList()
     if "$" in token[x]:
-        print("ACCEPT") #if $ can be applied in the token, proceed
+        finished = 1 #continues outside
     else:
         print ("REJECT") #if not, Reject
 
@@ -102,17 +128,69 @@ def declarationListPrime(): #Rule 3
 
 def declaration(): #Rule 4
     global x
+    global checkMain
+    global checkLastMain
+    global currentScope
+    global functionName
+    global functionType
+    global functionReturn
     typeSpecifier()
     w = token[x].isalpha()
     if token[x] not in keywords and w is True:
+        if "main" in token[x]: #if main is in the file
+            checkMain += 1
+            checkLastMain += 1
+        if token[x-1] != "void": #if void is not in the file
+            print("REJECT")
+            exit(0)
+        else:
+            checkLastMain = 0
+
         x += 1  # Accepts ID
         if ";" in token[x]:
             x += 1  # Accepts ;
+            m = 0
+            for l in vars: #checking for duplicates of declared variables
+                if token[x-2] == l:
+                    if variableType[m] == token[x-3]:
+                        print("REJECT")
+                        exit(0)
+                m += 1
+
+            variableDeclaration.append(token[x-3] + " " + token[x-2] + " global 0")
+            vars.append(token[x-2])
+            variableType.append(token[x-3])
+            varsScope.append("global")
+            varsScopeBlock.append(0)
+
+            if "void" in token[x-3]:
+                print("REJECT")
+                exit(0)
+
         elif "[" in token[x]:
             x += 1  # Accepts [
+            m = 0
+            for l in vars: #checking for duplicates of declared variables
+                if token[x-2] == l:
+                    if variableType[k] == token[x-3]:
+                        print("REJECT")
+                        exit(0)
+                m += 1
+
+                variableDeclaration.append(token[x - 3] + " " + token[x - 2] + " global 0")
+                vars.append(token[x - 2])
+                variableType.append(token[x - 3])
+                varsScope.append("global")
+                varsScopeBlock.append(0)
+
+                if "void" in token[x-3]:
+                    print("REJECT")
+                    exit(0)
+
             z = hasnum(token[x])
             if z is True:
                 x += 1  # Accepts NUM/FLOAT
+                declarationPrime()
                 if "]" in token[x]:
                     x += 1  # Accepts ]
                     if ";" in token[x]:
@@ -126,22 +204,6 @@ def declaration(): #Rule 4
             else:
                 print("REJECT")
                 exit(0)
-        elif "(" in token[x]:
-            x += 1  # Accepts (
-            parameters()
-
-            if ")" in token[x]:
-                x += 1  # Accepts )
-                compoundStatement()
-            else:
-                print("REJECT")
-                exit(0)
-        else:
-            print("REJECT")
-            exit(0)
-    else:
-        print("REJECT")
-        exit(0)
 
 def declarationPrime(): #Rule 5
     global x
@@ -155,19 +217,38 @@ def declarationPrime(): #Rule 5
 
     if "(" in token[x]:
         x += 1  # Accepts (
+        for l in functionDeclaration:  # check if there is duplicates of declared functions
+            if token[l-2] in l:
+                print("REJECT")
+                exit(0)
+        functionDeclaration.append(token[x - 3] + " " + token[x - 2])
+        functionName = token[x - 2]
+        functionNames.append(token[x - 2])
+        functionTypes.append(token[x - 3])
+        functionType = token[x - 3]
+        functionReturn = 0
+        currentScope = 0
+
+        parameters()
+
+        if ")" in token[x]:
+            x += 1 #Accepts )
+            compoundStatement()
+
+            if functionReturn == 0 and "int" in functionType:
+                print ("REJECT")
+                exit(0)
+            elif functionReturn == 0 and "float" in functionType:
+                print("REJECT")
+                exit(0)
+            else:
+                functionReturn = 0
+        else:
+            print("REJECT")
+            exit(0)
     else:
         print("REJECT")
         exit(0)
-
-    parameters()
-
-    if ")" in token[x]:
-        x += 1  # Accepts )
-    else:
-        print("REJECT")
-        exit(0)
-
-    compoundStatement()
 
 def variableDeclaration(): #Rule 6
     global x
@@ -175,6 +256,24 @@ def variableDeclaration(): #Rule 6
     w = token[x].isalpha()
     if token[x] not in keywords and w is True:
         x += 1  # Accepts ID
+        m = 0
+        for l in vars: #check for duplicated declared variables
+            if v == token[i-1]:
+                if functionName in varsScope[m]:
+                    if currentScope <= varsScopeBlock[m]:
+                        print ("REJECT")
+                        exit(0)
+
+            m += 1
+        variableDeclaration.append(token[x-2] + " " + token[x-1] + " " + str(functionName) + " " + str(currentScope))
+        vars.append(token[x-1])
+        variableType.append(token[x-2])
+        varsScope.append(functionName)
+        varsScopeBlock.append(currentScope)
+
+        if "void" in token[i-2]: # check if ID is type void
+            print("REJECT")
+            exit(0)
     else:
         print("REJECT")
         exit(0)
@@ -190,6 +289,13 @@ def variableDeclarationPrime(): #Rule 7
         w = hasnum(token[x])
         if w is True:
             x += 1  # Accepts NUM/FLOAT
+            if "." in token[x-1]: # check for float in the array declaration
+                print("REJECT")
+                exit(0)
+            if "E" in token[x-1]: #check for float in the array declaration
+                print("REJECT")
+                exit(0)
+
             if "]" in token[x]:
                 x += 1  # Accepts ]
                 if ";" in token[x]:
@@ -232,24 +338,77 @@ def parameter(): #Rule 9
 
 def parameterPrime(): #Rule 10
     global x
-    if "[" in token[x]:
-        x += 1  # Accepts [
-        if "]" in token[x]:
-            x += 1  # Accepts ]
+    global currentScope
+    global functionName
+    typeSpecifier()
+    functionDeclaration[functionIndex] - functionDeclaration[functionIndex] + " " + token[x-1]
+    functionCallArguments.append("")
+    functionCallArguments[functionIndex] = functionCallArguments[functionIndex] + " " + token[x-1]
+    w = token[x].isalpha()
+    if token[x] not in keywords and w is True:
+        x += 1 #Accepts ID
+        functionDeclaration[functionIndex] = functionDeclaration[functionIndex] + " " + token[x-1]
+
+        m = 0
+        g = 0
+        gh = 0
+        cz = 0
+        for duplicates in vars: #check for duplicate declared variables and with scope
+            if duplicates in token[x-1]:
+                if "global" not in varsScope[m] and functionName not in varsScope[m]: #may not work
+                    cz = 1
+                    continue
+                if "global" in varsScope[m]:
+                    m = g
+                    gh = 1
+                    break
+            m += 1
+
+        currentScope = 1
+        if not varsScope:
+            cz = 1
+        if 0 in cz and "global" in varsScope[m] and 1 in gh:  #may not work
+            variableDeclaration.append(token[x-2] + " " + token[x-1] + " global 0")
+            vars.append(token[x-1])
+            vartype.append(token[x-2])
+            varsScope.append("global")
+            varsScopeBlock.append(0)
+        else:
+            variableDeclaration.append(token[i-2] + " " + token[i-1] + " " + str(functionName) + " " + str(currentScope))
+            vars.append(token[i-1])
+            variableType.append(token[i-2])
+            varsScope.append(functionName)
+            varsScopeBlock.append(currentScope)
+
+        currentScope = 0
+
+
+        if "[" in token[x]:
+            x += 1  # Accepts [
+            if "]" in token[x]:
+                x += 1  # Accepts ]
+                return
+            else:
+                print("REJECT")
+                exit(0)
+        else:
+            return
+    else:
+        if "void" in token[x-1]:
             return
         else:
             print("REJECT")
             exit(0)
-    else:
-        return
 
 def parameters(): #Rule 11
     global x
+    global functionIndex
     if "int" in token[x] or "float" in token[x]:
         parametersList()
     elif "void" in token[x]:
         x += 1  # Accepts void
         parametersPrime()
+        functionIndex += 1
     else:
         print("REJECT")
         exit(0)
@@ -294,6 +453,7 @@ def compoundStatement(): #Rule 15
     global x
     if "{" in token[x]:
         x += 1  # Accepts {
+        currentScope += 1
     else:
         return
 
@@ -455,8 +615,13 @@ def iterationStatement(): #Rule 24
 
 def returnStatement(): #Rule 25
     global x
+    global functionReturn
     if "return" in token[x]:
         x += 1  # Accepts return
+        if "int" in functionType:
+            functionReturn = 1
+        else:
+            functionReturn = 1
     else:
         return
     returnStatementPrime()
@@ -464,21 +629,48 @@ def returnStatement(): #Rule 25
 
 def returnStatementPrime(): #Rule 26
     global x
+    global functionReturn
+    global expressionReturn
+    global expressionType
     w = token[x].isalpha()
     z = hasnum(token[x])
     if ";" in token[x]:
         x += 1  # Accepts ;
+        if "void" not in functionType: #may not work; check if int or float function does not return value
+            print("REJECT")
+            exit(0)
         return
     elif token[x] not in keywords and w is True:
+        if "void" in functionType: #Check if void has return with value
+            print("REJECT")
+            exit(0)
+
+        if "int" in functionType:
+            expressionType = "int"
+        else:
+            expressionType = "float"
+        expressionReturn = 1
         expressionPrime()
+        expressionReturn = 0
+
         if ";" in token[x]:
             x += 1  # Accepts ;
             return
         else:
             print("REJECT")
             exit(0)
-    elif z  is True:
+    elif z is True:
+        if "void" in functionType: # check if void has return with value
+            print("REJECT")
+            exit(0)
+
+        if "int" in functionType:
+            expressionType = "int"
+        else:
+            expressionType = "float"
+        expressionReturn = 1
         expressionPrime()
+        expressionReturn = 0
         if ";" in token[x]:
             x += 1  # Accepts ;
             return
@@ -502,12 +694,27 @@ def returnStatementPrime(): #Rule 26
 
 def expression(): #Rule 27
     global x
+    global expressionLeft
+    global expressionRight
+    global expressionType
+    global parameter
+    global parameterMatch
     if "=" in token[x]:
         x += 1  # Accepts =
+        m = 0
+        for duplicates in vars: #find the type of the first ID for the expression
+            if v in token[x-2]:
+                expressionType = variableType[m]
+                exception0 = 1
+            k += 1
         expressionPrime()
+        expressionLeft = 0
     elif "[" in token[x]:
         x += 1  # Accepts [
+        expressionType = "int"
+        expressionRight = 1
         expressionPrime()
+        expressionRight = 0
         if "[" in token[x-1]:
             print("REJECT")
             exit(0)
@@ -535,7 +742,19 @@ def expression(): #Rule 27
             exit(0)
     elif "(" in token[x]:
         x += 1  # Accepts (
+        m = 0
+        for duplicates in functionNames:
+            if token[i-2] in v:
+                break
+            m += 1
         arguments()
+        parameter = 0
+        r = 0
+        if not parameterMatch:
+            r = 1
+        if r == 0 and  parameterMatch not in functionCallArguments[m]:
+            print("REJECT")
+            exit(0)
         if ")" in token[x]:
             x += 1  # Accepts )
             if multiplyDivideSymbols in token[x]:
@@ -572,11 +791,68 @@ def expression(): #Rule 27
 
 def expressionPrime(): #Rule 28
     global x
+    global expressionType
+    global exception0
+    global exception1
+    global exceptionReturn
+    global parameterMatch
+    global parameter
     w = token[x].isalpha()
     z = hasnum(token[x])
     if token[x] not in keywords and w is True:
         x += 1  # Accepts ID
-        expression()
+        if 1 in parameter:
+            q = 0
+            for duplicates in vars: #get the type of the var for operand/operator checking
+                if token[x-1] in duplicates:
+                    check = variableType[q]
+                q += 1
+            parameterMatch = parameterMatch + " " + check
+        if expressionLeft == 0 and parameter == 0:
+            if "(" in token[x]:
+                q = 0
+                check = 0
+                for duplicates in functionNames: #get the type of the function for operand/operator checking
+                    if token[x-1] in v:
+                        check = functionTypes[q]
+                    q += 1
+                if check not in expressionType:
+                    print("REJECT")
+                    exit(0)
+                if expressionReturn == 1:
+                    q = 0
+                    check = 0
+                    for duplicates in vars: #get the type of the var for operand/operator checking
+                        if token[x-1] in duplicates:
+                            check = variableType[q]
+                        q += 1
+                    if check not in expressionType:
+                        print("REJECT")
+                        exit(0)
+
+                    if "(" in token[x] and expressionReturn == 0 and parameter == 0:
+                        if token[x-1] not in functionNames:
+                            print("REJECT")
+                            exit(0)
+
+                    cz = 0
+                    m = 0
+                    for duplicates in vars: #check for duplicate declared variables
+                        if v in token[x-1]:
+                            if functioName not in varsScope[m] and "global" not in varsScope[m]:
+                                cz = 1
+                            if functionName in varsScope[m]:
+                                cz = 0
+                        m += 1
+                    if token[x-1] not in vars and "(" not in token[x]:
+                        print("REJECT")
+                        exit(0)
+                    if cz == 1:
+                        print("REJECT")
+                        exit(0)
+
+                    expression()
+
     elif "(" in token[x]:
         x += 1  # Accepts (
         expressionPrime()
@@ -602,6 +878,40 @@ def expressionPrime(): #Rule 28
             exit(0)
     elif z is True:
         x += 1  # Accepts NUM/FLOAT
+        if parameter == 1:
+            if "." in token[x-1]:
+                parameterMatch = parameterMatch + " float"
+            elif "E" in token[x-1]:
+                parameterMatch = parameterMatch + "float"
+            else:
+                parameterMatch = parameterMatch + " int"
+
+            cz = 0
+            if "." in token[x-1]:
+                cz = 1
+            if "E" in token[x-1]:
+                cz = 1
+
+            if exceptionReturn == 1 and cz == 1:
+                if "float" not in expressionType:
+                    print("REJECT")
+                    exit(0)
+            if expressionReturn == 1 and cz == 0:
+                if "int" not in expressionType:
+                    print("REJECT")
+                    exit(0)
+            if expressionRight == 1 and "E" in token[x-1]:
+                print("REJECT")
+                exit(0)
+            if expressionRight == 1 and "." in token[x-1]:
+                print("REJECT")
+                exit(0)
+
+            if expressionLeft == 1:
+                if cz != 1 and "float" in expressionType:
+                    if "." not in token[x-1] and "E" not in token[x+1]:
+                        print("REJECT")
+                        exit(0)
         termPrime()
         addExpressionPrime()
         if comparisonSymbols in token[x]:
@@ -712,10 +1022,43 @@ def multiplyOperation(): #Rule 39
 
 def factor(): #Rule 40
     global x
+    global expressionReturn
+    global expressionLeft
     w = token[x].isalpha()
     z = hasnum(token[x])
     if token[x] not in keywords and w is True:
         x += 1  # Accepts ID
+
+        if expressionReturn == 1:
+            q = 0
+            cz = 0
+            for duplicates in vars: #get the type of the var for operand/operator checking
+                if token[x-1] in v:
+                    if "global" not in varsScope[q] and functionName not in varsScope[q]:
+                        cz = 1
+                    if functionName in varsScope[q]:
+                        cz = 0
+                        check = variableType[q]
+                        break
+                    check = variableType[q]
+                q += 1
+            if check not in expressionType:
+                print("REJECT")
+                exit(0)
+            if cz == 1:
+                print("REJECT")
+                exit(0)
+
+        if expressionReturn == 1:
+            q = 0
+            for duplicates in vars: #get the type of the var for operand/operator checking
+                if token[i-1] in duplicates:
+                    check = variableType[q]
+                q += 1
+            if check not in expressionType:
+                print("REJECT")
+                exit(0)
+
         if "[" in token[x]:
             x += 1  # Accepts [
             expressionPrime()
@@ -785,6 +1128,10 @@ def arguments(): #Rule 42
 
 
 def argumentsList(): #Rule 43
+    global parameter
+    global parameterMatch
+    parameterMatch = ""
+    parmeter = 1
     expressionPrime()
     argumentslistPrime()
 
@@ -805,3 +1152,11 @@ def argumentslistPrime(): #Rule 44
 
 
 programDeclaration() #Starts parsing the
+
+print(variableDeclaration)
+print(functionDeclaration)
+
+if checkMain == 1 and checkLastMain == 1: #check if contains 1 main function
+    print("ACCEPT")
+else:
+    print("REJECT")

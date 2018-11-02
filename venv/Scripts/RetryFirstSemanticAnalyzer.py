@@ -1,80 +1,72 @@
 import sys
 import re
+with open(sys.argv[1], "r") as file: #opens file
+    filelines = file.read().splitlines() # reads file and splits lines
+    file.close() #closes file
 
-f = open(sys.argv[1], "r")  # open file and read contents into a list (without "\n")
-filelines = f.read().splitlines()
-f.close()
 
-keywordchecklist = ["else", "if", "int", "return", "void", "while", "float"]  # list of all keywords
+insideComment = 0
+keywordchecklist = ["if", "else", "while", "int", "float", "void", "return"] #denotes all keywords
+symbols = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]" #denotes symbols used
+comparisonSymbols = "<" or "<=" or  ">" or ">=" or "==" or"!=" #holds relational operations
+addSubtractSymbols = "+" or "-" #holds addition and subtraction operations
+multiplyDivideSymbols = "*" or "/" #holds multiplication and division operations
+characters = "[a-zA-Z]+" #obtains all words for the IDs
+digits = "[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?" #gets all decimal values, including integer values 0-9
+errors = "\S" #reports errors
+token = []  # creates a list that holds all of the tokens
+i = 0  #value that holds the token counter for the parser
 
-# our regular expressions for the lexical analyzer
-wordsRegex = "[a-z]+"  # gets all words/ID's
-numbersRegex = "[0-9]+(\.[0-9]+)?(E(\+|-)?[0-9]+)?"  # gets all NUM's/float numbers
-symRegex = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]"  # gets all special symbols
-errorRegex = "\S"
+for importantLines in filelines: #receiving importantlines from filelines
+    importantLine = importantLines #sets importantLine to importantLines
 
-incomment = 0  # check to see if in comment
-token = []  # create List to hold all tokens
-i = 0  # token counter for parser
 
-# ------------------Begin going through the file and getting tokens----------------------- #
-for flines in filelines:
-    fline = flines
+    if not importantLine:
+        continue # if not an important line, it continues through the file
 
-    if not fline:
-        continue
-    # print  # extra line to separate input lines
-    # if fline:
-        # print "INPUT: " + fline  # print the input line, while also getting rid of blank lines
+    list = "(%s)|(%s)|(%s)|(%s)" % (characters, digits, symbols, errors)  # puts entire library into a list of strings
 
-    regex = "(%s)|(%s)|(%s)|(%s)" % (wordsRegex, numbersRegex, symRegex, errorRegex)
-    '([a-z]+)|([0-9]+(\.[0-9]+)?(E(\+|-)?[0-9]+)?)|'
-    '("\/\*|\*\/|\+|-|\*|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]|//")|(\S)'
-
-    for t in re.findall(regex, fline):
-        if t[0] and incomment == 0:
-            if t[0] in keywordchecklist:
-                token.append(t[0])
-                # print "keyword:", t[0]
+    for word in re.findall(list, importantLine): #finds list
+        if re.match(characters, word[0]) and insideComment == 0: #matches characters and makes sure insideComment is 0
+            if word[0] in keywordchecklist:
+                token.append(word[0]) #keyword is constructed out of characters a-zA-Z
             else:
-                # print "ID:", t[0]
-                token.append(t[0])
-        elif t[1] and incomment == 0:
-            if "." in t[1]:
-                # print "FLOAT:", t[1]
-                token.append(t[1])
-            elif "E" in t[1]:
-                # print "FLOAT:", t[1]
-                token.append(t[1])
+                token.append(word[0]) #appends character values that are not keywords
+
+
+
+
+        elif re.match(digits,word[1]) and insideComment == 0: #matches digits and makes sure inside comment is 0
+            if "." in word[1]:
+                token.append(word[1]) #checks if value is a decimal value and appends
+            elif "E" in word[1]:
+                token.append(word[1]) #checks if value is an expontential value and appends
             else:
-                # print "NUM:", t[1]
-                token.append(t[1])
-        elif t[5]:
-            if t[5] == "/*":
-                incomment = incomment + 1
-            elif t[5] == "*/" and incomment > 0:
-                incomment = incomment - 1
-            elif t[5] == "//" and incomment == 0:
+                token.append(word[1]) #appends integer value
+        elif re.match(symbols, word[4]): #matches symbols
+            if "/*" in word[4]: #Checks when word approaches /*
+                insideComment = insideComment + 1 #increments insideComment if inside
+            elif "*/" in word[4] and insideComment > 0: #Checks when word approaches */
+                insideComment = insideComment - 1 #decrements insideComment if outside
+            elif "//" in word[4] and insideComment == 0: #If neither
                 break
-            elif incomment == 0:
-                if t[5] == "*/":
-                    if "*/*" in fline:
-                        # print "*"
+            elif insideComment == 0: #when inside counter is 0
+                if "*/" in word[4]: #when it reaches terminal */
+                    if "*/*" in importantLine: #when it's still sorting through comments
                         token.append("*")
-                        incomment += 1
-                        continue
+                        insideComment += 1
+                        continue #skips comments and continue through the program
                     else:
-                        # print "*"
-                        token.append("*")
-                        # print "/"
-                        token.append("/")
+                        token.append("*") #appends multiplication symbol
+                        token.append("/") #appends division symbol
                 else:
                     # print t[5]
-                    token.append(t[5])
-        elif t[6] and incomment == 0:
+                    token.append(word[4]) #appends rest of symbols
+        elif word[3] and insideComment == 0: #matches errors and makes sure insideComment is 0
             # print "ERROR:", t[6]
-            token.append(t[6])
-# ------------ end of for loop for the file and getting tokens --------------------------- #
+            token.append(word[3]) #appends error
+
+                    # ----- end of lexer ----- #
 
 token.append("$")  # add to end to check if done parsing
 ismain = 0  # check for 1 main function
@@ -677,7 +669,7 @@ def exp():  # 22
             parammatch = parammatch + " " + check
 
         if exc0 == 1 and parm == 0:
-            if token[i] == "(":
+            if "(" in token[i]:
                 o = 0
                 check = 0
                 for v in funnames:  # get the type of the function for operand/operator checking
@@ -730,7 +722,7 @@ def exp():  # 22
                 print("REJECT")
                 sys.exit(0)
 
-        if token[i] == "(" and exc0 == 0 and parm == 0:
+        if "(" in token[i] and exc0 == 0 and parm == 0:
             if token[i-1] not in funnames:
                 print("REJECT")
                 sys.exit(0)
@@ -762,18 +754,15 @@ def exp():  # 22
             i += 1  # Accept )
             termprime()
             addexpprime()
-            if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                           token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+            if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
                 relop()
                 addexp()
-            elif token[i] == "+" or token[i] == "-":
+            elif "-" in token[i] or "+" in token[i]:
                 addexpprime()
-                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
                     relop()
                     addexp()
-            elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                             token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+            elif "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
                 relop()
                 addexp()
             else:
@@ -822,18 +811,15 @@ def exp():  # 22
 
         termprime()
         addexpprime()
-        if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                       token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+        if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
             relop()
             addexp()
-        elif token[i] == "+" or token[i] == "-":
+        elif "-" in token[i] or "+" in token[i]:
             addexpprime()
-            if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                           token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+            if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
                 relop()
                 addexp()
-        elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                         token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+        elif "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
                 relop()
                 addexp()
         else:
@@ -869,23 +855,20 @@ def ex():  # 22X
             if token[i] == "=":
                 i += 1  # Accept =
                 exp()
-            elif token[i] == "*" or token[i] == "/":
+            elif "/" in token[i] or "*" in token[i]:
                 termprime()
                 addexpprime()
-                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
                     relop()
                     addexp()
                 else:
                     return
-            elif token[i] == "+" or token[i] == "-":
+            elif "-" in token[i] or "+" in token[i]:
                 addexpprime()
-                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
                     relop()
                     addexp()
-            elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                             token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+            elif "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
                 relop()
                 addexp()
             else:
@@ -911,23 +894,20 @@ def ex():  # 22X
 
         if token[i] == ")":
             i += 1  # Accept )
-            if token[i] == "*" or token[i] == "/":
+            if "/" in token[i] or "*" in token[i]:
                 termprime()
                 addexpprime()
-                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
                     relop()
                     addexp()
                 else:
                     return
-            elif token[i] == "+" or token[i] == "-":
+            elif "-" in token[i] or "+" in token[i]:
                 addexpprime()
-                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
                     relop()
                     addexp()
-            elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                             token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+            elif "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
                 relop()
                 addexp()
             else:
@@ -935,25 +915,22 @@ def ex():  # 22X
         else:
             print("REJECT")
             sys.exit(0)
-    elif token[i] == "*" or token[i] == "/":
+    elif "/" in token[i] or "*" in token[i]:
         termprime()
         addexpprime()
-        if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                       token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+        if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
             relop()
             addexp()
         else:
             return
-    elif token[i] == "+" or token[i] == "-":
+    elif "-" in token[i] or "+" in token[i]:
         addexpprime()
-        if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                       token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+        if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
             relop()
             addexp()
         else:
             return
-    elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                     token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+    elif "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
         relop()
         addexp()
     else:
@@ -967,10 +944,10 @@ def var():  # 23
         i += 1  # Accept ID
     else:
         return
-    if token[i] == "[":
+    if "[" in token[i]:
         i += 1  # Accept [
         exp()
-        if token[i] == "]":
+        if "]" in token[i]:
             i += 1  # Accept ]
         else:
             print("REJECT")
@@ -981,8 +958,10 @@ def var():  # 23
 
 def simexp():  # 24
     addexp()
-    if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                   token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+    simexpprime()
+
+def simexpprime():
+    if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
         relop()
         addexp()
     else:
@@ -991,8 +970,7 @@ def simexp():  # 24
 
 def relop():  # 25
     global i
-    if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
-                   token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+    if "==" in token[i] or "<=" in token[i] or ">=" in token[i] or "!=" in token[i] or "<" in token[i] or ">" in token[i]:
         i += 1  # Accept <=, <, >, >=, ==, or !=
     else:
         return
@@ -1004,7 +982,7 @@ def addexp():  # 26
 
 
 def addexpprime():  # 27
-    if token[i] == "+" or token[i] == "-":
+    if "-" in token[i] or "+" in token[i]:
         addop()
         term()
         addexpprime()
@@ -1014,7 +992,7 @@ def addexpprime():  # 27
 
 def addop():  # 28
     global i
-    if token[i] == "+" or token[i] == "-":
+    if "-" in token[i] or "+" in token[i]:
         i += 1  # Accept +, -
     else:
         return
@@ -1026,7 +1004,7 @@ def term():  # 29
 
 
 def termprime():  # 30
-    if token[i] == "*" or token[i] == "/":
+    if "/" in token[i] or "*" in token[i]:
         mulop()
         factor()
         termprime()
@@ -1036,7 +1014,7 @@ def termprime():  # 30
 
 def mulop():  # 31
     global i
-    if token[i] == "*" or token[i] == "/":
+    if "/" in token[i] or "*" in token[i]:
         i += 1  # Accept *, /
     else:
         return
@@ -1080,17 +1058,17 @@ def factor():  # 32
                 sys.exit(0)
 
 
-        if token[i] == "[":
+        if "[" in token[i]:
             i += 1  # Accept [
             exp()
-            if token[i] == "]":
+            if "]" in token[i]:
                 i += 1  # Accept ]
             else:
                 return
-        elif token[i] == "(":
+        elif "(" in token[i]:
             i += 1  # Accept (
             args()
-            if token[i] == ")":
+            if ")" in token[i]:
                 i += 1  # Accept )
             else:
                 return
@@ -1098,10 +1076,10 @@ def factor():  # 32
             return
     elif y is True:
         i += 1  # Accept NUM/FLOAT
-    elif token[i] == "(":
+    elif "(" in token[i]:
         i += 1  # Accept (
         exp()
-        if token[i] == ")":
+        if ")" in token[i]:
             i += 1  # Accept )
         else:
             return
@@ -1110,15 +1088,15 @@ def factor():  # 32
         sys.exit(0)
 
 
-def call():  # 33
+def factorprime():  # 33
     global i
     x = token[i].isalpha()
     if token[i] not in keywordchecklist and x is True:
         i += 1  # Accept ID
-        if token[i] == "(":
+        if "(" in token[i]:
             i += 1  # Accept (
             args()
-            if token[i] == ")":
+            if ")" in token[i]:
                 i += 1  # Accept )
             else:
                 print("REJECT")
@@ -1138,9 +1116,9 @@ def args():  # 34
         arglist()
     elif y is True:
         arglist()
-    elif token[i] == "(":
+    elif "(" in token[i]:
         arglist()
-    elif token[i] == ")":
+    elif ")" in token[i]:
         return
     else:
         return
@@ -1156,11 +1134,11 @@ def arglist():  # 35
 
 def arglistprime():  # 36
     global i
-    if token[i] == ",":
+    if "," in token[i]:
         i += 1  # Accept ,
         exp()
         arglistprime()
-    elif token[i] == ")":
+    elif ")" in token[i]:
         return
     else:
         return
@@ -1171,8 +1149,8 @@ def arglistprime():  # 36
 # begin parsing
 program()
 
-# print vardec
-# print fundec
+print(vardec)
+print(fundec)
 
 if ismain == 1 and lastmain == 1:  # check if contains 1 main function
     print("ACCEPT")
