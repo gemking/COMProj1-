@@ -190,6 +190,7 @@ def declaration(): #Rule 4
             z = hasnum(token[x])
             if z is True:
                 x += 1  # Accepts NUM/FLOAT
+                declarationPrime()
                 if "]" in token[x]:
                     x += 1  # Accepts ]
                     if ";" in token[x]:
@@ -203,43 +204,6 @@ def declaration(): #Rule 4
             else:
                 print("REJECT")
                 exit(0)
-        elif "(" in token[x]:
-            x += 1  # Accepts (
-            for duplicates in functionDeclaration: #check if there is duplicates of declared functions
-                if duplicates in token[x-2]:
-                    print("REJECT")
-                    exit(0)
-            functionDeclaration.append(token[x-3] + " " + token[x-2])
-            functionName = token[x-2]
-            functionNames.append(token[x-2])
-            functionTypes.append(token[x-3])
-            functionType = token[x-3]
-            functionReturn = 0
-            currentScope = 0
-
-            parameters()
-
-            if ")" in token[x]:
-                x += 1  # Accepts )
-                compoundStatement()
-
-                if 0 in functionReturn and "int" in functionType: #0 in functionReturn may screw up
-                    print("REJECT")
-                    exit(0)
-                elif 0 in functionReturn and "float" in functionType:
-                    print("REJECT")
-                    exit(0)
-                else:
-                    functionReturn = 0
-            else:
-                print("REJECT")
-                exit(0)
-        else:
-            print("REJECT")
-            exit(0)
-    else:
-        print("REJECT")
-        exit(0)
 
 def declarationPrime(): #Rule 5
     global x
@@ -253,19 +217,38 @@ def declarationPrime(): #Rule 5
 
     if "(" in token[x]:
         x += 1  # Accepts (
+        for duplicates in functionDeclaration:  # check if there is duplicates of declared functions
+            if duplicates in token[x - 2]:
+                print("REJECT")
+                exit(0)
+        functionDeclaration.append(token[x - 3] + " " + token[x - 2])
+        functionName = token[x - 2]
+        functionNames.append(token[x - 2])
+        functionTypes.append(token[x - 3])
+        functionType = token[x - 3]
+        functionReturn = 0
+        currentScope = 0
+
+        parameters()
+
+        if ")" in token[x]:
+            x += 1 #Accepts )
+            compoundStatement()
+
+            if 0 in functionReturn and "int" in functionType:
+                print ("REJECT")
+                exit(0)
+            elif 0 in functionReturn and "float" in functionType:
+                print("REJECT")
+                exit(0)
+            else:
+                functionReturn = 0
+        else:
+            print("REJECT")
+            exit(0)
     else:
         print("REJECT")
         exit(0)
-
-    parameters()
-
-    if ")" in token[x]:
-        x += 1  # Accepts )
-    else:
-        print("REJECT")
-        exit(0)
-
-    compoundStatement()
 
 def variableDeclaration(): #Rule 6
     global x
@@ -273,6 +256,24 @@ def variableDeclaration(): #Rule 6
     w = token[x].isalpha()
     if token[x] not in keywords and w is True:
         x += 1  # Accepts ID
+        m = 0
+        for duplicates in vars: #check for duplicated declared variables
+            if duplicates in token[x-1]:
+                if functionName in varsScope[m]:
+                    if currentScope <= varsScopeBlock[m]:
+                        print ("REJECT")
+                        exit(0)
+
+            m += 1
+        variableDeclaration.append(token[x-2] + " " + token[x-1] + " " + str(functionName) + " " + str(currentScope))
+        vars.append(token[x-1])
+        variableType.append(token[x-2])
+        varsScope.append(functionName)
+        varsScopeBlock.append(currentScope)
+
+        if "void" in token[i-2]: # check if ID is type void
+            print("REJECT")
+            exit(0)
     else:
         print("REJECT")
         exit(0)
@@ -288,6 +289,13 @@ def variableDeclarationPrime(): #Rule 7
         w = hasnum(token[x])
         if w is True:
             x += 1  # Accepts NUM/FLOAT
+            if "." in token[x-1]: # check for float in the array declaration
+                print("REJECT")
+                exit(0)
+            if "E" in token[x-1]: #check for float in the array declaration
+                print("REJECT")
+                exit(0)
+
             if "]" in token[x]:
                 x += 1  # Accepts ]
                 if ";" in token[x]:
@@ -330,6 +338,44 @@ def parameter(): #Rule 9
 
 def parameterPrime(): #Rule 10
     global x
+    global currentScope
+    global functionName
+    typeSpecifier()
+    functionDeclaration[functionIndex] - functionDeclaration[functionIndex] + " " + token[x-1]
+    functionCallArguments.append("")
+    functionCallArguments[functionIndex] = functionCallArguments[functionIndex] + " " + token[x-1]
+    w = token[x].isalpha()
+    if token[x] not in keywords and w is True:
+        x += 1 #Accepts ID
+        functionDeclaration[functionIndex] = functionDeclaration[functionIndex] + " " + token[x-1]
+
+        m = 0
+        g = 0
+        gh = 0
+        cz = 0
+        for duplicates in vars: #check for duplicate declared variables and with scope
+            if duplicates in token[x-1]:
+                if "global" not in varsScope[m] and functionName not in varsScope[m]: #may not work
+                    cz = 1
+                    continue
+                if "global" in varsScope[m]:
+                    m = g
+                    gh = 1
+                    break
+            m += 1
+
+        currentScope = 1
+        if not varsScope:
+            cz = 1
+        if 0 in cz and "global" in varsScope[m] and 1 in gh:  #may not work
+            variableDeclaration.append(token[x-2] + " " + token[x-1] + " global 0")
+            vars.append(token[x-1])
+            vartype.append(token[x-2])
+            varsScope.append("global")
+            varsScopeBlock.append(0)
+
+
+
     if "[" in token[x]:
         x += 1  # Accepts [
         if "]" in token[x]:
@@ -343,11 +389,13 @@ def parameterPrime(): #Rule 10
 
 def parameters(): #Rule 11
     global x
+    global functionIndex
     if "int" in token[x] or "float" in token[x]:
         parametersList()
     elif "void" in token[x]:
         x += 1  # Accepts void
         parametersPrime()
+        functionIndex += 1
     else:
         print("REJECT")
         exit(0)

@@ -221,9 +221,12 @@ def typeSpecifier(): #Rule 8
 
 def parameter(): #Rule 9
     global x
+    global checkMain
     typeSpecifier()
     w = token[x].isalpha()
     if token[x] not in keywords and w is True:
+        if "main" in token[x]:
+            checkMain += 1
         x += 1  # Accepts ID
     else:
         return
@@ -245,6 +248,7 @@ def parameterPrime(): #Rule 10
 
 def parameters(): #Rule 11
     global x
+    global fun
     if "int" in token[x] or "float" in token[x]:
         parametersList()
     elif "void" in token[x]:
