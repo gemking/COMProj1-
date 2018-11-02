@@ -103,9 +103,10 @@ def hasnum(inputstring):
 
 
 def programDeclaration(): #runs program(Rule 1)
+    global completed
     declarationList()
     if "$" in token[x]:
-        print("ACCEPT") #if $ can be applied in the token, proceed
+        finished = 1 #continues outside
     else:
         print ("REJECT") #if not, Reject
 
@@ -127,14 +128,55 @@ def declarationListPrime(): #Rule 3
 
 def declaration(): #Rule 4
     global x
+    global checkMain
+    global checkLastMain
+    global currentScope
+    global functionName
+    global functionType
+    global functionReturn
     typeSpecifier()
     w = token[x].isalpha()
     if token[x] not in keywords and w is True:
+        if "main" in token[x]: #if main is in the file
+            checkMain += 1
+            checkLastMain += 1
+        if token[x-1] != "void": #if void is not in the file
+            print("REJECT")
+            exit(0)
+        else:
+            checkLastMain = 0
+
         x += 1  # Accepts ID
         if ";" in token[x]:
             x += 1  # Accepts ;
+            m = 0
+            for duplicates in vars: #checking for duplicates of declared variables
+                if duplicates in token[x-2]:
+                    if variableType in token[x-3]:
+                        print("REJECT")
+                        exit(0)
+                m += 1
+
+            variableDeclaration.append(token[i-3] + " " + token[i-2] + " global 0")
+            vars.append(token[i-2])
+            variableType.append(token[i-3])
+            varsScope.append("global")
+            varsScopeBlock.append(0)
+
+            if "void" in token[i-3]:
+                print("REJECT")
+                exit(0)
+
         elif "[" in token[x]:
             x += 1  # Accepts [
+            m = 0
+            for duplicates in vars: #checking for duplicates of declared variables
+                if duplicates in token[x-2]:
+                    if variableType in token[x-3]:
+                        print("REJECT")
+                        exit(0)
+                m += 1
+                
             z = hasnum(token[x])
             if z is True:
                 x += 1  # Accepts NUM/FLOAT

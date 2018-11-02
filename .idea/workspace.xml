@@ -44,14 +44,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="23" />
-          <entry key="py" value="28700" />
+          <entry key="py" value="29567" />
           <entry key="txt" value="548" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="571" />
-          <entry key="Python" value="28699" />
+          <entry key="Python" value="29566" />
           <entry key="RegExp" value="1" />
         </counts>
       </usages-collector>
@@ -111,8 +111,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermodRevised1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="416">
-              <caret line="96" column="65" selection-start-line="96" selection-start-column="65" selection-end-line="96" selection-end-column="65" />
+            <state relative-caret-position="518">
+              <caret line="162" column="12" selection-start-line="162" selection-start-column="12" selection-end-line="162" selection-end-column="12" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -176,8 +176,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/test.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="442">
-              <caret line="26" column="6" lean-forward="true" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
+            <state relative-caret-position="473">
+              <caret line="42" selection-start-line="42" selection-end-line="42" />
             </state>
           </provider>
         </entry>
@@ -212,18 +212,18 @@
         <option value="$PROJECT_DIR$/venv/Scripts/ParserGit.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/FirstParser.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/FirstSemanticAnalyzer.py" />
-        <option value="$PROJECT_DIR$/venv/Scripts/test.txt" />
         <option value="$PROJECT_DIR$/venv/Scripts/parsermod1.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/OGparser.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/semanticParserMod1.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py" />
+        <option value="$PROJECT_DIR$/venv/Scripts/test.txt" />
         <option value="$PROJECT_DIR$/venv/Scripts/parsermodRevised1.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-41" />
-    <option name="y" value="54" />
+    <option name="x" value="34" />
+    <option name="y" value="75" />
     <option name="width" value="1365" />
     <option name="height" value="941" />
   </component>
@@ -469,7 +469,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-84" y="67" width="1365" height="941" extended-state="0" />
+    <frame x="-287" y="64" width="1365" height="941" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4990403" visible="true" weight="0.22079879" />
@@ -608,16 +608,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/semanticParserMod1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="729">
-          <caret line="806" column="40" selection-start-line="806" selection-start-column="40" selection-end-line="806" selection-end-column="40" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermod1.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -664,6 +654,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/FirstParser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="729">
+          <caret line="777" column="9" selection-start-line="777" selection-start-column="9" selection-end-line="777" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-34">
@@ -676,15 +676,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/test.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="26" column="6" lean-forward="true" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
+        <state relative-caret-position="473">
+          <caret line="42" selection-start-line="42" selection-end-line="42" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/FirstParser.py">
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/semanticParserMod1.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="729">
-          <caret line="777" column="9" selection-start-line="777" selection-start-column="9" selection-end-line="777" selection-end-column="9" />
+          <caret line="806" column="40" selection-start-line="806" selection-start-column="40" selection-end-line="806" selection-end-column="40" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
@@ -693,8 +693,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermodRevised1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
-          <caret line="96" column="65" selection-start-line="96" selection-start-column="65" selection-end-line="96" selection-end-column="65" />
+        <state relative-caret-position="518">
+          <caret line="162" column="12" selection-start-line="162" selection-start-column="12" selection-end-line="162" selection-end-column="12" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
