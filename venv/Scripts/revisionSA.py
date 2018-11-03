@@ -133,7 +133,13 @@ def declarationListPrime(): #Rule 3
 
 
 def declaration():  # 4
-    global x, checkMain, functionName, currentScope, functionType, functionReturn, checkFinalMain
+    global x
+    global checkMain
+    global functionName
+    global currentScope
+    global functionType
+    global functionReturn
+    global checkFinalMain
     typeSpecifier()
     w = token[x].isalpha()
     if token[x] not in keywords and w is True:
@@ -203,6 +209,9 @@ def declaration():  # 4
             else:
                 print("REJECT")
                 exit(0)
+
+
+
         elif "(" in token[x]:
             x += 1  # Accept (
             for v in functionDeclaration:  # check for duplicate declared functions
@@ -244,7 +253,8 @@ def declaration():  # 4
 
 
 def theVariableDeclaration():  # 5
-    global x, checkMain
+    global x
+    global checkMain
     typeSpecifier()
 
     w = token[x].isalpha()
@@ -340,34 +350,7 @@ def parameter():  # 7
     compoundStatement()
 
 
-def parameters():  # 8
-    global x, functionIndex
-    if token[x] in miniKeywords:
-        parametersList()
-        functionIndex += 1
-    else:
-        print("REJECT")
-        exit(0)
-
-
-def parametersList():  # 9
-    parameterPrime()
-    parametersListPrime()
-
-
-def parametersListPrime():  # 10
-    global x
-    if "," in token[x]:
-        x += 1  # Accept ,
-        parameterPrime()
-        parametersListPrime()
-    elif ")" in token[x]:
-        return
-    else:
-        return
-
-
-def parameterPrime():  # 11
+def parameterPrime():
     global x, functionName, currentScope
     typeSpecifier()
     functionDeclaration[functionIndex] = functionDeclaration[functionIndex] + " " + token[x - 1]
@@ -430,7 +413,50 @@ def parameterPrime():  # 11
             exit(0)
 
 
-def compoundStatement():  # 12
+
+def parameters():
+    global x
+    global functionIndex
+    if "int" in token[x] or "float" in token[x]:
+        parameterPrime()
+        parametersListPrime()
+        functionIndex += 1
+    elif "void" in token[x]:
+        parametersPrime()
+        functionIndex += 1
+    else:
+        print("REJECT")
+        exit(0)
+
+def parametersPrime(): # Rule 12
+    global x
+    typeSpecifier()
+    w = token[x].isalpha()
+    if token[x] not in keywords and w is True:
+        parameterPrime()
+        parametersListPrime()
+    else:
+        return
+
+def parametersList():
+    parameterPrime()
+    parametersListPrime()
+
+
+def parametersListPrime():
+    global x
+    if "," in token[x]:
+        x += 1  # Accept ,
+        parameterPrime()
+        parametersListPrime()
+    elif ")" in token[x]:
+        return
+    else:
+        return
+
+
+
+def compoundStatement():
     global x, currentScope
     if "{" in token[x]:
         x += 1  # Accept {
@@ -448,11 +474,11 @@ def compoundStatement():  # 12
         exit(0)
 
 
-def localDeclarations():  # 13
+def localDeclarations():
     localDeclarationsPrime()
 
 
-def localDeclarationsPrime():  # 14
+def localDeclarationsPrime():
     if token[x] in miniKeywords:
         theVariableDeclaration()
         localDeclarationsPrime()
@@ -460,11 +486,11 @@ def localDeclarationsPrime():  # 14
         return
 
 
-def statementList():  # 15
+def statementList():
     statementListPrime()
 
 
-def statementListPrime():  # 16
+def statementListPrime():
     w = token[x].isalpha()
     z = hasnum(token[x])
     if token[x] not in keywords and w is True:
@@ -482,7 +508,7 @@ def statementListPrime():  # 16
         return
 
 
-def statement():  # 17
+def statement():
     w = token[x].isalpha()
     z = hasnum(token[x])
     if token[x] not in keywords and w is True:
@@ -504,7 +530,7 @@ def statement():  # 17
         exit(0)
 
 
-def expressionStatement():  # 18
+def expressionStatement():
     global x
     w = token[x].isalpha()
     z = hasnum(token[x])
@@ -536,7 +562,7 @@ def expressionStatement():  # 18
         exit(0)
 
 
-def selectionStatement():  # 19
+def selectionStatement():
     global x
     if "if" in token[x]:
         x += 1  # Accept if
@@ -563,7 +589,7 @@ def selectionStatement():  # 19
         return
 
 
-def iterationStatement():  # 20
+def iterationStatement():
     global x
     if "while" in token[x]:
         x += 1  # Accept while
@@ -587,8 +613,11 @@ def iterationStatement():  # 20
     statement()
 
 
-def returnStatement():  # 21
-    global x, expressionReturn, expressionType, functionReturn
+def returnStatement():
+    global x
+    global expressionReturn
+    global expressionType
+    global functionReturn
     if "return" in token[x]:
         x += 1  # Accept return
         if "int" in functionType:
@@ -656,8 +685,14 @@ def returnStatement():  # 21
         exit(0)
 
 
-def expressionPrime():  # 22
-    global x, expressionType, rightExpression, leftExpression, expressionReturn, matchParameter, theParameter
+def expressionPrime():
+    global x
+    global expressionType
+    global rightExpression
+    global leftExpression
+    global expressionReturn
+    global matchParameter
+    global theParameter
     w = token[x].isalpha()
     z = hasnum(token[x])
     if token[x] not in keywords and w is True:
@@ -821,8 +856,13 @@ def expressionPrime():  # 22
         exit(0)
 
 
-def expression():  # 22X
-    global x, expressionType, rightExpression, leftExpression, theParameter, matchParameter
+def expression():
+    global x
+    global expressionType
+    global leftExpression
+    global rightExpression
+    global theParameter
+    global matchParameter
     if "=" in token[x]:
         x += 1  # Accept =
         k = 0
@@ -906,7 +946,7 @@ def expression():  # 22X
         simpleExpressionPrime()
 
 
-def variable():  # 23
+def variable():
     global x
     w = token[x].isalpha()
     if token[x] not in keywords and w is True:
@@ -925,7 +965,7 @@ def variable():  # 23
         return
 
 
-def simpleExpression():  # 24
+def simpleExpression():
     addExpression()
     simpleExpressionPrime()
 
@@ -937,7 +977,7 @@ def simpleExpressionPrime():
         return
 
 
-def comparisonOperation():  # 25
+def comparisonOperation():
     global x
     if token[x] in comparisionSymbols:
         x += 1  # Accept <=, <, >, >=, ==, or !=
@@ -945,12 +985,12 @@ def comparisonOperation():  # 25
         return
 
 
-def addExpression():  # 26
+def addExpression():
     term()
     addExpressionPrime()
 
 
-def addExpressionPrime():  # 27
+def addExpressionPrime():
     if token[x] in additionSubtractionSymbols:
         additiveOperation()
         term()
@@ -959,7 +999,7 @@ def addExpressionPrime():  # 27
         return
 
 
-def additiveOperation():  # 28
+def additiveOperation():
     global x
     if token[x] in additionSubtractionSymbols:
         x += 1  # Accept +, -
@@ -967,12 +1007,12 @@ def additiveOperation():  # 28
         return
 
 
-def term():  # 29
+def term():
     factor()
     termPrime()
 
 
-def termPrime():  # 30
+def termPrime():
     if token[x] in multiplicationDivisionSymbols:
         multiplicativeOperation()
         factor()
@@ -981,7 +1021,7 @@ def termPrime():  # 30
         return
 
 
-def multiplicativeOperation():  # 31
+def multiplicativeOperation():
     global x
     if token[x] in multiplicationDivisionSymbols:
         x += 1  # Accept *, /
@@ -989,8 +1029,10 @@ def multiplicativeOperation():  # 31
         return
 
 
-def factor():  # 32
-    global x, leftExpression, expressionReturn
+def factor():
+    global x
+    leftExpression
+    expressionReturn
     w = token[x].isalpha()
     z = hasnum(token[x])
     if token[x] not in keywords and w is True:
@@ -1057,7 +1099,7 @@ def factor():  # 32
         exit(0)
 
 
-def factorPrime():  # 33
+def factorPrime():
     global x
     w = token[x].isalpha()
     if token[x] not in keywords and w is True:
@@ -1077,7 +1119,7 @@ def factorPrime():  # 33
         return
 
 
-def arguments():  # 34
+def arguments():
     global x
     w = token[x].isalpha()
     z = hasnum(token[x])
@@ -1093,15 +1135,16 @@ def arguments():  # 34
         return
 
 
-def argumentsList():  # 35
-    global matchParameter, theParameter
+def argumentsList():
+    global matchParameter
+    global theParameter
     theParameter = 1
     matchParameter = ""
     expressionPrime()
     argumentsListPrime()
 
 
-def argumentsListPrime():  # 36
+def argumentsListPrime():
     global x
     if "," in token[x]:
         x += 1  # Accept ,
