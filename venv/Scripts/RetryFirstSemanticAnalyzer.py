@@ -97,7 +97,7 @@ functionName = 0  # function name, for scope
 functionType = 0  # function type, determine if it needs return
 currentScope = 0  # current scope
 functionReturn = 0  # does function have a return
-functionReturn = 0  # check if int/float function has return
+
 
 
 # ---------------------------------- parsing functions ----------------------------------- #
@@ -111,9 +111,9 @@ def programDeclaration():  # runs program(Rule 1)
     global isCompleted
     declarationList()
     if "$" in token[x]:
-        isCompleted = 1  # continues outside
+        isCompleted = 1  #will continue
     else:
-        print("REJECT")  # if not, Reject
+        print("REJECT")
 
 
 def declarationList():  # Rule 2
@@ -151,11 +151,11 @@ def declaration():  # Rule 4
         else:
             checkFinalMain = 0
 
-        x += 1  # Accept ID
+        x += 1  # Accepts ID
         if ";" in token[x]:
-            x += 1  # Accept ;
+            x += 1  # Accepts ;
             s = 0
-            for l in vars:  # check for duplicate declared variables
+            for l in vars:  # checks if there are any duplicates of declared variables
                 if token[x - 2] in l:
                     if variableType[s] in token[x - 3]:
                         print("REJECT")
@@ -173,9 +173,9 @@ def declaration():  # Rule 4
                 exit(0)
 
         elif "[" in token[x]:
-            x += 1  # Accept [
+            x += 1  # Accepts [
             s = 0
-            for l in vars:  # check for duplicate declared variables
+            for l in vars:   # checks if there are any duplicates of declared variables
                 if token[x - 2] in l:
                     if variableType[s] in token[x - 3]:
                         print("REJECT")
@@ -1172,6 +1172,21 @@ def argumentsListPrime():  # Rule 43
     else:
         return
 
+def duplicateVariableCheck():
+    global x
+    s = 0
+    for l in vars:  # checks if there are any duplicates of declared variables
+        if token[x - 2] in l:
+            if variableType[s] in token[x - 3]:
+                print("REJECT")
+                exit(0)
+        s += 1
+
+    variableDeclaration.append(token[x - 3] + " " + token[x - 2] + " global 0")
+    vars.append(token[x - 2])
+    variableType.append(token[x - 3])
+    varsScope.append("global")
+    varsScopeBlock.append(0)
 
 # ----------------------------- end of parsing functions --------------------------------- #
 

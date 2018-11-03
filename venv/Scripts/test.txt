@@ -1,6 +1,5 @@
-
 /* test for basic functionality of proj 3 - pass */
-/* test 14 - test param id types */
+/* test 8 - test simple function return */
 
 int x;
 int y;
@@ -16,27 +15,15 @@ int my ( float b, int c)
 }
 
 
-
-int something( int z, int q)
+void main ( int x, int y )
 {
-	int why;
-
-	why = z+q;
-
-	return why;
-
-}
-
-void main( int x, int y )
-{
-	float q;
 	int z;
 	x=1;
 	y=2;
 	z = x + y;
 	if (z < 5)
 	{
-		z=my(q,z);
+		z=my(1.2, 2);
 
 	}
 
