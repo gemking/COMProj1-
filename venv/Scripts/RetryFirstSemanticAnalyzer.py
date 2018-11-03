@@ -865,7 +865,7 @@ def ex():  # 22X
         x += 1  # Accept (
         k = 0
         for v in funnames:
-            if v == token[x-2]:
+            if v in token[x-2]:
                 break
             k += 1
         args()
@@ -873,7 +873,7 @@ def ex():  # 22X
         u = 0
         if not parammatch:
             u = 1
-        if u == 0 and funcallargs[k] != parammatch:
+        if u == 0 and parammatch not in funcallargs[k]:
             print("REJECT")
             sys.exit(0)
 
@@ -1001,7 +1001,7 @@ def factor():  # 32
             ch = 0
             for v in vars:  # get the type of the var for operand/operator checking
                 if v in token[x-1]:
-                    if varscope[o] != "global" and varscope[o] != funname:
+                    if "global" not in varscope[o] and funname not in varscope[o]:
                         ch = 1
                     if funname in varscope[o]:
                         ch = 0
@@ -1009,7 +1009,7 @@ def factor():  # 32
                         break
                     check = vartype[o]
                 o += 1
-            if exptype != check:
+            if exptype not in check:
                 print("REJECT")
                 sys.exit(0)
             if ch == 1:
@@ -1022,7 +1022,7 @@ def factor():  # 32
                 if v in token[x-1]:
                     check = vartype[o]
                 o += 1
-            if exptype != check:
+            if exptype not in check:
                 print("REJECT")
                 sys.exit(0)
 
