@@ -12,6 +12,8 @@ symbols = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]"  # de
 comparisionSymbols = ["==", "<=", ">=", "!=", "<", ">"]
 additionSubtractionSymbols = ["-", "+"]
 multiplicationDivisionSymbols = ["/", "*"]
+intFloatKeywords = ["int", "float"]
+decimalExponentKeywords = [".", "E"]
 miniKeywords = ["void", "int", "float"]
 miniKeywordsTwo = ["while", "if", "return", "(", ";", "{"]
 characters = "[a-zA-Z]+"  # obtains all words for the IDs
@@ -154,44 +156,12 @@ def declaration():  # Rule 4
         x += 1  # Accepts ID
         if ";" in token[x]:
             x += 1  # Accepts ;
-            s = 0
-            for l in vars:  # checks if there are any duplicates of declared variables
-                if token[x - 2] in l:
-                    if variableType[s] in token[x - 3]:
-                        print("REJECT")
-                        exit(0)
-                s += 1
-
-            variableDeclaration.append(token[x - 3] + " " + token[x - 2] + " global 0")
-            vars.append(token[x - 2])
-            variableType.append(token[x - 3])
-            varsScope.append("global")
-            varsScopeBlock.append(0)
-
-            if "void" in token[x - 3]:
-                print("REJECT")
-                exit(0)
-
+            duplicateVariableCheck()
+            variableAppend()
         elif "[" in token[x]:
             x += 1  # Accepts [
-            s = 0
-            for l in vars:   # checks if there are any duplicates of declared variables
-                if token[x - 2] in l:
-                    if variableType[s] in token[x - 3]:
-                        print("REJECT")
-                        exit(0)
-                s += 1
-
-            variableDeclaration.append(token[x - 3] + " " + token[x - 2] + " global 0")
-            vars.append(token[x - 2])
-            variableType.append(token[x - 3])
-            varsScope.append("global")
-            varsScopeBlock.append(0)
-
-            if "void" in token[x - 3]:
-                print("REJECT")
-                exit(0)
-
+            duplicateVariableCheck()
+            variableAppend()
             z = hasnum(token[x])
             if z is True:
                 x += 1  # Accept NUM/FLOAT
@@ -210,42 +180,24 @@ def declaration():  # Rule 4
                 exit(0)
         elif "(" in token[x]:
             x += 1  # Accept (
-            for l in functionDeclaration:  # check for duplicate declared functions
-                if token[x - 2] in l:
-                    print("REJECT")
-                    exit(0)
-            functionDeclaration.append(token[x - 3] + " " + token[x - 2])
-            functionName = token[x - 2]
-            functionNames.append(token[x - 2])
-            functionTypes.append(token[x - 3])
-            functionType = token[x - 3]
-            functionReturn = 0
-            currentScope = 0
-
-            parameters()
+            duplicateFunctionCheck()
 
             if ")" in token[x]:
                 x += 1  # Accept )
                 compoundStatement()
 
-                if functionReturn == 0 and "int" in functionType:  # check if not funtype in "int"
-                    print("REJECT")
-                    exit(0)
-                elif functionReturn == 0 and "float" in functionType:
+                if functionReturn == 0 and functionType in intFloatKeywords:  # check if not funtype in "int" or "float"
                     print("REJECT")
                     exit(0)
                 else:
                     functionReturn = 0
-
             else:
                 print("REJECT")
                 exit(0)
         else:
             print("REJECT")
             exit(0)
-    else:
-        print("REJECT")
-        exit(0)
+        #else was deleted
 
 
 def theVariableDeclaration():  # Rule 5
@@ -289,10 +241,7 @@ def variableDeclarationPrime():  # Rule 6
         w = hasnum(token[x])
         if w is True:
             x += 1  # Accept NUM/FLOAT
-            if "." in token[x - 1]:  # check for float in array declaration
-                print("REJECT")
-                exit(0)
-            if "E" in token[x - 1]:  # check for float in array declaration
+            if token[x-1] in intFloatKeywords: #checks if there is a float or exponential value in the array
                 print("REJECT")
                 exit(0)
             if "]" in token[x]:
@@ -309,9 +258,7 @@ def variableDeclarationPrime():  # Rule 6
         else:
             print("REJECT")
             exit(0)
-    else:
-        print("REJECT")
-        exit(0)
+
 
 
 def typeSpecifier():  # Rule 7
@@ -388,8 +335,7 @@ def parameterPrime():  # Rule 9
             varsScopeBlock.append(0)
 
         else:
-            variableDeclaration.append(
-                token[x - 2] + " " + token[x - 1] + " " + str(functionName) + " " + str(currentScope))
+            variableDeclaration.append(token[x - 2] + " " + token[x - 1] + " " + str(functionName) + " " + str(currentScope))
             vars.append(token[x - 1])
             variableType.append(token[x - 2])
             varsScope.append(functionName)
@@ -418,7 +364,7 @@ def parameterPrime():  # Rule 9
 def parameters():  # Rule 10
     global x
     global functionIndex
-    if "int" in token[x] or "float" in token[x]:
+    if token[x] in intFloatKeywords:
         parameterPrime()
         parametersListPrime()
         functionIndex += 1
@@ -908,17 +854,13 @@ def expressionPrime():  # Rule 27
     elif z is True:
         x += 1  # Accept NUM/FLOAT
         if theParameter == 1:
-            if "." in token[x - 1]:
-                matchParameter = matchParameter + " float"
-            elif "E" in token[x - 1]:
+            if token[x-1] in decimalExponentKeywords:
                 matchParameter = matchParameter + " float"
             else:
                 matchParameter = matchParameter + " int"
 
         dn = 0
-        if "." in token[x - 1]:
-            dn = 1
-        if "E" in token[x - 1]:
+        if token[x-1] in decimalExponentKeywords:
             dn = 1
 
         if expressionReturn == 1 and dn == 1:
@@ -931,16 +873,13 @@ def expressionPrime():  # Rule 27
                 print("REJECT")
                 exit(0)
 
-        if rightExpression == 1 and "E" in token[x - 1]:
-            print("REJECT")
-            exit(0)
-        if rightExpression == 1 and "." in token[x - 1]:
+        if rightExpression == 1 and token[x-1] in decimalExponentKeywords:
             print("REJECT")
             exit(0)
 
         if leftExpression == 1:
             if dn != 1 and "float" in expressionType:
-                if "." not in token[x + 1] and "E" not in token[x + 1]:
+                if token[x-1] not in decimalExponentKeywords:
                     print("REJECT")
                     exit(0)
 
@@ -1182,6 +1121,28 @@ def duplicateVariableCheck():
                 exit(0)
         s += 1
 
+def duplicateFunctionCheck():
+    global x
+    global functionName
+    global currentScope
+    global functionType
+    global functionReturn
+    for l in functionDeclaration:  # checks if there are any dupllicates of declared functions
+        if token[x - 2] in l:
+            print("REJECT")
+            exit(0)
+    functionDeclaration.append(token[x - 3] + " " + token[x - 2])
+    functionName = token[x - 2]
+    functionNames.append(token[x - 2])
+    functionTypes.append(token[x - 3])
+    functionType = token[x - 3]
+    functionReturn = 0
+    currentScope = 0
+
+    parameters()
+
+def variableAppend():
+    global x
     variableDeclaration.append(token[x - 3] + " " + token[x - 2] + " global 0")
     vars.append(token[x - 2])
     variableType.append(token[x - 3])

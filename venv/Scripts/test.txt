@@ -1,5 +1,5 @@
 /* test for basic functionality of proj 3 - pass */
-/* test 8 - test simple function return */
+/* test 21 - relop expression must return int */
 
 int x;
 int y;
@@ -11,20 +11,33 @@ int my ( float b, int c)
 
 	z = z+c;
 
-	return z+c;
+	return z;
 }
 
 
-void main ( int x, int y )
+int something( int z, int q)
 {
+	int why;
+
+	why = z+q;
+
+	return why;
+
+}
+
+void main( int x, int y )
+{
+	float q;
 	int z;
 	x=1;
 	y=2;
 	z = x + y;
-	if (z < 5)
+	if (z < 5.2)
 	{
-		z=my(1.2, 2);
-
+		z=my(q,z);
 	}
+
+	if (q)
+		z=z+1;
 
 }
