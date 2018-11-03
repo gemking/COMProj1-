@@ -264,8 +264,7 @@ def theVariableDeclaration():  # Rule 5
                         print("REJECT")
                         exit(0)
             s += 1
-        variableDeclaration.append(
-            token[x - 2] + " " + token[x - 1] + " " + str(functionName) + " " + str(currentScope))
+        variableDeclaration.append(token[x - 2] + " " + token[x - 1] + " " + str(functionName) + " " + str(currentScope))
         vars.append(token[x - 1])
         variableType.append(token[x - 2])
         varsScope.append(functionName)
@@ -710,7 +709,7 @@ def expression():  # Rule 26
         x += 1  # Accept =
         s = 0
         for l in vars:  # find the type of the first ID for the exp
-            if token[x - 2] == l:
+            if l in token[x - 2]:
                 expressionType = variableType[s]
                 leftExpression = 1
             s += 1
