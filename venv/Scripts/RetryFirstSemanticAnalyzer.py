@@ -203,6 +203,10 @@ def declaration():  # 4
             else:
                 print("REJECT")
                 sys.exit(0)
+
+def declarationPrime(): #Rule 5 
+        global x 
+        type
         elif "(" in token[x]:
             x += 1  # Accept (
             for v in fundec:  # check for duplicate declared functions

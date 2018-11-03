@@ -12,7 +12,7 @@
     <session id="-691979507">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="25" />
+          <entry key="project.closed" value="26" />
           <entry key="project.open.time.0" value="3" />
           <entry key="project.open.time.1" value="7" />
           <entry key="project.open.time.12" value="1" />
@@ -20,14 +20,14 @@
           <entry key="project.open.time.2" value="5" />
           <entry key="project.open.time.27" value="1" />
           <entry key="project.open.time.28" value="1" />
-          <entry key="project.open.time.3" value="1" />
+          <entry key="project.open.time.3" value="2" />
           <entry key="project.open.time.32" value="1" />
           <entry key="project.open.time.33" value="1" />
           <entry key="project.open.time.42" value="1" />
           <entry key="project.open.time.48" value="1" />
           <entry key="project.open.time.63" value="1" />
           <entry key="project.open.time.7" value="2" />
-          <entry key="project.opened" value="27" />
+          <entry key="project.opened" value="28" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -45,14 +45,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="23" />
-          <entry key="py" value="43041" />
+          <entry key="py" value="43098" />
           <entry key="txt" value="584" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="607" />
-          <entry key="Python" value="43040" />
+          <entry key="Python" value="43097" />
           <entry key="RegExp" value="1" />
         </counts>
       </usages-collector>
@@ -87,8 +87,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1785">
-              <caret line="106" column="5" selection-start-line="106" selection-start-column="5" selection-end-line="106" selection-end-column="5" />
+            <state relative-caret-position="-2760">
+              <caret line="202" column="17" lean-forward="true" selection-start-line="202" selection-start-column="17" selection-end-line="202" selection-end-column="17" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -111,8 +111,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermod1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="527">
-              <caret line="247" lean-forward="true" selection-start-line="247" selection-end-line="247" />
+            <state relative-caret-position="4182">
+              <caret line="247" selection-start-line="247" selection-end-line="247" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
                 <marker date="1541181370246" expanded="true" signature="8200:8202" ph="..." />
@@ -125,7 +125,7 @@
         <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermodRevised1.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="119">
-              <caret line="8" column="51" selection-start-line="8" selection-start-column="51" selection-end-line="8" selection-end-column="51" />
+              <caret line="7" column="17" lean-forward="true" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -136,7 +136,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/semanticParserMod1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1156">
+            <state relative-caret-position="-17343">
               <caret line="69" column="25" selection-start-line="69" selection-start-column="25" selection-end-line="69" selection-end-column="25" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -174,8 +174,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/revisionSA.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="399">
-              <caret line="1121" column="26" lean-forward="true" selection-start-line="1121" selection-start-column="26" selection-end-line="1121" selection-end-column="26" />
+            <state relative-caret-position="259">
+              <caret line="1108" column="26" selection-start-line="1108" selection-start-column="26" selection-end-line="1108" selection-end-column="26" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -232,10 +232,10 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="16" />
-    <option name="width" value="1363" />
-    <option name="height" value="975" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="347" />
+    <option name="width" value="1398" />
+    <option name="height" value="1000" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -480,15 +480,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="16" y="0" width="1363" height="975" extended-state="0" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4990403" visible="true" weight="0.22113207" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4990403" visible="true" weight="0.15437302" />
       <window_info id="Structure" order="1" sideWeight="0.5009597" side_tool="true" weight="0.24908425" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936978" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.24613555" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.22451194" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.36442515" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -548,17 +548,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py</url>
-          <line>284</line>
+          <line>288</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py</url>
-          <line>511</line>
+          <line>515</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py</url>
-          <line>941</line>
+          <line>945</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
       </breakpoints>
@@ -663,16 +663,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1785">
-          <caret line="106" column="5" selection-start-line="106" selection-start-column="5" selection-end-line="106" selection-end-column="5" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/RevisedRetryFirstSemnaticAnalyzer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -683,22 +673,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermodRevised1.py">
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermod1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="8" column="51" selection-start-line="8" selection-start-column="51" selection-end-line="8" selection-end-column="51" />
+        <state relative-caret-position="4182">
+          <caret line="247" selection-start-line="247" selection-end-line="247" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/semanticParserMod1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1156">
-          <caret line="69" column="25" selection-start-line="69" selection-start-column="25" selection-end-line="69" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <marker date="1541181370246" expanded="true" signature="8200:8202" ph="..." />
           </folding>
         </state>
       </provider>
@@ -725,21 +706,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermod1.py">
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/semanticParserMod1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="527">
-          <caret line="247" lean-forward="true" selection-start-line="247" selection-end-line="247" />
+        <state relative-caret-position="-17343">
+          <caret line="69" column="25" selection-start-line="69" selection-start-column="25" selection-end-line="69" selection-end-column="25" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <marker date="1541181370246" expanded="true" signature="8200:8202" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermodRevised1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="17" lean-forward="true" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2760">
+          <caret line="202" column="17" lean-forward="true" selection-start-line="202" selection-start-column="17" selection-end-line="202" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/revisionSA.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="1121" column="26" lean-forward="true" selection-start-line="1121" selection-start-column="26" selection-end-line="1121" selection-end-column="26" />
+        <state relative-caret-position="259">
+          <caret line="1108" column="26" selection-start-line="1108" selection-start-column="26" selection-end-line="1108" selection-end-column="26" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>

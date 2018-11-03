@@ -142,7 +142,7 @@ def declaration():  # 4
             checkFinalMain = 1
             if token[x-1] != "void":
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
         else:
             checkFinalMain = 0
 
@@ -154,7 +154,7 @@ def declaration():  # 4
                 if token[x-2] in v:
                     if variableType[k] in token[x - 3]:
                         print("REJECT")
-                        sys.exit(0)
+                        exit(0)
                 k += 1
 
             variableDeclaration.append(token[x - 3] + " " + token[x - 2] + " global 0")
@@ -165,7 +165,7 @@ def declaration():  # 4
 
             if "void" in token[x-3]:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
 
         elif "[" in token[x]:
             x += 1  # Accept [
@@ -174,7 +174,7 @@ def declaration():  # 4
                 if token[x-2] in v:
                     if variableType[k] in token[x - 3]:
                         print("REJECT")
-                        sys.exit(0)
+                        exit(0)
                 k += 1
 
             variableDeclaration.append(token[x - 3] + " " + token[x - 2] + " global 0")
@@ -185,7 +185,7 @@ def declaration():  # 4
 
             if "void" in token[x-3]:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
 
             z = hasnum(token[x])
             if z is True:
@@ -196,19 +196,19 @@ def declaration():  # 4
                         x += 1  # Accept ;
                     else:
                         print("REJECT")
-                        sys.exit(0)
+                        exit(0)
                 else:
                     print("REJECT")
-                    sys.exit(0)
+                    exit(0)
             else:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
         elif "(" in token[x]:
             x += 1  # Accept (
             for v in functionDeclaration:  # check for duplicate declared functions
                 if token[x-2] in v:
                     print("REJECT")
-                    sys.exit(0)
+                    exit(0)
             functionDeclaration.append(token[x - 3] + " " + token[x - 2])
             functionName = token[x - 2]
             functionNames.append(token[x - 2])
@@ -225,22 +225,22 @@ def declaration():  # 4
 
                 if functionReturn == 0 and "int" in functionType: #check if not funtype in "int"
                     print("REJECT")
-                    sys.exit(0)
+                    exit(0)
                 elif functionReturn == 0 and "float" in functionType:
                     print("REJECT")
-                    sys.exit(0)
+                    exit(0)
                 else:
                     functionReturn = 0
 
             else:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def theVariableDeclaration():  # 5
@@ -256,7 +256,7 @@ def theVariableDeclaration():  # 5
                 if varsScope[k] in functionName:
                     if varsScopeBlock[k] >= currentScope:
                         print("REJECT")
-                        sys.exit(0)
+                        exit(0)
             k += 1
         variableDeclaration.append(token[x - 2] + " " + token[x - 1] + " " + str(functionName) + " " + str(currentScope))
         vars.append(token[x-1])
@@ -266,10 +266,10 @@ def theVariableDeclaration():  # 5
 
         if "void" in token[x-2]:  # check if ID is type void
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
     if ";" in token[x]:
         x += 1  # Accept ;
@@ -280,10 +280,10 @@ def theVariableDeclaration():  # 5
             x += 1  # Accept NUM/FLOAT
             if "." in token[x-1]:  # check for float in array declaration
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
             if "E" in token[x-1]:  # check for float in array declaration
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
             if "]" in token[x]:
                 x += 1  # Accept ]
                 if ";" in token[x]:
@@ -291,16 +291,16 @@ def theVariableDeclaration():  # 5
                     return
                 else:
                     print("REJECT")
-                    sys.exit(0)
+                    exit(0)
             else:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def typeSpecifier():  # 6
@@ -327,7 +327,7 @@ def parameter():  # 7
         x += 1  # Accept (
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
     parameters()
 
@@ -335,7 +335,7 @@ def parameter():  # 7
         x += 1  # Accept )
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
     compoundStatement()
 
@@ -347,7 +347,7 @@ def parameters():  # 8
         functionIndex += 1
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def parametersList():  # 9
@@ -419,7 +419,7 @@ def parameterPrime():  # 11
                 return
             else:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
         else:
             return
     else:
@@ -427,7 +427,7 @@ def parameterPrime():  # 11
             return
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
 
 
 def compoundStatement():  # 12
@@ -445,7 +445,7 @@ def compoundStatement():  # 12
         x += 1  # Accept }
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def localDeclarations():  # 13
@@ -501,7 +501,7 @@ def statement():  # 17
         returnStatement()
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def expressionStatement():  # 18
@@ -514,26 +514,26 @@ def expressionStatement():  # 18
             x += 1  # Accept ;
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif z is True:
         expressionPrime()
         if ";" in token[x]:
             x += 1  # Accept ;
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif "(" in token[x]:
         expressionPrime()
         if ";" in token[x]:
             x += 1  # Accept ;
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif ";" in token[x]:
         x += 1  # Accept ;
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def selectionStatement():  # 19
@@ -547,14 +547,14 @@ def selectionStatement():  # 19
         x += 1  # Accept (
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
     expressionPrime()
     if ")" in token[x]:
         x += 1  # Accept )
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
     statement()
     if "else" in token[x]:
         x += 1  # Accept else
@@ -574,7 +574,7 @@ def iterationStatement():  # 20
         x += 1  # Accept (
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
     expressionPrime()
 
@@ -582,7 +582,7 @@ def iterationStatement():  # 20
         x += 1  # Accept )
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
     statement()
 
@@ -603,12 +603,12 @@ def returnStatement():  # 21
         x += 1  # Accept ;
         if "void" not in functionType:  # check if int or float function does not return a value
             print("REJECT")
-            sys.exit(0)
+            exit(0)
         return
     elif token[x] not in keywords and w is True:
         if "void" in functionType:  # check if void has return with value
             print("REJECT")
-            sys.exit(0)
+            exit(0)
 
         if "int" in functionType:
             expressionType = "int"
@@ -623,11 +623,11 @@ def returnStatement():  # 21
             return
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif z is True:
         if "void" in functionType:  # check if void has return with value
             print("REJECT")
-            sys.exit(0)
+            exit(0)
 
         if "int" in functionType:
             expressionType = "int"
@@ -642,7 +642,7 @@ def returnStatement():  # 21
             return
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif "(" in token[x]:
         expressionPrime()
         if ";" in token[x]:
@@ -650,10 +650,10 @@ def returnStatement():  # 21
             return
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def expressionPrime():  # 22
@@ -680,7 +680,7 @@ def expressionPrime():  # 22
                     o += 1
                 if expressionType != check:
                     print("REJECT")
-                    sys.exit(0)
+                    exit(0)
 
             else:
                 o = 0
@@ -698,10 +698,10 @@ def expressionPrime():  # 22
                     o += 1
                 if ch == 1:
                     print("REJECT")
-                    sys.exit(0)
+                    exit(0)
                 if expressionType != check:
                     print("REJECT")
-                    sys.exit(0)
+                    exit(0)
 
         if rightExpression == 1:
             o = 0
@@ -711,7 +711,7 @@ def expressionPrime():  # 22
                 o += 1
             if expressionType not in check:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
 
         if expressionReturn == 1:
             o = 0
@@ -722,12 +722,12 @@ def expressionPrime():  # 22
                 o += 1
             if expressionType not in check:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
 
         if "(" in token[x] and leftExpression == 0 and theParameter == 0:
             if token[x-1] not in functionNames:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
 
         ch = 0
         k = 0
@@ -741,11 +741,11 @@ def expressionPrime():  # 22
 
         if token[x-1] not in vars and "(" not in token[x]:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
 
         if ch == 1:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
 
         expression()
 
@@ -766,7 +766,7 @@ def expressionPrime():  # 22
                 simpleExpressionPrime()
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif z is True:
         x += 1  # Accept NUM/FLOAT
         if theParameter == 1:
@@ -786,25 +786,25 @@ def expressionPrime():  # 22
         if expressionReturn == 1 and ch == 1:
             if "float" not in expressionType:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
 
         if expressionReturn == 1 and ch == 0:
             if "int" not in expressionType:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
 
         if rightExpression == 1 and "E" in token[x - 1]:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
         if rightExpression == 1 and "." in token[x - 1]:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
 
         if leftExpression == 1:
             if ch != 1 and "float" in expressionType:
                 if "." not in token[x+1] and "E" not in token[x+1]:
                     print("REJECT")
-                    sys.exit(0)
+                    exit(0)
 
         termPrime()
         addExpressionPrime()
@@ -818,7 +818,7 @@ def expressionPrime():  # 22
             simpleExpressionPrime()
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def expression():  # 22X
@@ -841,7 +841,7 @@ def expression():  # 22X
         rightExpression = 0
         if "[" in token[x-1]:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
         if "]" in token[x]:
             x += 1  # Accept ]
             if "=" in token[x]:
@@ -860,7 +860,7 @@ def expression():  # 22X
                 simpleExpressionPrime()
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif "(" in token[x]:
         x += 1  # Accept (
         k = 0
@@ -875,7 +875,7 @@ def expression():  # 22X
             u = 1
         if u == 0 and matchParameter not in functionCallArguments[k]:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
 
         if ")" in token[x]:
             x += 1  # Accept )
@@ -892,7 +892,7 @@ def expression():  # 22X
                 simpleExpressionPrime()
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     elif token[x] in multiplicationDivisionSymbols:
         termPrime()
         addExpressionPrime()
@@ -920,7 +920,7 @@ def variable():  # 23
             x += 1  # Accept ]
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     else:
         return
 
@@ -1011,10 +1011,10 @@ def factor():  # 32
                 o += 1
             if expressionType not in check:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
             if ch == 1:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
 
         if expressionReturn == 1:
             o = 0
@@ -1024,7 +1024,7 @@ def factor():  # 32
                 o += 1
             if expressionType not in check:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
 
 
         if "[" in token[x]:
@@ -1054,7 +1054,7 @@ def factor():  # 32
             return
     else:
         print("REJECT")
-        sys.exit(0)
+        exit(0)
 
 
 def factorPrime():  # 33
@@ -1069,10 +1069,10 @@ def factorPrime():  # 33
                 x += 1  # Accept )
             else:
                 print("REJECT")
-                sys.exit(0)
+                exit(0)
         else:
             print("REJECT")
-            sys.exit(0)
+            exit(0)
     else:
         return
 
