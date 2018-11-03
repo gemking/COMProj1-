@@ -163,11 +163,11 @@ def declaration():  # 4
             varscope.append("global")
             varscopen.append(0)
 
-            if token[x-3] == "void":
+            if "void" in token[x-3]:
                 print("REJECT")
                 sys.exit(0)
 
-        elif token[x] == "[":
+        elif "[" in token[x]:
             x += 1  # Accept [
             k = 0
             for v in vars:  # check for duplicate declared variables
@@ -183,16 +183,16 @@ def declaration():  # 4
             varscope.append("global")
             varscopen.append(0)
 
-            if token[x-3] == "void":
+            if "void" in token[x-3]:
                 print("REJECT")
                 sys.exit(0)
 
             z = hasnum(token[x])
             if z is True:
                 x += 1  # Accept NUM/FLOAT
-                if token[x] == "]":
+                if "]" in token[x]:
                     x += 1  # Accept ]
-                    if token[x] == ";":
+                    if ";" in token[x]:
                         x += 1  # Accept ;
                     else:
                         print("REJECT")
@@ -203,7 +203,7 @@ def declaration():  # 4
             else:
                 print("REJECT")
                 sys.exit(0)
-        elif token[x] == "(":
+        elif "(" in token[x]:
             x += 1  # Accept (
             for v in fundec:  # check for duplicate declared functions
                 if token[x-2] in v:
@@ -219,7 +219,7 @@ def declaration():  # 4
 
             params()
 
-            if token[x] == ")":
+            if ")" in token[x]:
                 x += 1  # Accept )
                 compoundstmt()
 
@@ -264,16 +264,16 @@ def vd():  # 5
         varscope.append(funname)
         varscopen.append(curscope)
 
-        if token[x-2] == "void":  # check if ID is type void
+        if "void" in token[x-2]:  # check if ID is type void
             print("REJECT")
             sys.exit(0)
     else:
         print("REJECT")
         sys.exit(0)
 
-    if token[x] == ";":
+    if ";" in token[x]:
         x += 1  # Accept ;
-    elif token[x] == "[":
+    elif "[" in token[x]:
         x += 1  # Accept [
         w = hasnum(token[x])
         if w is True:
@@ -284,9 +284,9 @@ def vd():  # 5
             if "E" in token[x-1]:  # check for float in array declaration
                 print("REJECT")
                 sys.exit(0)
-            if token[x] == "]":
+            if "]" in token[x]:
                 x += 1  # Accept ]
-                if token[x] == ";":
+                if ";" in token[x]:
                     x += 1  # Accept ;
                     return
                 else:
@@ -317,13 +317,13 @@ def fd():  # 7
 
     w = token[x].isalpha()
     if token[x] not in keywordchecklist and w is True:
-        if token[x] == "main":
+        if "main" in token[x]:
             ismain += 1
         x += 1  # Accept ID
     else:
         return
 
-    if token[x] == "(":
+    if "(" in token[x]:
         x += 1  # Accept (
     else:
         print("REJECT")
@@ -331,7 +331,7 @@ def fd():  # 7
 
     params()
 
-    if token[x] == ")":
+    if ")" in token[x]:
         x += 1  # Accept )
     else:
         print("REJECT")
@@ -357,11 +357,11 @@ def paramslist():  # 9
 
 def paramslistprime():  # 10
     global x
-    if token[x] == ",":
+    if "," in token[x]:
         x += 1  # Accept ,
         param()
         paramslistprime()
-    elif token[x] == ")":
+    elif ")" in token[x]:
         return
     else:
         return
@@ -387,7 +387,7 @@ def param():  # 11
                 if varscope[k] != "global" and varscope[k] != funname:
                     ch = 1
                     continue
-                if varscope[k] == "global":
+                if "global" in varscope[k]:
                     m = k
                     mc = 1
                     break
@@ -396,7 +396,7 @@ def param():  # 11
         curscope = 1
         if not varscope:
             ch = 1
-        if ch == 0 and varscope[m] == "global" and mc == 1:
+        if ch == 0 and "global" in varscope[m] and mc == 1:
             vardec.append(token[x-2] + " " + token[x-1] + " global 0")
             vars.append(token[x-1])
             vartype.append(token[x-2])
@@ -412,9 +412,9 @@ def param():  # 11
 
         curscope = 0
 
-        if token[x] == "[":
+        if "[" in token[x]:
             x += 1  # Accept [
-            if token[x] == "]":
+            if "]" in token[x]:
                 x += 1  # Accept ]
                 return
             else:
@@ -423,7 +423,7 @@ def param():  # 11
         else:
             return
     else:
-        if token[x-1] == "void":
+        if "void" in token[x-1]:
             return
         else:
             print("REJECT")
@@ -432,7 +432,7 @@ def param():  # 11
 
 def compoundstmt():  # 12
     global x, curscope
-    if token[x] == "{":
+    if "{" in token[x]:
         x += 1  # Accept {
         curscope += 1
     else:
@@ -441,7 +441,7 @@ def compoundstmt():  # 12
     localdeclarations()
     statementlist()
 
-    if token[x] == "}":
+    if "}" in token[x]:
         x += 1  # Accept }
     else:
         print("REJECT")
@@ -476,7 +476,7 @@ def statementlistprime():  # 16
     elif token[x] in miniKeywordsTwo:
         statement()
         statementlistprime()
-    elif token[x] == "}":
+    elif "}" in token[x]:
         return
     else:
         return
@@ -489,15 +489,15 @@ def statement():  # 17
         expstmt()
     elif z is True:
         expstmt()
-    elif token[x] == "(" or token[x] == ";":
+    elif "(" in token[x] or ";" in token[x]:
         expstmt()
-    elif token[x] == "{":
+    elif "{" in token[x]:
         compoundstmt()
-    elif token[x] == "if":
+    elif "if" in token[x]:
         selectionstmt()
-    elif token[x] == "while":
+    elif "while" in token[x]:
         itstmt()
-    elif token[x] == "return":
+    elif "return" in token[x]:
         retstmt()
     else:
         print("REJECT")
@@ -510,26 +510,26 @@ def expstmt():  # 18
     z = hasnum(token[x])
     if token[x] not in keywords and w is True:
         exp()
-        if token[x] == ";":
+        if ";" in token[x]:
             x += 1  # Accept ;
         else:
             print("REJECT")
             sys.exit(0)
     elif z is True:
         exp()
-        if token[x] == ";":
+        if ";" in token[x]:
             x += 1  # Accept ;
         else:
             print("REJECT")
             sys.exit(0)
-    elif token[x] == "(":
+    elif "(" in token[x]:
         exp()
-        if token[x] == ";":
+        if ";" in token[x]:
             x += 1  # Accept ;
         else:
             print("REJECT")
             sys.exit(0)
-    elif token[x] == ";":
+    elif ";" in token[x]:
         x += 1  # Accept ;
     else:
         print("REJECT")
@@ -538,25 +538,25 @@ def expstmt():  # 18
 
 def selectionstmt():  # 19
     global x
-    if token[x] == "if":
+    if "if" in token[x]:
         x += 1  # Accept if
     else:
         return
 
-    if token[x] == "(":
+    if "(" in token[x]:
         x += 1  # Accept (
     else:
         print("REJECT")
         sys.exit(0)
 
     exp()
-    if token[x] == ")":
+    if ")" in token[x]:
         x += 1  # Accept )
     else:
         print("REJECT")
         sys.exit(0)
     statement()
-    if token[x] == "else":
+    if "else" in token[x]:
         x += 1  # Accept else
         statement()
     else:
@@ -565,12 +565,12 @@ def selectionstmt():  # 19
 
 def itstmt():  # 20
     global x
-    if token[x] == "while":
+    if "while" in token[x]:
         x += 1  # Accept while
     else:
         return
 
-    if token[x] == "(":
+    if "(" in token[x]:
         x += 1  # Accept (
     else:
         print("REJECT")
@@ -578,7 +578,7 @@ def itstmt():  # 20
 
     exp()
 
-    if token[x] == ")":
+    if ")" in token[x]:
         x += 1  # Accept )
     else:
         print("REJECT")
@@ -589,9 +589,9 @@ def itstmt():  # 20
 
 def retstmt():  # 21
     global x, excret, exptype, funret
-    if token[x] == "return":
+    if "return" in token[x]:
         x += 1  # Accept return
-        if funtype == "int":
+        if "int" in funtype:
             funret = 1
         else:
             funret = 1
@@ -599,18 +599,18 @@ def retstmt():  # 21
         return
     w = token[x].isalpha()
     z = hasnum(token[x])
-    if token[x] == ";":
+    if ";" in token[x]:
         x += 1  # Accept ;
         if funtype != "void":  # check if int or float function does not return a value
             print("REJECT")
             sys.exit(0)
         return
     elif token[x] not in keywords and w is True:
-        if funtype == "void":  # check if void has return with value
+        if "void" in funtype:  # check if void has return with value
             print("REJECT")
             sys.exit(0)
 
-        if funtype == "int":
+        if "int" in funtype:
             exptype = "int"
         else:
             exptype = "float"
@@ -618,18 +618,18 @@ def retstmt():  # 21
         exp()
         excret = 0
 
-        if token[x] == ";":
+        if ";" in token[x]:
             x += 1  # Accept ;
             return
         else:
             print("REJECT")
             sys.exit(0)
     elif z is True:
-        if funtype == "void":  # check if void has return with value
+        if "void" in funtype:  # check if void has return with value
             print("REJECT")
             sys.exit(0)
 
-        if funtype == "int":
+        if "int" in funtype:
             exptype = "int"
         else:
             exptype = "float"
@@ -637,15 +637,15 @@ def retstmt():  # 21
 
         exp()
         excret = 0
-        if token[x] == ";":
+        if ";" in token[x]:
             x += 1  # Accept ;
             return
         else:
             print("REJECT")
             sys.exit(0)
-    elif token[x] == "(":
+    elif "(" in token[x]:
         exp()
-        if token[x] == ";":
+        if ";" in token[x]:
             x += 1  # Accept ;
             return
         else:
@@ -706,7 +706,7 @@ def exp():  # 22
         if exc1 == 1:
             o = 0
             for v in vars:  # get the type of the var for operand/operator checking
-                if v == token[x-1]:
+                if token[x-1] in v:
                     check = vartype[o]
                 o += 1
             if exptype != check:
@@ -735,7 +735,7 @@ def exp():  # 22
             if token[x-1] == v:
                 if varscope[k] != funname and varscope[k] != "global":
                     ch = 1
-                if varscope[k] == funname:
+                if funname in varscope[k]:
                     ch = 0
             k += 1
 
@@ -749,10 +749,10 @@ def exp():  # 22
 
         ex()
 
-    elif token[x] == "(":
+    elif "(" in token[x]:
         x += 1  # Accept (
         exp()
-        if token[x] == ")":
+        if ")" in token[x]:
             x += 1  # Accept )
             termprime()
             addexpprime()
@@ -823,7 +823,7 @@ def exp():  # 22
 
 def ex():  # 22X
     global x, exptype, exc1, exc0, parm, parammatch
-    if token[x] == "=":
+    if "=" in token[x]:
         x += 1  # Accept =
         k = 0
         for v in vars:  # find the type of the first ID for the exp
@@ -833,18 +833,18 @@ def ex():  # 22X
             k += 1
         exp()
         exc0 = 0
-    elif token[x] == "[":
+    elif "[" in token[x]:
         x += 1  # Accept [
         exptype = "int"
         exc1 = 1
         exp()
         exc1 = 0
-        if token[x-1] == "[":
+        if "[" in token[x-1]:
             print("REJECT")
             sys.exit(0)
-        if token[x] == "]":
+        if "]" in token[x]:
             x += 1  # Accept ]
-            if token[x] == "=":
+            if "=" in token[x]:
                 x += 1  # Accept =
                 exp()
             elif token[x] in multiplicationDivisionSymbols:
@@ -1000,10 +1000,10 @@ def factor():  # 32
             o = 0
             ch = 0
             for v in vars:  # get the type of the var for operand/operator checking
-                if v == token[x-1]:
+                if v in token[x-1]:
                     if varscope[o] != "global" and varscope[o] != funname:
                         ch = 1
-                    if varscope[o] == funname:
+                    if funname in varscope[o]:
                         ch = 0
                         check = vartype[o]
                         break
@@ -1019,7 +1019,7 @@ def factor():  # 32
         if excret == 1:
             o = 0
             for v in vars:  # get the type of the var for operand/operator checking
-                if v == token[x-1]:
+                if v in token[x-1]:
                     check = vartype[o]
                 o += 1
             if exptype != check:
