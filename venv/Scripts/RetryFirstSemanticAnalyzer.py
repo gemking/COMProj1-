@@ -151,8 +151,8 @@ def declaration():  # 4
             x += 1  # Accept ;
             k = 0
             for v in vars:  # check for duplicate declared variables
-                if token[x-2] == v:
-                    if vartype[k] == token[x-3]:
+                if token[x-2] in v:
+                    if vartype[k] in token[x-3]:
                         print("REJECT")
                         sys.exit(0)
                 k += 1
@@ -171,8 +171,8 @@ def declaration():  # 4
             x += 1  # Accept [
             k = 0
             for v in vars:  # check for duplicate declared variables
-                if token[x-2] == v:
-                    if vartype[k] == token[x-3]:
+                if token[x-2] in v:
+                    if vartype[k] in token[x-3]:
                         print("REJECT")
                         sys.exit(0)
                 k += 1
@@ -223,10 +223,10 @@ def declaration():  # 4
                 x += 1  # Accept )
                 compoundstmt()
 
-                if funret == 0 and funtype == "int":
+                if funret == 0 and "int" in funtype: #check if not funtype in "int"
                     print("REJECT")
                     sys.exit(0)
-                elif funret == 0 and funtype == "float":
+                elif funret == 0 and "float" in funtype:
                     print("REJECT")
                     sys.exit(0)
                 else:
@@ -252,8 +252,8 @@ def vd():  # 5
         x += 1  # Accept ID
         k = 0
         for v in vars:  # check for duplicate declared variables
-            if token[x-1] == v:
-                if varscope[k] == funname:
+            if token[x-1] in v:
+                if varscope[k] in funname:
                     if varscopen[k] >= curscope:
                         print("REJECT")
                         sys.exit(0)
@@ -383,8 +383,8 @@ def param():  # 11
         mc = 0
         ch = 0
         for v in vars:  # check for duplicate declared variables and with scope
-            if token[x-1] == v:
-                if varscope[k] != "global" and varscope[k] != funname:
+            if token[x-1] in v:
+                if "global" not in varscope[k] and varscope[k] not in funname: #may not work
                     ch = 1
                     continue
                 if "global" in varscope[k]:
@@ -601,7 +601,7 @@ def retstmt():  # 21
     z = hasnum(token[x])
     if ";" in token[x]:
         x += 1  # Accept ;
-        if funtype != "void":  # check if int or float function does not return a value
+        if "void" not in funtype:  # check if int or float function does not return a value
             print("REJECT")
             sys.exit(0)
         return
@@ -665,7 +665,7 @@ def exp():  # 22
         if parm == 1:
             o = 0
             for v in vars:  # get the type of the var for operand/operator checking
-                if v == token[x-1]:
+                if v in token[x-1]:
                     check = vartype[o]
                 o += 1
             parammatch = parammatch + " " + check
@@ -675,7 +675,7 @@ def exp():  # 22
                 o = 0
                 check = 0
                 for v in funnames:  # get the type of the function for operand/operator checking
-                    if v == token[x-1]:
+                    if v in token[x-1]:
                         check = funtypes[o]
                     o += 1
                 if exptype != check:
@@ -687,10 +687,10 @@ def exp():  # 22
                 ch = 0
                 check = 0
                 for v in vars:  # check variable before checking if operator/operand agree
-                    if v == token[x-1]:
-                        if varscope[o] != "global" and varscope[o] != funname:
+                    if v in token[x-1]:
+                        if "global" not in varscope[o] and varscope[o] not in funname:
                             ch = 1
-                        if varscope[o] == funname:
+                        if varscope[o] in funname:
                             ch = 0
                             check = vartype[o]
                             break
@@ -706,10 +706,10 @@ def exp():  # 22
         if exc1 == 1:
             o = 0
             for v in vars:  # get the type of the var for operand/operator checking
-                if token[x-1] in v:
+                if v in token[x-1]:
                     check = vartype[o]
                 o += 1
-            if exptype != check:
+            if exptype not in check:
                 print("REJECT")
                 sys.exit(0)
 
@@ -717,10 +717,10 @@ def exp():  # 22
             o = 0
             check = 0
             for v in vars:  # get the type of the var for operand/operator checking
-                if v == token[x-1]:
+                if v in token[x-1]:
                     check = vartype[o]
                 o += 1
-            if exptype != check:
+            if exptype not in check:
                 print("REJECT")
                 sys.exit(0)
 
@@ -732,14 +732,14 @@ def exp():  # 22
         ch = 0
         k = 0
         for v in vars:  # check for duplicate declared variables
-            if token[x-1] == v:
-                if varscope[k] != funname and varscope[k] != "global":
+            if v in token[x-1]:
+                if funname not in varscope[k] and "global" not in varscope[k]:
                     ch = 1
                 if funname in varscope[k]:
                     ch = 0
             k += 1
 
-        if token[x-1] not in vars and token[x] != "(":
+        if token[x-1] not in vars and "(" not in token[x]:
             print("REJECT")
             sys.exit(0)
 
@@ -784,12 +784,12 @@ def exp():  # 22
             ch = 1
 
         if excret == 1 and ch == 1:
-            if exptype != "float":
+            if "float" not in exptype:
                 print("REJECT")
                 sys.exit(0)
 
         if excret == 1 and ch == 0:
-            if exptype != "int":
+            if "int" not in exptype:
                 print("REJECT")
                 sys.exit(0)
 
@@ -801,7 +801,7 @@ def exp():  # 22
             sys.exit(0)
 
         if exc0 == 1:
-            if ch != 1 and exptype == "float":
+            if ch != 1 and "float" in exptype:
                 if "." not in token[x+1] and "E" not in token[x+1]:
                     print("REJECT")
                     sys.exit(0)
