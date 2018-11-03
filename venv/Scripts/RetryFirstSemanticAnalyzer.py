@@ -1187,6 +1187,10 @@ def duplicateVariableCheck():
     variableType.append(token[x - 3])
     varsScope.append("global")
     varsScopeBlock.append(0)
+    if "void" in token[x - 3]:
+        print("REJECT")
+        exit(0)
+
 
 # ----------------------------- end of parsing functions --------------------------------- #
 
