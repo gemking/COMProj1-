@@ -45,14 +45,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="23" />
-          <entry key="py" value="43768" />
+          <entry key="py" value="44857" />
           <entry key="txt" value="584" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="607" />
-          <entry key="Python" value="43767" />
+          <entry key="Python" value="44856" />
           <entry key="RegExp" value="1" />
         </counts>
       </usages-collector>
@@ -174,11 +174,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/revisionSA.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17384">
-              <caret line="1144" lean-forward="true" selection-start-line="1144" selection-end-line="1144" />
+            <state relative-caret-position="331">
+              <caret line="1176" column="2" selection-start-line="1176" selection-start-column="2" selection-end-line="1176" selection-end-column="2" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-                <marker date="1541273051796" expanded="true" signature="14015:14214" ph="..." />
+                <marker date="1541276093173" expanded="true" signature="14138:14337" ph="..." />
               </folding>
             </state>
           </provider>
@@ -234,8 +234,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-41" />
-    <option name="y" value="9" />
+    <option name="x" value="-238" />
+    <option name="y" value="342" />
     <option name="width" value="1363" />
     <option name="height" value="975" />
   </component>
@@ -482,7 +482,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-41" y="9" width="1363" height="975" extended-state="0" />
+    <frame x="-112" y="22" width="1363" height="975" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4990403" visible="true" weight="0.22113207" />
@@ -740,11 +740,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/revisionSA.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17384">
-          <caret line="1144" lean-forward="true" selection-start-line="1144" selection-end-line="1144" />
+        <state relative-caret-position="331">
+          <caret line="1176" column="2" selection-start-line="1176" selection-start-column="2" selection-end-line="1176" selection-end-column="2" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <marker date="1541273051796" expanded="true" signature="14015:14214" ph="..." />
+            <marker date="1541276093173" expanded="true" signature="14138:14337" ph="..." />
           </folding>
         </state>
       </provider>
