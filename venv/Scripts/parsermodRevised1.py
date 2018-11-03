@@ -349,8 +349,8 @@ def parameterPrime(): #Rule 10
         x += 1 #Accepts ID
         functionDeclaration[functionIndex] = functionDeclaration[functionIndex] + " " + token[x-1]
 
-        m = 0
-        g = 0
+        m = 0 
+        g = 0 
         gh = 0
         cz = 0
         for duplicates in vars: #check for duplicate declared variables and with scope
