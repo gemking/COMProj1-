@@ -65,8 +65,10 @@ for importantLines in filelines:  # receiving importantlines from filelines
                         token.append("*")  # appends multiplication symbol
                         token.append("/")  # appends division symbol
                 else:
+                    # print t[5]
                     token.append(word[4])  # appends rest of symbols
         elif word[3] and insideComment == 0:  # matches errors and makes sure insideComment is 0
+            # print "ERROR:", t[6]
             token.append(word[3])  # appends error
 
             # ----- end of lexer ----- #
@@ -98,23 +100,23 @@ functionName = 0  # function name, for scope
 functionType = 0  # function type, determine if it needs return
 currentScope = 0  # current scope
 functionReturn = 0  # does function have a return
-
+functionReturn = 0  # check if int/float function has return
 
 
 # ---------------------------------- parsing functions ----------------------------------- #
 
 
-def containsNumber(inputString):
-    return any(char.isdigit() for char in inputString)
+def hasnum(inputstring):
+    return any(char.isdigit() for char in inputstring)
 
 
 def programDeclaration():  # runs program(Rule 1)
     global isCompleted
     declarationList()
     if "$" in token[x]:
-        isCompleted = 1  #will continue
+        isCompleted = 1  # continues outside
     else:
-        print("REJECT")
+        print("REJECT")  # if not, Reject
 
 
 def declarationList():  # Rule 2
@@ -152,16 +154,17 @@ def declaration():  # Rule 4
         else:
             checkFinalMain = 0
 
-        x += 1  # Accepts ID
+        x += 1  # Accept ID
         if ";" in token[x]:
-            x += 1  # Accepts ;
+            x += 1  # Accept ;
             duplicateVariableCheck()
             variableAppend()
         elif "[" in token[x]:
-            x += 1  # Accepts [
+            x += 1  # Accept [
             duplicateVariableCheck()
             variableAppend()
-            z = containsNumber(token[x])
+
+            z = hasnum(token[x])
             if z is True:
                 x += 1  # Accept NUM/FLOAT
                 if "]" in token[x]:
@@ -185,18 +188,19 @@ def declaration():  # Rule 4
                 x += 1  # Accept )
                 compoundStatement()
 
-                if functionReturn == 0 and functionType in intFloatKeywords:  # check if not funtype in "int" or "float"
+                if functionReturn == 0 and functionType in intFloatKeywords:  # check if not funtype in "int"
                     print("REJECT")
                     exit(0)
                 else:
                     functionReturn = 0
+
             else:
                 print("REJECT")
                 exit(0)
         else:
             print("REJECT")
             exit(0)
-        #else was deleted
+
 
 
 def theVariableDeclaration():  # Rule 5
@@ -215,7 +219,8 @@ def theVariableDeclaration():  # Rule 5
                         print("REJECT")
                         exit(0)
             s += 1
-        variableDeclaration.append(token[x - 2] + " " + token[x - 1] + " " + str(functionName) + " " + str(currentScope))
+        variableDeclaration.append(
+            token[x - 2] + " " + token[x - 1] + " " + str(functionName) + " " + str(currentScope))
         vars.append(token[x - 1])
         variableType.append(token[x - 2])
         varsScope.append(functionName)
@@ -237,10 +242,10 @@ def variableDeclarationPrime():  # Rule 6
         x += 1  # Accept ;
     elif "[" in token[x]:
         x += 1  # Accept [
-        w = containsNumber(token[x])
+        w = hasnum(token[x])
         if w is True:
             x += 1  # Accept NUM/FLOAT
-            if token[x-1] in intFloatKeywords: #checks if there is a float or exponential value in the array
+            if token[x-1] in intFloatKeywords:
                 print("REJECT")
                 exit(0)
             if "]" in token[x]:
@@ -334,7 +339,8 @@ def parameterPrime():  # Rule 9
             varsScopeBlock.append(0)
 
         else:
-            variableDeclaration.append(token[x - 2] + " " + token[x - 1] + " " + str(functionName) + " " + str(currentScope))
+            variableDeclaration.append(
+                token[x - 2] + " " + token[x - 1] + " " + str(functionName) + " " + str(currentScope))
             vars.append(token[x - 1])
             variableType.append(token[x - 2])
             varsScope.append(functionName)
@@ -439,7 +445,7 @@ def statementList():  # Rule 17
 
 def statementListPrime():  # Rule 18
     w = token[x].isalpha()
-    z = containsNumber(token[x])
+    z = hasnum(token[x])
     if token[x] not in keywords and w is True:
         statement()
         statementListPrime()
@@ -454,7 +460,7 @@ def statementListPrime():  # Rule 18
 
 def statement():  # Rule 19
     w = token[x].isalpha()
-    z = containsNumber(token[x])
+    z = hasnum(token[x])
     if token[x] not in keywords and w is True:
         expressionStatement()
     elif z is True or token[x] in leftParenthesesSemicolon:
@@ -475,7 +481,7 @@ def statement():  # Rule 19
 def expressionStatement():  # Rule 20
     global x
     w = token[x].isalpha()
-    z = containsNumber(token[x])
+    z = hasnum(token[x])
     if token[x] not in keywords and w is True:
         expressionPrime()
         if ";" in token[x]:
@@ -490,11 +496,11 @@ def expressionStatement():  # Rule 20
         else:
             print("REJECT")
             exit(0)
-    """elif ";" in token[x]:
+    elif ";" in token[x]:
         x += 1  # Accept ;
     else:
         print("REJECT")
-        exit(0) """ #come back to potentially delete later
+        exit(0)
 
 
 def selectionStatement():  # Rule 21
@@ -569,8 +575,11 @@ def returnStatement():  # Rule 24
 
 def returnStatementPrime():  # Rule 25
     global x
+    global functionReturn
+    global expressionReturn
+    global expressionType
     w = token[x].isalpha()
-    z = containsNumber(token[x])
+    z = hasnum(token[x])
     if ";" in token[x]:
         x += 1  # Accept ;
         if "void" not in functionType:  # check if int or float function does not return a value
@@ -578,7 +587,9 @@ def returnStatementPrime():  # Rule 25
             exit(0)
         return
     elif token[x] not in keywords and w is True:
-       checkVoidIntFloatInFunctionType()
+
+
+        checkVoidIntFloatInFunctionType()
     elif z is True:
         checkVoidIntFloatInFunctionType()
     elif "(" in token[x]:
@@ -605,7 +616,7 @@ def expression():  # Rule 26
         x += 1  # Accept =
         s = 0
         for l in vars:  # find the type of the first ID for the exp
-            if l in token[x - 2]:
+            if token[x - 2] == l:
                 expressionType = variableType[s]
                 leftExpression = 1
             s += 1
@@ -693,7 +704,7 @@ def expressionPrime():  # Rule 27
     global matchParameter
     global theParameter
     w = token[x].isalpha()
-    z = containsNumber(token[x])
+    z = hasnum(token[x])
     if token[x] not in keywords and w is True:
         x += 1  # Accept ID
         if theParameter == 1:
@@ -738,25 +749,11 @@ def expressionPrime():  # Rule 27
                     exit(0)
 
         if rightExpression == 1:
-            q = 0
-            for l in vars:  # get the type of the var for operand/operator checking
-                if l in token[x - 1]:
-                    check = variableType[q]
-                q += 1
-            if expressionType not in check:
-                print("REJECT")
-                exit(0)
+            getVar()
 
         if expressionReturn == 1:
-            q = 0
             check = 0
-            for l in vars:  # get the type of the var for operand/operator checking
-                if l in token[x - 1]:
-                    check = variableType[q]
-                q += 1
-            if expressionType not in check:
-                print("REJECT")
-                exit(0)
+            getVar()
 
         if "(" in token[x] and leftExpression == 0 and theParameter == 0:
             if token[x - 1] not in functionNames:
@@ -804,7 +801,7 @@ def expressionPrime():  # Rule 27
     elif z is True:
         x += 1  # Accept NUM/FLOAT
         if theParameter == 1:
-            if token[x-1] in decimalExponentKeywords:
+            if "." in token[x - 1] or "E" in token[x-1]:
                 matchParameter = matchParameter + " float"
             else:
                 matchParameter = matchParameter + " int"
@@ -829,7 +826,7 @@ def expressionPrime():  # Rule 27
 
         if leftExpression == 1:
             if dn != 1 and "float" in expressionType:
-                if token[x-1] not in decimalExponentKeywords:
+                if token[x+1] not in decimalExponentKeywords:
                     print("REJECT")
                     exit(0)
 
@@ -941,7 +938,7 @@ def factor():  # Rule 39
     leftExpression
     expressionReturn
     w = token[x].isalpha()
-    z = containsNumber(token[x])
+    z = hasnum(token[x])
     if token[x] not in keywords and w is True:
         x += 1  # Accept ID
 
@@ -1028,7 +1025,7 @@ def factorPrime():  # Rule 40
 def arguments():  # Rule 41
     global x
     w = token[x].isalpha()
-    z = containsNumber(token[x])
+    z = hasnum(token[x])
     if token[x] not in keywords and w is True:
         argumentsList()
     elif z is True or "(" in token[x]:
@@ -1093,20 +1090,24 @@ def checkVoidIntFloatInFunctionType():
     global x
     global expressionReturn
     global expressionType
+    if "void" in functionType:  # check if void has return with value
+        print("REJECT")
+        exit(0)
+
     if "int" in functionType:
         expressionType = "int"
     else:
         expressionType = "float"
-        expressionReturn = 1
+    expressionReturn = 1
+    expressionPrime()
+    expressionReturn = 0
 
-        expressionPrime()
-        expressionReturn = 0
-        if ";" in token[x]:
-            x += 1  # Accept ;
-            return
-        else:
-            print("REJECT")
-            exit(0)
+    if ";" in token[x]:
+        x += 1  # Accept ;
+        return
+    else:
+        print("REJECT")
+        exit(0)
 
 def variableAppend():
     global x
@@ -1118,6 +1119,18 @@ def variableAppend():
     if "void" in token[x - 3]:
         print("REJECT")
         exit(0)
+
+def getVar():
+    q = 0
+    global expressionType
+    for l in vars:  # get the type of the var for operand/operator checking
+        if l in token[x - 1]:
+            check = variableType[q]
+        q += 1
+    if expressionType not in check:
+        print("REJECT")
+        exit(0)
+
 
 
 # ----------------------------- end of parsing functions --------------------------------- #

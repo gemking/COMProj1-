@@ -1,30 +1,13 @@
-/* test for basic functionality of proj 3 - pass */
-/* test 6 - calling a method, scope check of function */
+/*
+  Error: Void functions may not return values.
+*/
 
-int x;
-int y;
-
-
-int my ( float b, int c)
+void print(void)
 {
-	int z;
-
-	z = z+c;
-
-	return z;
+   return 6;
 }
 
-
-void main ( int x, int y )
+void main(void)
 {
-	int z;
-	x=1;
-	y=2;
-	z = x + y;
-	if (z < 5)
-	{
-		z=my(1.2, 2);
-
-	}
-
+   print();
 }
