@@ -1,16 +1,20 @@
+
 /* test for basic functionality of proj 3 - fail */
-/* test 18 - test declaring variable twice */
+/* test 13 - test function param miscount */
 
 int x;
 int y;
 
-void my (void)
+
+int my ( float b, int c)
 {
 	int z;
 
-	int z;
+	z = z+c;
 
+	return z+c;
 }
+
 
 int something( int z, int q)
 {
@@ -30,7 +34,7 @@ void main( int x, int y )
 	z = x + y;
 	if (z < 5)
 	{
-		z=my(1.2, 2.5);
+		z=my(1.2);
 
 	}
 

@@ -827,7 +827,7 @@ def ex():  # 22X
         i += 1  # Accept =
         k = 0
         for v in vars:  # find the type of the first ID for the exp
-            if token[i-2] == v:
+            if token[i-2] in v:
                 exptype = vartype[k]
                 exc0 = 1
             k += 1
@@ -1019,7 +1019,7 @@ def factor():  # 32
         if excret == 1:
             o = 0
             for v in vars:  # get the type of the var for operand/operator checking
-                if v == token[i-1]:
+                if v in token[i-1]:
                     check = vartype[o]
                 o += 1
             if exptype != check:
