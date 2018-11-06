@@ -1,13 +1,37 @@
-/*
-  Error: Void functions may not return values.
-*/
+/* test for basic functionality of proj 3 - fail */
+/* test 18 - test declaring variable twice */
 
-void print(void)
+int x;
+int y;
+
+void my (void)
 {
-   return 6;
+	int z;
+
+	int z;
+
 }
 
-void main(void)
+int something( int z, int q)
 {
-   print();
+	int why;
+
+	why = z+q;
+
+	return why;
+
+}
+
+void main( int x, int y )
+{
+	int z;
+	x=1;
+	y=2;
+	z = x + y;
+	if (z < 5)
+	{
+		z=my(1.2, 2.5);
+
+	}
+
 }

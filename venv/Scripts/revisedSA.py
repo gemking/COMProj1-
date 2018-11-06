@@ -318,7 +318,7 @@ def parameterPrime():  # Rule 9
         dn = 0
         for l in vars:  # check for duplicate declared variables and with scope
             if token[x - 1] in l:
-                if "global" not in varsScope[s] and varsScope[s] not in functionName:  # may not work
+                if "global" not in varsScope[s] and varsScope[s] not in functionName:
                     dn = 1
                     continue
                 if "global" in varsScope[s]:
@@ -338,8 +338,7 @@ def parameterPrime():  # Rule 9
             varsScopeBlock.append(0)
 
         else:
-            variableDeclaration.append(
-                token[x - 2] + " " + token[x - 1] + " " + str(functionName) + " " + str(currentScope))
+            variableDeclaration.append(token[x - 2] + " " + token[x - 1] + " " + str(functionName) + " " + str(currentScope))
             vars.append(token[x - 1])
             variableType.append(token[x - 2])
             varsScope.append(functionName)
@@ -445,10 +444,7 @@ def statementList():  # Rule 17
 def statementListPrime():  # Rule 18
     w = token[x].isalpha()
     z = hasnum(token[x])
-    if token[x] not in keywords and w is True:
-        statement()
-        statementListPrime()
-    elif z is True or token[x] in miniKeywordsTwo:
+    if token[x] not in keywords and w is True or z is True or token[x] in miniKeywordsTwo:
         statement()
         statementListPrime()
     elif "}" in token[x]:
@@ -460,9 +456,7 @@ def statementListPrime():  # Rule 18
 def statement():  # Rule 19
     w = token[x].isalpha()
     z = hasnum(token[x])
-    if token[x] not in keywords and w is True:
-        expressionStatement()
-    elif z is True or token[x] in leftParenthesesSemicolon:
+    if token[x] not in keywords and w is True or z is True or token[x] in leftParenthesesSemicolon:
         expressionStatement()
     elif "{" in token[x]:
         compoundStatement()
@@ -481,25 +475,13 @@ def expressionStatement():  # Rule 20
     global x
     w = token[x].isalpha()
     z = hasnum(token[x])
-    if token[x] not in keywords and w is True:
+    if token[x] not in keywords and w is True or z is True or "(" in token[x]:
         expressionPrime()
         if ";" in token[x]:
             x += 1  # Accept ;
         else:
             print("REJECT")
             exit(0)
-    elif z is True or "(" in token[x]:
-        expressionPrime()
-        if ";" in token[x]:
-            x += 1  # Accept ;
-        else:
-            print("REJECT")
-            exit(0)
-    elif ";" in token[x]:
-        x += 1  # Accept ;
-    else:
-        print("REJECT")
-        exit(0)
 
 
 def selectionStatement():  # Rule 21
@@ -585,11 +567,7 @@ def returnStatementPrime():  # Rule 25
             print("REJECT")
             exit(0)
         return
-    elif token[x] not in keywords and w is True:
-
-
-        checkVoidIntFloatInFunctionType()
-    elif z is True:
+    elif token[x] not in keywords and w is True or z is True:
         checkVoidIntFloatInFunctionType()
     elif "(" in token[x]:
         expressionPrime()
@@ -638,12 +616,8 @@ def expression():  # Rule 26
             elif token[x] in multiplicationDivisionSymbols:
                 termPrime()
                 addExpressionPrime()
-                if token[x] in comparisionSymbols:
-                    simpleExpressionPrime()
             elif token[x] in additionSubtractionSymbols:
                 addExpressionPrime()
-                if token[x] in comparisionSymbols:
-                    simpleExpressionPrime()
             elif token[x] in comparisionSymbols:
                 simpleExpressionPrime()
         else:
@@ -670,12 +644,8 @@ def expression():  # Rule 26
             if token[x] in multiplicationDivisionSymbols:
                 termPrime()
                 addExpressionPrime()
-                if token[x] in comparisionSymbols:
-                    simpleExpressionPrime()
             elif token[x] in additionSubtractionSymbols:
                 addExpressionPrime()
-                if token[x] in comparisionSymbols:
-                    simpleExpressionPrime()
             elif token[x] in comparisionSymbols:
                 simpleExpressionPrime()
         else:
@@ -684,12 +654,8 @@ def expression():  # Rule 26
     elif token[x] in multiplicationDivisionSymbols:
         termPrime()
         addExpressionPrime()
-        if token[x] in comparisionSymbols:
-            simpleExpressionPrime()
     elif token[x] in additionSubtractionSymbols:
         addExpressionPrime()
-        if token[x] in comparisionSymbols:
-            simpleExpressionPrime()
     elif token[x] in comparisionSymbols:
         simpleExpressionPrime()
 
@@ -790,10 +756,6 @@ def expressionPrime():  # Rule 27
                 simpleExpressionPrime()
             elif token[x] in additionSubtractionSymbols:
                 addExpressionPrime()
-                if token[x] in comparisionSymbols:
-                    simpleExpressionPrime()
-            elif token[x] in comparisionSymbols:
-                simpleExpressionPrime()
         else:
             print("REJECT")
             exit(0)
@@ -835,10 +797,6 @@ def expressionPrime():  # Rule 27
             simpleExpressionPrime()
         elif token[x] in additionSubtractionSymbols:
             addExpressionPrime()
-            if token[x] in comparisionSymbols:
-                simpleExpressionPrime()
-        elif token[x] in comparisionSymbols:
-            simpleExpressionPrime()
     else:
         print("REJECT")
         exit(0)
@@ -1025,9 +983,7 @@ def arguments():  # Rule 41
     global x
     w = token[x].isalpha()
     z = hasnum(token[x])
-    if token[x] not in keywords and w is True:
-        argumentsList()
-    elif z is True or "(" in token[x]:
+    if token[x] not in keywords and w is True or z is True or "(" in token[x]:
         argumentsList()
     elif ")" in token[x]:
         return
@@ -1131,9 +1087,6 @@ def getVar():
     if expressionType not in check:
         print("REJECT")
         exit(0)
-
-
-
 # ----------------------------- end of parsing functions --------------------------------- #
 
 # begin parsing
