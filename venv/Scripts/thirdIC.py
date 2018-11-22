@@ -153,14 +153,48 @@ def declaration():  # Rule 4
                     q += 1
                     currentFunction = token[x - 1]
                 else:
-                    parameterCount()
+                    f = x + 1
+                    paramcount = 0
+                    qch = q + 1
+                    while ")" not in token[f]:
+                        if token[f] in intFloatKeywords:
+                            paramcount += 1
+                            funcparm.append(str(qch).ljust(4) + "\tparam\t\t4   \t\t\t\t\t" + token[f + 1])
+                            qch += 1
+                            f += 2
+                            if "," in token[f]:
+                                f += 1
+                    print(str(q).ljust(4) + "\tfunc \t\t" + token[x - 1].ljust(4) + "\t\t" + token[x - 2].ljust(
+                        4) + "\t\t" + str(
+                        paramcount))
+                    q = qch
+                    for v in funcparm:
+                        print(v)
+                    currentFunction = token[x - 1]
             else:
                 if "void" in token[x+1]:
                     print(str(q).ljust(4) + "\tfunc \t\t" + token[x-1].ljust(4) + "\t\t" + token[x-2].ljust(4) + "\t\t0")
                     q += 1
                     currentFunction = token[x - 1]
                 else:
-                    parameterCount()
+                    f = x + 1
+                    paramcount = 0
+                    qch = q + 1
+                    while ")" not in token[f]:
+                        if token[f] in intFloatKeywords:
+                            paramcount += 1
+                            funcparm.append(str(qch).ljust(4) + "\tparam\t\t4   \t\t\t\t\t" + token[f + 1])
+                            qch += 1
+                            f += 2
+                            if "," in token[f]:
+                                f += 1
+                    print(str(q).ljust(4) + "\tfunc \t\t" + token[x - 1].ljust(4) + "\t\t" + token[x - 2].ljust(
+                        4) + "\t\t" + str(
+                        paramcount))
+                    q = qch
+                    for v in funcparm:
+                        print(v)
+                    currentFunction = token[x - 1]
 
 
         if ";" in token[x]:
@@ -228,6 +262,7 @@ def variableDeclaration():  # Rule 6
 
 def variableDeclarationPrime(): # Rule 7
     global x
+    global q
     if ";" in token[x]:
         x += 1  # Accepts ;
     elif "[" in token[x]:
@@ -569,7 +604,8 @@ def selectionStatement():  # Rule 22
     selectionStatementPrime()
 
 def selectionStatementPrime(): # Rule 23
-
+    global x
+    global q
     if "else" in token[x]:
         ifListQuadruples[ifListNumberQuadruples] = ifListQuadruples[ifListNumberQuadruples] + str(q + 1)
     else:
@@ -944,49 +980,13 @@ def expressionPrime():  # Rule 28
                 f += 1
 
             if insideWlistQuadruples == 1:
-                parmcount = 0
-                h1 = exquad.partition('(')[-1].rpartition(')')[0]
-                h2 = exquad.partition('(')
-                if ',' in h1:
-                    h1 = h1.split(',')
-                for v in h1:
-                    parmcount += 1
-                    whileListQuadruples.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
-                    q += 1
-
-                whileListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                q += 1
-                t += 1
+                whileParameterCountExpressionQuadruples()
 
             elif insideIfListQuadruples == 1:
-                parmcount = 0
-                h1 = exquad.partition('(')[-1].rpartition(')')[0]
-                h2 = exquad.partition('(')
-                if ',' in h1:
-                    h1 = h1.split(',')
-                for v in h1:
-                    parmcount += 1
-                    ifListQuadruples.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
-                    q += 1
-
-                ifListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                q += 1
-                t += 1
+                ifParameterCountExpressionQuadruples()
 
             else:
-                parmcount = 0
-                h1 = exquad.partition('(')[-1].rpartition(')')[0]
-                h2 = exquad.partition('(')
-                if ',' in h1:
-                    h1 = h1.split(',')
-                for v in h1:
-                    parmcount += 1
-                    print(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
-                    q += 1
-
-                print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                q += 1
-                t += 1
+                printParameterCountExpressionQuadruples()
 
         if "=" in token[x]:
             f = x + 1
@@ -1015,43 +1015,10 @@ def expressionPrime():  # Rule 28
 
             if insideWlistQuadruples == 1:
                 if "(" in lastexp:
-                    parmcount = 0
-                    h1 = lastexp.partition('(')[-1].rpartition(')')[0]
-                    h2 = lastexp.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        whileListQuadruples.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    whileListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-                    whileListQuadruples.append(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
-                    q += 1
-                    insideExpression = 1
+                    whileListQuadruplesParameterCountLastExpression()
 
                 elif "[" in lastexp:
-                    h1 = lastexp.partition('[')
-                    h2 = lastexp.partition('[')[-1].rpartition(']')[0]
-                    if h2.isdigit() is False:
-                        whileListQuadruples.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
-                        q += 1
-                        temp = "t" + str(t)
-                        t += 1
-                        h2 = temp
-                    else:
-                        h2 = int(h2) * 4
-                    whileListQuadruples.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-
-                    whileListQuadruples.append(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
-                    q += 1
-                    insideExpression = 1
+                    whileListQuadruplesLastExpression()
 
                 else:
                     whileListQuadruples.append(str(q).ljust(4) + "\tassgn\t\t" + lastexp.ljust(4) + "\t\t\t\t\t" + str(assign))
@@ -1060,43 +1027,10 @@ def expressionPrime():  # Rule 28
 
             elif insideIfListQuadruples == 1:
                 if "(" in lastexp:
-                    parmcount = 0
-                    h1 = lastexp.partition('(')[-1].rpartition(')')[0]
-                    h2 = lastexp.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        ifListQuadruples.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    ifListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-                    ifListQuadruples.append(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
-                    q += 1
-                    insideExpression = 1
+                    ifListQuadruplesParamterCounterLastExpression()
 
                 elif "[" in lastexp:
-                    h1 = lastexp.partition('[')
-                    h2 = lastexp.partition('[')[-1].rpartition(']')[0]
-                    if h2.isdigit() is False:
-                        ifListQuadruples.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
-                        q += 1
-                        temp = "t" + str(t)
-                        t += 1
-                        h2 = temp
-                    else:
-                        h2 = int(h2) * 4
-                    ifListQuadruples.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-
-                    ifListQuadruples.append(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
-                    q += 1
-                    insideExpression = 1
+                   ifListQuadruplesLastExpression()
 
                 else:
                     ifListQuadruples.append(str(q).ljust(4) + "\tassgn\t\t" + lastexp.ljust(4) + "\t\t\t\t\t" + str(assign))
@@ -1762,6 +1696,94 @@ def printh2():
         h2 = int(h2) * 4
     print(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
 
+def whileParameterCountExpressionQuadruples():
+    parmcount = 0
+    h1 = exquad.partition('(')[-1].rpartition(')')[0]
+    h2 = exquad.partition('(')
+    if ',' in h1:
+        h1 = h1.split(',')
+    for v in h1:
+        parmcount += 1
+        whileListQuadruples.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
+        q += 1
+
+    whileListQuadruples.append(
+        str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+    q += 1
+    t += 1
+
+def ifParameterCountExpressionQuadruples():
+    parmcount = 0
+    h1 = exquad.partition('(')[-1].rpartition(')')[0]
+    h2 = exquad.partition('(')
+    if ',' in h1:
+        h1 = h1.split(',')
+    for v in h1:
+        parmcount += 1
+        ifListQuadruples.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
+        q += 1
+
+    ifListQuadruples.append(
+        str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+    q += 1
+    t += 1
+
+def printParameterCountExpressionQuadruples():
+    parmcount = 0
+    h1 = exquad.partition('(')[-1].rpartition(')')[0]
+    h2 = exquad.partition('(')
+    if ',' in h1:
+        h1 = h1.split(',')
+    for v in h1:
+        parmcount += 1
+        ifListQuadruples.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
+        q += 1
+
+    ifListQuadruples.append(
+        str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+    q += 1
+    t += 1
+
+def ifListQuadruplesParamterCounterLastExpression():
+    if "(" in lastexp:
+        parmcount = 0
+        h1 = lastexp.partition('(')[-1].rpartition(')')[0]
+        h2 = lastexp.partition('(')
+        if ',' in h1:
+            h1 = h1.split(',')
+        for v in h1:
+            parmcount += 1
+            ifListQuadruples.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
+            q += 1
+
+        ifListQuadruples.append(
+            str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+        q += 1
+        temp = "t" + str(t)
+        t += 1
+        ifListQuadruples.append(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
+        q += 1
+        insideExpression = 1
+
+def whileListQuadruplesParameterCountLastExpression():
+    parmcount = 0
+    h1 = lastexp.partition('(')[-1].rpartition(')')[0]
+    h2 = lastexp.partition('(')
+    if ',' in h1:
+        h1 = h1.split(',')
+    for v in h1:
+        parmcount += 1
+        whileListQuadruples.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
+        q += 1
+
+    whileListQuadruples.append(
+        str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+    q += 1
+    temp = "t" + str(t)
+    t += 1
+    whileListQuadruples.append(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
+    q += 1
+    insideExpression = 1
 def printParameterCountLastExpression():
     parmcount = 0
     h1 = lastexp.partition('(')[-1].rpartition(')')[0]
@@ -1778,6 +1800,48 @@ def printParameterCountLastExpression():
     temp = "t" + str(t)
     t += 1
     print(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
+    q += 1
+    insideExpression = 1
+
+def ifListQuadruplesLastExpression():
+    h1 = lastexp.partition('[')
+    h2 = lastexp.partition('[')[-1].rpartition(']')[0]
+    if h2.isdigit() is False:
+        ifListQuadruples.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+        q += 1
+        temp = "t" + str(t)
+        t += 1
+        h2 = temp
+    else:
+        h2 = int(h2) * 4
+    ifListQuadruples.append(
+        str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+    q += 1
+    temp = "t" + str(t)
+    t += 1
+
+    ifListQuadruples.append(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
+    q += 1
+    insideExpression = 1
+
+def whileListQuadruplesLastExpression():
+    h1 = lastexp.partition('[')
+    h2 = lastexp.partition('[')[-1].rpartition(']')[0]
+    if h2.isdigit() is False:
+        whileListQuadruples.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+        q += 1
+        temp = "t" + str(t)
+        t += 1
+        h2 = temp
+    else:
+        h2 = int(h2) * 4
+    whileListQuadruples.append(
+        str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+    q += 1
+    temp = "t" + str(t)
+    t += 1
+
+    whileListQuadruples.append(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
     q += 1
     insideExpression = 1
 
