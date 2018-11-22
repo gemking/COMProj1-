@@ -1441,32 +1441,11 @@ def doMath(op, op1, op2):
     if "*" in op:
         if insideWlistQuadruples == 1:
             if "(" in op1:
-                    parmcount = 0
-                    h1 = op1.partition('(')[-1].rpartition(')')[0]
-                    h2 = op1.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        whileListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    whileListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    afterWhileListQuadruplesIncrementation()
-                    op1 = temp
+                    whileListQuadruplesParamcount()
+                    afterWhileListQuadruplesIncrementationOperation1()
 
             if "(" in op2:
-                    parmcount = 0
-                    h1 = op2.partition('(')[-1].rpartition(')')[0]
-                    h2 = op2.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        whileListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    whileListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation2()
 
             if "[" in op1:
@@ -1480,31 +1459,11 @@ def doMath(op, op1, op2):
 
         elif insideIfListQuadruples == 1:
             if "(" in op1:
-                    parmcount = 0
-                    h1 = op1.partition('(')[-1].rpartition(')')[0]
-                    h2 = op1.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        ifListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    ifListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation1()
 
             if "(" in op2:
-                    parmcount = 0
-                    h1 = op2.partition('(')[-1].rpartition(')')[0]
-                    h2 = op2.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        ifListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    ifListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation2()
 
             if "[" in op1:
@@ -1518,31 +1477,11 @@ def doMath(op, op1, op2):
 
         else:
             if "(" in op1:
-                    parmcount = 0
-                    h1 = op1.partition('(')[-1].rpartition(')')[0]
-                    h2 = op1.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation1()
 
             if "(" in op2:
-                    parmcount = 0
-                    h1 = op2.partition('(')[-1].rpartition(')')[0]
-                    h2 = op2.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation2()
 
             if "[" in op1:
@@ -1561,34 +1500,12 @@ def doMath(op, op1, op2):
     elif "/" in op:
         if insideWlistQuadruples == 1:
             if "(" in op1:
-                    parmcount = 0
-                    h1 = op1.partition('(')[-1].rpartition(')')[0]
-                    h2 = op1.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        whileListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    whileListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    afterWhileListQuadruplesIncrementation()
-                    op1 = temp
+                    whileListQuadruplesParamcount()
+                    afterWhileListQuadruplesIncrementationOperation1()
 
             if "(" in op2:
-                    parmcount = 0
-                    h1 = op2.partition('(')[-1].rpartition(')')[0]
-                    h2 = op2.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        whileListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    whileListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    afterWhileListQuadruplesIncrementation()
-                    op2 = temp
+                    whileListQuadruplesParamcount()
+                    afterWhileListQuadruplesIncrementationOperation2()
 
             if "[" in op1:
                 whileListQuadruplesIncrementationh2()
@@ -1601,37 +1518,16 @@ def doMath(op, op1, op2):
 
         elif insideIfListQuadruples == 1:
             if "(" in op1:
-                    parmcount = 0
-                    h1 = op1.partition('(')[-1].rpartition(')')[0]
-                    h2 = op1.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        ifListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    ifListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    afterWhileListQuadruplesIncrementation()
-                    op1 = temp
+                    ifListQuadruplesParacount()
+                    afterWhileListQuadruplesIncrementationOperation1()
 
             if "(" in op2:
-                    parmcount = 0
-                    h1 = op2.partition('(')[-1].rpartition(')')[0]
-                    h2 = op2.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        ifListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    ifListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    afterWhileListQuadruplesIncrementationOperation1()
+                    ifListQuadruplesParacount()
+                    afterWhileListQuadruplesIncrementationOperation2()
 
             if "[" in op1:
                 ifListQuadruplesIncrementationh2()
-                afterWhileListQuadruplesIncrementationOperation2()
+                afterWhileListQuadruplesIncrementationOperation1()
 
             if "[" in op2:
                 ifListQuadruplesIncrementationh2()
@@ -1640,34 +1536,12 @@ def doMath(op, op1, op2):
 
         else:
             if "(" in op1:
-                    parmcount = 0
-                    h1 = op1.partition('(')[-1].rpartition(')')[0]
-                    h2 = op1.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    afterWhileListQuadruplesIncrementation()
-                    op1 = temp
+                    printParameterCount()
+                    afterWhileListQuadruplesIncrementationOperation1()
 
             if "(" in op2:
-                    parmcount = 0
-                    h1 = op2.partition('(')[-1].rpartition(')')[0]
-                    h2 = op2.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    afterWhileListQuadruplesIncrementation()
-                    op2 = temp
+                    printParameterCount()
+                    afterWhileListQuadruplesIncrementationOperation2()
 
             if "[" in op1:
                 printh2()
@@ -1685,38 +1559,12 @@ def doMath(op, op1, op2):
     elif "+" in op:
         if insideWlistQuadruples == 1:
             if "(" in op1:
-                    parmcount = 0
-                    h1 = op1.partition('(')[-1].rpartition(')')[0]
-                    h2 = op1.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        whileListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    whileListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-                    op1 = temp
+                    whileListQuadruplesParamcount()
+                    afterWhileListQuadruplesIncrementationOperation1()
 
             if "(" in op2:
-                    parmcount = 0
-                    h1 = op2.partition('(')[-1].rpartition(')')[0]
-                    h2 = op2.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        whileListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    whileListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-                    op2 = temp
+                    whileListQuadruplesParamcount()
+                    afterWhileListQuadruplesIncrementationOperation2()
 
             if "[" in op1:
                 whileListQuadruplesIncrementationh2()
@@ -1729,38 +1577,12 @@ def doMath(op, op1, op2):
 
         elif insideIfListQuadruples == 1:
             if "(" in op1:
-                    parmcount = 0
-                    h1 = op1.partition('(')[-1].rpartition(')')[0]
-                    h2 = op1.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        ifListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    ifListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-                    op1 = temp
+                    ifListQuadruplesParacount()
+                    afterWhileListQuadruplesIncrementationOperation1()
 
             if "(" in op2:
-                    parmcount = 0
-                    h1 = op2.partition('(')[-1].rpartition(')')[0]
-                    h2 = op2.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        ifListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    ifListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-                    op2 = temp
+                    ifListQuadruplesParacount()
+                    afterWhileListQuadruplesIncrementationOperation2()
 
             if "[" in op1:
                 ifListQuadruplesIncrementationh2()
@@ -1773,39 +1595,11 @@ def doMath(op, op1, op2):
 
         else:
             if "(" in op1:
-                    parmcount = 0
-                    h1 = op1.partition('(')[-1].rpartition(')')[0]
-                    h2 = op1.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-                    op1 = temp
-
+                    printParameterCount()
+                    afterWhileListQuadruplesIncrementationOperation1()
             if "(" in op2:
-                    parmcount = 0
-                    h1 = op2.partition('(')[-1].rpartition(')')[0]
-                    h2 = op2.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-                    op2 = temp
-
+                    printParameterCount()
+                    afterWhileListQuadruplesIncrementationOperation2()
             if "[" in op1:
                 printh2()
                 afterWhileListQuadruplesIncrementationOperation1()
@@ -1822,38 +1616,12 @@ def doMath(op, op1, op2):
     else:  # if op == "-"
         if insideWlistQuadruples == 1:
             if "(" in op1:
-                    parmcount = 0
-                    h1 = op1.partition('(')[-1].rpartition(')')[0]
-                    h2 = op1.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        whileListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    whileListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-                    op1 = temp
+                    whileListQuadruplesParamcount()
+                    afterWhileListQuadruplesIncrementationOperation1()
 
             if "(" in op2:
-                    parmcount = 0
-                    h1 = op2.partition('(')[-1].rpartition(')')[0]
-                    h2 = op2.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        whileListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    whileListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-                    op2 = temp
+                    whileListQuadruplesParamcount()
+                    afterWhileListQuadruplesIncrementationOperation2()
 
             if "[" in op1:
                 whileListQuadruplesIncrementationh2()
@@ -1866,38 +1634,12 @@ def doMath(op, op1, op2):
 
         elif insideIfListQuadruples == 1:
             if "(" in op1:
-                    parmcount = 0
-                    h1 = op1.partition('(')[-1].rpartition(')')[0]
-                    h2 = op1.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        ifListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    ifListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-                    op1 = temp
+                    ifListQuadruplesParacount()
+                    afterWhileListQuadruplesIncrementationOperation1()
 
             if "(" in op2:
-                    parmcount = 0
-                    h1 = op2.partition('(')[-1].rpartition(')')[0]
-                    h2 = op2.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        ifListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    ifListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-                    op2 = temp
+                    ifListQuadruplesParacount()
+                    afterWhileListQuadruplesIncrementationOperation2()
 
             if "[" in op1:
                 ifListQuadruplesIncrementationh2()
@@ -1910,39 +1652,12 @@ def doMath(op, op1, op2):
 
         else:
             if "(" in op1:
-                    parmcount = 0
-                    h1 = op1.partition('(')[-1].rpartition(')')[0]
-                    h2 = op1.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-                    op1 = temp
+                    printParameterCount()
+                    afterWhileListQuadruplesIncrementationOperation1()
 
             if "(" in op2:
-                    parmcount = 0
-                    h1 = op2.partition('(')[-1].rpartition(')')[0]
-                    h2 = op2.partition('(')
-                    if ',' in h1:
-                        h1 = h1.split(',')
-                    for v in h1:
-                        parmcount += 1
-                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
-                        q += 1
-
-                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
-                    q += 1
-                    temp = "t" + str(t)
-                    t += 1
-                    op2 = temp
-
+                    printParameterCount()
+                    afterWhileListQuadruplesIncrementationOperation2()
             if "[" in op1:
                 printh2()
                 afterWhileListQuadruplesIncrementationOperation1()
@@ -1994,6 +1709,31 @@ def afterWhileListQuadruplesIncrementationh1():
     t += 1
     h1 = temp
 
+def ifListQuadruplesParacount():
+    parmcount = 0
+    h1 = op1.partition('(')[-1].rpartition(')')[0]
+    h2 = op1.partition('(')
+    if ',' in h1:
+        h1 = h1.split(',')
+    for v in h1:
+        parmcount += 1
+        ifListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+        q += 1
+
+    ifListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+
+def whileListQuadruplesParamcount():
+    parmcount = 0
+    h1 = op1.partition('(')[-1].rpartition(')')[0]
+    h2 = op1.partition('(')
+    if ',' in h1:
+        h1 = h1.split(',')
+    for v in h1:
+        parmcount += 1
+        whileListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+        q += 1
+        whileListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+
 def ifListQuadruplesIncrementationh2():
     h1 = op2.partition('[')
     h2 = op2.partition('[')[-1].rpartition(']')[0]
@@ -2006,6 +1746,19 @@ def ifListQuadruplesIncrementationh2():
     temp = "t" + str(t)
     t += 1
     h2 = temp
+
+def printParameterCount():
+    parmcount = 0
+    h1 = op1.partition('(')[-1].rpartition(')')[0]
+    h2 = op1.partition('(')
+    if ',' in h1:
+        h1 = h1.split(',')
+    for v in h1:
+        parmcount += 1
+        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+        q += 1
+
+    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
 
 def whileListQuadruplesIncrementationh2():
     h1 = op1.partition('[')
