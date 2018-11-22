@@ -12,15 +12,16 @@
     <session id="-691979507">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="32" />
+          <entry key="project.closed" value="33" />
           <entry key="project.open.time.0" value="3" />
           <entry key="project.open.time.1" value="8" />
+          <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.2" value="5" />
           <entry key="project.open.time.27" value="1" />
           <entry key="project.open.time.28" value="1" />
-          <entry key="project.open.time.3" value="4" />
+          <entry key="project.open.time.3" value="5" />
           <entry key="project.open.time.32" value="1" />
           <entry key="project.open.time.33" value="1" />
           <entry key="project.open.time.39" value="1" />
@@ -29,32 +30,32 @@
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.63" value="1" />
           <entry key="project.open.time.7" value="2" />
-          <entry key="project.opened" value="33" />
+          <entry key="project.opened" value="35" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="30" />
+          <entry key="py" value="31" />
           <entry key="txt" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="30" />
+          <entry key="Python" value="31" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="23" />
-          <entry key="py" value="47946" />
+          <entry key="py" value="48511" />
           <entry key="txt" value="698" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="721" />
-          <entry key="Python" value="47945" />
+          <entry key="Python" value="48510" />
           <entry key="RegExp" value="1" />
         </counts>
       </usages-collector>
@@ -63,10 +64,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/venv/Scripts/testIC.py">
+        <entry file="file://$PROJECT_DIR$/venv/Scripts/secondIC.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
+            <state relative-caret-position="153">
+              <caret line="9" column="31" lean-forward="true" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -75,12 +76,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/venv/Scripts/secondIC.py">
+        <entry file="file://$PROJECT_DIR$/venv/Scripts/thirdIC.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="45" column="87" lean-forward="true" selection-start-line="36" selection-start-column="88" selection-end-line="45" selection-end-column="87" />
+            <state relative-caret-position="-383">
+              <caret line="1952" column="26" lean-forward="true" selection-start-line="1952" selection-start-column="26" selection-end-line="1956" selection-end-column="118" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
+                <marker date="1542923955516" expanded="true" signature="69800:70217" ph="..." />
               </folding>
             </state>
           </provider>
@@ -89,7 +91,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermodRevised1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5831">
+            <state relative-caret-position="5848">
               <caret line="344" column="36" selection-start-line="344" selection-start-column="36" selection-end-line="344" selection-end-column="36" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -101,7 +103,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/semanticParserMod1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2261">
+            <state relative-caret-position="2278">
               <caret line="134" selection-start-line="134" selection-end-line="134" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -113,7 +115,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/OGparser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19431">
+            <state relative-caret-position="19448">
               <caret line="1144" column="28" selection-start-line="1144" selection-start-column="28" selection-end-line="1144" selection-end-column="28" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -125,7 +127,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18802">
+            <state relative-caret-position="18819">
               <caret line="1107" column="47" selection-start-line="1107" selection-start-column="47" selection-end-line="1107" selection-end-column="47" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -137,7 +139,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/revisedSA.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18615">
+            <state relative-caret-position="18632">
               <caret line="1096" column="19" selection-start-line="1096" selection-start-column="19" selection-end-line="1096" selection-end-column="19" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -149,7 +151,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/oldRevisedSA.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
+            <state relative-caret-position="255">
               <caret line="15" column="36" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="36" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -170,7 +172,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/revisionSA.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6494">
+            <state relative-caret-position="6511">
               <caret line="383" column="87" selection-start-line="383" selection-start-column="87" selection-end-line="383" selection-end-column="87" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
@@ -231,14 +233,15 @@
         <option value="$PROJECT_DIR$/venv/Scripts/testIC.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/test.txt" />
         <option value="$PROJECT_DIR$/venv/Scripts/secondIC.py" />
+        <option value="$PROJECT_DIR$/venv/Scripts/thirdIC.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="472" />
-    <option name="y" value="168" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="718" />
+    <option name="y" value="69" />
     <option name="width" value="1353" />
-    <option name="height" value="988" />
+    <option name="height" value="967" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -246,7 +249,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -291,6 +293,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -315,7 +318,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.testIC">
+  <component name="RunManager" selected="Python.thirdIC">
     <configuration name="RetryFirstSemanticAnalyzer" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Proj1" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -358,27 +361,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="oldRevisedSA" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="Proj1" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/venv/Scripts" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/Scripts/oldRevisedSA.py" />
-      <option name="PARAMETERS" value="&quot;test.txt&quot;" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="parser" type="PythonConfigurationType" factoryName="Python">
       <module name="Proj1" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -400,7 +382,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="revisedSA" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="secondIC" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="Proj1" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -412,7 +394,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/Scripts/revisedSA.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/Scripts/secondIC.py" />
       <option name="PARAMETERS" value="&quot;test.txt&quot;" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -442,21 +424,42 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="thirdIC" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="Proj1" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/venv/Scripts" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/venv/Scripts/thirdIC.py" />
+      <option name="PARAMETERS" value="&quot;test.txt&quot;" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.parser" />
       <item itemvalue="Python.RetryFirstSemanticAnalyzer" />
-      <item itemvalue="Python.revisedSA" />
-      <item itemvalue="Python.oldRevisedSA" />
       <item itemvalue="Python.finalSA" />
       <item itemvalue="Python.testIC" />
+      <item itemvalue="Python.secondIC" />
+      <item itemvalue="Python.thirdIC" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.thirdIC" />
+        <item itemvalue="Python.secondIC" />
         <item itemvalue="Python.testIC" />
         <item itemvalue="Python.RetryFirstSemanticAnalyzer" />
         <item itemvalue="Python.finalSA" />
-        <item itemvalue="Python.revisedSA" />
-        <item itemvalue="Python.oldRevisedSA" />
       </list>
     </recent_temporary>
   </component>
@@ -491,7 +494,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32936978" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.39804772" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.39370933" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.36334056" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -667,7 +670,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/testIC.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
+        <state relative-caret-position="306">
           <caret line="18" column="17" selection-start-line="18" selection-start-column="17" selection-end-line="18" selection-end-column="17" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -677,7 +680,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/parsermodRevised1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5831">
+        <state relative-caret-position="5848">
           <caret line="344" column="36" selection-start-line="344" selection-start-column="36" selection-end-line="344" selection-end-column="36" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -687,7 +690,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/semanticParserMod1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2261">
+        <state relative-caret-position="2278">
           <caret line="134" selection-start-line="134" selection-end-line="134" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -697,7 +700,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/OGparser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19431">
+        <state relative-caret-position="19448">
           <caret line="1144" column="28" selection-start-line="1144" selection-start-column="28" selection-end-line="1144" selection-end-column="28" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -707,7 +710,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/RetryFirstSemanticAnalyzer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18802">
+        <state relative-caret-position="18819">
           <caret line="1107" column="47" selection-start-line="1107" selection-start-column="47" selection-end-line="1107" selection-end-column="47" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -717,7 +720,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/revisedSA.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18615">
+        <state relative-caret-position="18632">
           <caret line="1096" column="19" selection-start-line="1096" selection-start-column="19" selection-end-line="1096" selection-end-column="19" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -727,7 +730,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/oldRevisedSA.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
+        <state relative-caret-position="255">
           <caret line="15" column="36" selection-start-line="15" selection-start-column="36" selection-end-line="15" selection-end-column="36" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -744,7 +747,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/revisionSA.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6494">
+        <state relative-caret-position="6511">
           <caret line="383" column="87" selection-start-line="383" selection-start-column="87" selection-end-line="383" selection-end-column="87" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
@@ -755,10 +758,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/secondIC.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="45" column="87" lean-forward="true" selection-start-line="36" selection-start-column="88" selection-end-line="45" selection-end-column="87" />
+        <state relative-caret-position="153">
+          <caret line="9" column="31" lean-forward="true" selection-start-line="9" selection-start-column="31" selection-end-line="9" selection-end-column="31" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/thirdIC.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-383">
+          <caret line="1952" column="26" lean-forward="true" selection-start-line="1952" selection-start-column="26" selection-end-line="1956" selection-end-column="118" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+            <marker date="1542923955516" expanded="true" signature="69800:70217" ph="..." />
           </folding>
         </state>
       </provider>
