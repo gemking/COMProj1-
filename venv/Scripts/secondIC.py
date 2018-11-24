@@ -147,21 +147,54 @@ def declaration():  # Rule 4
             currentFunction = token[x - 1]
 
         else:
-            if "void" in token[x+2]:
+            if "void" in token[x-2]:
                 if "void" in token[x+1]:
                     print(str(q).ljust(4) + "\tfunc \t\t" + token[x-1].ljust(4) + "\t\tvoid\t\t0")
                     q += 1
                     currentFunction = token[x - 1]
                 else:
-                    parameterCount()
+                    f = x + 1
+                    paramcount = 0
+                    qch = q + 1
+                    funcparm = []
+                    while token[f] != ")":
+                        if token[f] in intFloatKeywords:
+                            paramcount += 1
+                            funcparm.append(str(qch).ljust(4) + "\tparam\t\t4   \t\t\t\t\t" + token[f + 1])
+                            qch += 1
+                            f += 2
+                            if token[f] == ",":
+                                f += 1
+                    print(str(q).ljust(4) + "\tfunc \t\t" + token[x - 1].ljust(4) + "\t\t" + token[x - 2].ljust(4) + "\t\t" + str(paramcount))
+                    q = qch
+                    for v in funcparm:
+                        print(v)
+                    currentFunction = token[x - 1]
             else:
                 if "void" in token[x+1]:
                     print(str(q).ljust(4) + "\tfunc \t\t" + token[x-1].ljust(4) + "\t\t" + token[x-2].ljust(4) + "\t\t0")
                     q += 1
                     currentFunction = token[x - 1]
                 else:
-                    parameterCount()
-
+                    f = x + 1
+                    paramcount = 0
+                    qch = q + 1
+                    funcparm = []
+                    while token[f] != ")":
+                        if token[f] in intFloatKeywords:
+                            paramcount += 1
+                            funcparm.append(str(qch).ljust(4) + "\tparam\t\t4   \t\t\t\t\t" + token[f + 1])
+                            qch += 1
+                            f += 2
+                            if token[f] == ",":
+                                f += 1
+                    print(str(q).ljust(4) + "\tfunc \t\t" + token[x - 1].ljust(4) + "\t\t" + token[x - 2].ljust(
+                        4) + "\t\t" + str(
+                        paramcount))
+                    q = qch
+                    for v in funcparm:
+                        print(v)
+                    currentFunction = token[x - 1]
 
         if ";" in token[x]:
             x += 1  # Accepts ;
@@ -183,21 +216,23 @@ def declaration():  # Rule 4
             else:
                 print("REJECT")
                 exit(0)
-        declarationPrime()
-def declarationPrime(): #Rule 5
-    global x
-    if "(" in token[x]:
-        x += 1  # Accepts (
-        parameters()
-        if ")" in token[x]:
-            x += 1  # Accepts )
-            compoundStatement()
+        elif "(" in token[x]:
+            declarationPrime()
+def declarationPrime(): #Rule 5 
+        global x
+        if "(" in token[x]:
+            x += 1  # Accepts (
+            parameters()
+            if ")" in token[x]:
+                x += 1  # Accepts )
+                compoundStatement()
+            else:
+                print("REJECT")
+                exit(0)
         else:
             print("REJECT")
             exit(0)
-    else:
-        print("REJECT")
-        exit(0)
+
 
 
 def variableDeclaration():  # Rule 6
@@ -223,8 +258,8 @@ def variableDeclaration():  # Rule 6
     else:
         print("REJECT")
         exit(0)
-
-    variableDeclarationPrime()
+    if ";" in token[x]:
+        variableDeclarationPrime()
 
 def variableDeclarationPrime(): # Rule 7
     global x
@@ -390,7 +425,7 @@ def compoundStatement():  # Rule 15
         return
 
     localDeclarations()
-    statementList()
+    statement()
 
     if "}" in token[x]:
         x += 1  # Accepts }
@@ -435,7 +470,13 @@ def statementList():  # Rule 18
 def statementListPrime():  # Rule 19
     w = token[x].isalpha()
     z = hasnum(token[x])
-    if token[x] not in keywords and w is True or z is True or token[x] in miniKeywordsTwo:
+    if token[x] not in keywords and w is True:
+        statement()
+        statementListPrime()
+    elif z is True:
+        statement()
+        statementListPrime()
+    elif token[x] in miniKeywordsTwo:
         statement()
         statementListPrime()
     elif "}" in token[x]:
@@ -447,7 +488,11 @@ def statementListPrime():  # Rule 19
 def statement():  # Rule 20
     w = token[x].isalpha()
     z = hasnum(token[x])
-    if token[x] not in keywords and w is True or z is True or token[x] in leftParenthesesSemicolon:
+    if token[x] not in keywords and w is True:
+        expressionStatement()
+    elif z is True:
+        expressionStatement()
+    elif token[x] in leftParenthesesSemicolon:
         expressionStatement()
     elif "{" in token[x]:
         compoundStatement()
@@ -466,8 +511,27 @@ def expressionStatement():  # Rule 21
     global x
     w = token[x].isalpha()
     z = hasnum(token[x])
-    if token[x] not in keywords and w is True or z is True or "(" in token[x]:
+    if token[x] not in keywords and w is True:
         expressionPrime()
+        if ";" in token[x]:
+            x += 1  # Accept ;
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif z is True:
+        expressionPrime()
+        if ";" in token[x]:
+            x += 1  # Accept ;
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif "(" in token[x]:
+        if ";" in token[x]:
+            x += 1  # Accept ;
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif ";" in token[x]:
         if ";" in token[x]:
             x += 1  # Accept ;
         else:
@@ -570,7 +634,11 @@ def selectionStatement():  # Rule 22
     selectionStatementPrime()
 
 def selectionStatementPrime(): # Rule 23
-
+    global x
+    global ifBranch
+    global q
+    global t
+    global insideIfListQuadruples
     if "else" in token[x]:
         ifListQuadruples[ifListNumberQuadruples] = ifListQuadruples[ifListNumberQuadruples] + str(q + 1)
     else:
@@ -2329,6 +2397,7 @@ def parameterCount():
     f = x + 1
     paramcount = 0
     qch = q + 1
+    funcparm = []
     while ")" not in token[f]:
         if token[f] in intFloatKeywords:
             paramcount += 1
