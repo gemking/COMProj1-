@@ -1,104 +1,112 @@
 import sys
 import re
 
-with open(sys.argv[1], "r") as file:  # opens file
-    filelines = file.read().splitlines()  # reads file and splits lines
-    file.close()  # closes file
 
-insideComment = 0
+f = open(sys.argv[1], "r")  # open file and read contents into a list (without "\n")
+filelines = f.read().splitlines()
+f.close()
 
-keywords = ["if", "else", "while", "int", "float", "void", "return"]  # denotes all keywords
-symbols = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]"  # denotes symbols used
-comparisionSymbols = ["==", "<=", ">=", "!=", "<", ">"]
-additionSubtractionSymbols = ["-", "+"]
-multiplicationDivisionSymbols = ["/", "*"]
-intFloatKeywords = ["int", "float"]
-decimalExponentKeywords = [".", "E"]
-leftParenthesesSemicolon = ["(", ";"]
-miniKeywords = ["void", "int", "float"]
-miniKeywordsTwo = ["while", "if", "return", "(", ";", "{"]
-characters = "[a-zA-Z]+"  # obtains all words for the IDs
-digits = "[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?"  # gets all decimal values, including integer values 0-9
-errors = "\S"  # reports errors
-token = []  # creates a list that holds all of the tokens
-x = 0  # value that holds the token counter for the parser
 
-for importantLines in filelines:  # receiving importantlines from filelines
-    importantLine = importantLines  # sets importantLine to importantLines
+keywordchecklist = ["else", "if", "int", "return", "void", "while", "float"]  # list of all keywords
 
-    if not importantLine:
-        continue  # if not an important line, it continues through the file
+# our regular expressions for the lexical analyzer
+wordsRegex = "[a-z]+"  # gets all words/ID's
+numbersRegex = "[0-9]+(\.[0-9]+)?(E(\+|-)?[0-9]+)?"  # gets all NUM's/float numbers
+symRegex = "\/\*|\*\/|\+|-|\*|//|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]"  # gets all special symbols
+errorRegex = "\S"
 
-    list = "(%s)|(%s)|(%s)|(%s)" % (characters, digits, symbols, errors)  # puts entire library into a list of strings
+incomment = 0  # check to see if in comment
+token = []  # create List to hold all tokens
+i = 0  # token counter for parser
 
-    for word in re.findall(list, importantLine):  # finds list
-        if re.match(characters, word[0]) and insideComment == 0:  # matches characters and makes sure insideComment is 0
-            if word[0] in keywords:
-                token.append(word[0])  # keyword is constructed out of characters a-zA-Z
+# ------------------Begin going through the file and getting tokens----------------------- #
+for flines in filelines:
+    fline = flines
+
+    if not fline:
+        continue
+    # print  # extra line to separate input lines
+    # if fline:
+        # print "INPUT: " + fline  # print the input line, while also getting rid of blank lines
+
+    regex = "(%s)|(%s)|(%s)|(%s)" % (wordsRegex, numbersRegex, symRegex, errorRegex)
+    '([a-z]+)|([0-9]+(\.[0-9]+)?(E(\+|-)?[0-9]+)?)|'
+    '("\/\*|\*\/|\+|-|\*|/|<=|<|>=|>|==|!=|=|;|,|\(|\)|\{|\}|\[|\]|//")|(\S)'
+
+    for t in re.findall(regex, fline):
+        if t[0] and incomment == 0:
+            if t[0] in keywordchecklist:
+                token.append(t[0])
+                # print "keyword:", t[0]
             else:
-                token.append(word[0])  # appends character values that are not keywords
-
-
-
-
-        elif re.match(digits, word[1]) and insideComment == 0:  # matches digits and makes sure inside comment is 0
-            if "." in word[1]:
-                token.append(word[1])  # checks if value is a decimal value and appends
-            elif "E" in word[1]:
-                token.append(word[1])  # checks if value is an expontential value and appends
+                # print "ID:", t[0]
+                token.append(t[0])
+        elif t[1] and incomment == 0:
+            if "." in t[1]:
+                # print "FLOAT:", t[1]
+                token.append(t[1])
+            elif "E" in t[1]:
+                # print "FLOAT:", t[1]
+                token.append(t[1])
             else:
-                token.append(word[1])  # appends integer value
-        elif re.match(symbols, word[4]):  # matches symbols
-            if "/*" in word[4]:  # Checks when word approaches /*
-                insideComment = insideComment + 1  # increments insideComment if inside
-            elif "*/" in word[4] and insideComment > 0:  # Checks when word approaches */
-                insideComment = insideComment - 1  # decrements insideComment if outside
-            elif "//" in word[4] and insideComment == 0:  # If neither
+                # print "NUM:", t[1]
+                token.append(t[1])
+        elif t[5]:
+            if t[5] == "/*":
+                incomment = incomment + 1
+            elif t[5] == "*/" and incomment > 0:
+                incomment = incomment - 1
+            elif t[5] == "//" and incomment == 0:
                 break
-            elif insideComment == 0:  # when inside counter is 0
-                if "*/" in word[4]:  # when it reaches terminal */
-                    if "*/*" in importantLine:  # when it's still sorting through comments
+            elif incomment == 0:
+                if t[5] == "*/":
+                    if "*/*" in fline:
+                        # print "*"
                         token.append("*")
-                        insideComment += 1
-                        continue  # skips comments and continue through the program
+                        incomment += 1
+                        continue
                     else:
-                        token.append("*")  # appends multiplication symbol
-                        token.append("/")  # appends division symbol
+                        # print "*"
+                        token.append("*")
+                        # print "/"
+                        token.append("/")
                 else:
-                    token.append(word[4])  # appends rest of symbols
-        elif word[3] and insideComment == 0:  # matches errors and makes sure insideComment is 0
-            token.append(word[3])  # appends error
-
-            # ----- end of lexer ----- #
+                    # print t[5]
+                    token.append(t[5])
+        elif t[6] and incomment == 0:
+            # print "ERROR:", t[6]
+            token.append(t[6])
+# ------------ end of for loop for the file and getting tokens --------------------------- #
 
 token.append("$")  # add to end to check if done parsing
-leftExpression = 0
-rightExpression = 0
-expressionReturn = 0
-matchParameter = 0
-theParameter = 0
-checkMain = 0  #checks if there is 1 main function
-checkFinalMain = 0  #checks if the last function is main
-isCompleted = 0
 
-variableType = []  #holds type of variables
-variableDeclaration = []  #holds declared variables, scope, and type
-variableOperation = []  # checks for operation agreement
-vars = []  #holds all declared variables
-varsScope = []  #holds variable scope
-varsScopeBlock = []  #holds block number of variable scope
+q = 1  # Counter for quadruples list
+t = 0  # counter for our temps in the quadruples
 
-functionType = 0  #holds function type and determine if it needs a return
-functionDeclaration = []  # list to hold declared functions with parameters and arguments
-functionIndex = 0  #index that keeps track of the parameters and arguments of a function
-functionCall = []  #the functions that are called
-functionCallArguments = []  #holds argument types in a function's parameters
-functionNames = []  #holds function names
-functionTypes = []  #holds function types
-functionName = 0    #holds function name for scoping purposes
-currentScope = 0  # current scope
-functionReturn = 0  # checks if the function is an int/float and if it has a return
+currentfunc = 0  # what the function we are currently in is
+incurrentfunc = 0  # checks for scope inside a function
+inexp = 0
 
+iflistq = []
+iflistqnum = 0
+iflistfront = []
+iflistback = []
+iniflistq = 0
+ifbr = 0
+elsebr = 0
+
+doublecheck = 0
+whileendbr = 0
+whilefirstbr = 0
+lastw = 0
+whilelistq = []   # list of quadruples done until end of while loop
+wlistqnum = 0
+inwlistq = 0
+whilelistfront = []  # first half of the paramteres for while loop
+whilelistback = []  # second half of the parameters for while loop
+
+# --------------------------- print line for code generation ----------------------------- #
+print("----------------------------------------------------")
 # ---------------------------------- parsing functions ----------------------------------- #
 
 
@@ -106,992 +114,2297 @@ def hasnum(inputstring):
     return any(char.isdigit() for char in inputstring)
 
 
-def programDeclaration():  # runs program(Rule 1)
-    global isCompleted
-    declarationList()
-    if "$" in token[x]:
-        isCompleted = 1  #continues
+def program():  # 1
+    dl()
+    if token[i] == "$":
+        done = 1
+        # print "ACCEPT"
     else:
         print("REJECT")
 
 
-def declarationList():  # Rule 2
+def dl():  # 2
     declaration()
-    declarationListPrime()
+    dlprime()
 
 
-def declarationListPrime():  # Rule 3
-    if token[x] in miniKeywords:
+def dlprime():  # 3
+    if token[i] == "int" or token[i] == "void" or token[i] == "float":
         declaration()
-        declarationListPrime()
-    elif "$" in token[x]:
+        dlprime()
+    elif token[i] == "$":
         return
     else:
         return
 
 
-def declaration():  # Rule 4
-    global x
-    global checkMain
-    global functionName
-    global currentScope
-    global functionType
-    global functionReturn
-    global checkFinalMain
-    typeSpecifier()
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        if "main" in token[x]:
-            checkMain += 1
-            checkFinalMain = 1
-            if "void" not in token[x - 1]:
-                print("REJECT")
-                exit(0)
+def declaration():  # 4
+    global i, q, currentfunc
+    types()
+    x = token[i].isalpha()
+    if token[i] not in keywordchecklist and x is True:
+        i += 1  # Accept ID
+        funcparm = []
+        if token[i-1] == "main":
+            print(str(q).ljust(4) + "\tfunc \t\t" + token[i-1] + "\t\tvoid\t\t0")
+            q += 1
+            currentfunc = token[i-1]
+
         else:
-            checkFinalMain = 0
+            if token[i-2] == "void":
+                if token[i+1] == "void":
+                    print(str(q).ljust(4) + "\tfunc \t\t" + token[i-1].ljust(4) + "\t\tvoid\t\t0")
+                    q += 1
+                    currentfunc = token[i-1]
+                else:
+                    f = i + 1
+                    paramcount = 0
+                    qch = q + 1
+                    while token[f] != ")":
+                        if token[f] == "int" or token[f] == "float":
+                            paramcount += 1
+                            funcparm.append(str(qch).ljust(4) + "\tparam\t\t4   \t\t\t\t\t" + token[f+1])
+                            qch += 1
+                            f += 2
+                            if token[f] == ",":
+                                f += 1
+                    print(str(q).ljust(4) + "\tfunc \t\t" + token[i-1].ljust(4) + "\t\t" + token[i-2].ljust(4) + "\t\t" + str(paramcount))
+                    q = qch
+                    for v in funcparm:
+                        print(v)
+                    currentfunc = token[i-1]
 
-        x += 1  # Accepts ID
-        if ";" in token[x]:
-            x += 1  # Accepts ;
-            duplicateVariableCheck()
-            variableAppend()
-        elif "[" in token[x]:
-            x += 1  # Accepts [
-            duplicateVariableCheck()
-            variableAppend()
+            else:
+                if token[i+1] == "void":
+                    print(str(q).ljust(4) + "\tfunc \t\t" + token[i-1].ljust(4) + "\t\t" + token[i-2].ljust(4) + "\t\t0")
+                    q += 1
+                    currentfunc = token[i-1]
+                else:
+                    f = i + 1
+                    paramcount = 0
+                    qch = q + 1
+                    while token[f] != ")":
+                        if token[f] == "int" or token[f] == "float":
+                            paramcount += 1
+                            funcparm.append(str(qch).ljust(4) + "\tparam\t\t4   \t\t\t\t\t" + token[f+1])
+                            qch += 1
+                            f += 2
+                            if token[f] == ",":
+                                f += 1
+                    print(str(q).ljust(4) + "\tfunc \t\t" + token[i-1].ljust(4) + "\t\t" + token[i-2].ljust(4) + "\t\t" + str(paramcount))
+                    q = qch
+                    for v in funcparm:
+                        print(v)
+                    currentfunc = token[i-1]
 
-            z = hasnum(token[x])
-            if z is True:
-                x += 1  # Accepts NUM/FLOAT
-                if "]" in token[x]:
-                    x += 1  # Accepts ]
-                    if ";" in token[x]:
-                        x += 1  # Accepts ;
+        if token[i] == ";":
+            i += 1  # Accept ;
+        elif token[i] == "[":
+            i += 1  # Accept [
+            y = hasnum(token[i])
+            if y is True:
+                i += 1  # Accept NUM/FLOAT
+                if token[i] == "]":
+                    i += 1  # Accept ]
+                    if token[i] == ";":
+                        i += 1  # Accept ;
                     else:
                         print("REJECT")
-                        exit(0)
+                        sys.exit(0)
                 else:
                     print("REJECT")
-                    exit(0)
+                    sys.exit(0)
             else:
                 print("REJECT")
-                exit(0)
-        elif "(" in token[x]:
-            x += 1  # Accepts (
-            duplicateFunctionCheck()
-
-            if ")" in token[x]:
-                x += 1  # Accepts )
-                compoundStatement()
-
-                if functionReturn == 0 and functionType in intFloatKeywords:  # check if not funtype in "int"
-                    print("REJECT")
-                    exit(0)
-                else:
-                    functionReturn = 0
-
+                sys.exit(0)
+        elif token[i] == "(":
+            i += 1  # Accept (
+            params()
+            if token[i] == ")":
+                i += 1  # Accept )
+                compoundstmt()
             else:
                 print("REJECT")
-                exit(0)
+                sys.exit(0)
         else:
             print("REJECT")
-            exit(0)
-
-
-
-def theVariableDeclaration():  # Rule 5
-    global x
-    global checkMain
-    typeSpecifier()
-
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        x += 1  # Accepts ID
-        s = 0
-        for l in vars:  # checks for duplicates of declared variables
-            if token[x - 1] in l:
-                if varsScope[s] in functionName:
-                    if varsScopeBlock[s] >= currentScope:
-                        print("REJECT")
-                        exit(0)
-            s += 1
-        variableDeclaration.append(token[x - 2] + " " + token[x - 1] + " " + str(functionName) + " " + str(currentScope))
-        vars.append(token[x - 1])
-        variableType.append(token[x - 2])
-        varsScope.append(functionName)
-        varsScopeBlock.append(currentScope)
-
-        if "void" in token[x - 2]:  # checks if the ID is of type void
-            print("REJECT")
-            exit(0)
+            sys.exit(0)
     else:
         print("REJECT")
-        exit(0)
-
-    variableDeclarationPrime()
+        sys.exit(0)
 
 
-def variableDeclarationPrime():  # Rule 6
-    global x
-    if ";" in token[x]:
-        x += 1  # Accepts ;
-    elif "[" in token[x]:
-        x += 1  # Accepts [
-        w = hasnum(token[x])
-        if w is True:
-            x += 1  # Accepts NUM/FLOAT
-            if token[x-1] in intFloatKeywords:
-                print("REJECT")
-                exit(0)
-            if "]" in token[x]:
-                x += 1  # Accepts ]
-                if ";" in token[x]:
-                    x += 1  # Accepts ;
+def vd():  # 5
+    global i, q
+    types()
+
+    x = token[i].isalpha()
+    if token[i] not in keywordchecklist and x is True:
+        i += 1  # Accept ID
+
+        if token[i] != "[":
+            if inwlistq == 1:
+                whilelistq.append(str(q).ljust(4) + "\talloc\t\t4   \t\t    \t\t" + token[i-1])
+                q += 1
+            elif iniflistq == 1:
+                iflistq.append(str(q).ljust(4) + "\talloc\t\t4   \t\t    \t\t" + token[i-1])
+                q += 1
+            else:
+                print(str(q).ljust(4) + "\talloc\t\t4   \t\t    \t\t" + token[i-1])
+                q += 1
+
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+    if token[i] == ";":
+        i += 1  # Accept ;
+    elif token[i] == "[":
+        i += 1  # Accept [
+
+        alloc = int(token[i]) * int(4)
+
+        if inwlistq == 1:
+            whilelistq.append(str(q).ljust(4) + "\talloc\t\t" + str(alloc).ljust(4) + "\t\t    \t\t" + token[i-2])
+            q += 1
+        elif iniflistq == 1:
+            iflistq.append(str(q).ljust(4) + "\talloc\t\t" + str(alloc).ljust(4) + "\t\t    \t\t" + token[i-2])
+            q += 1
+        else:
+            print(str(q).ljust(4) + "\talloc\t\t" + str(alloc).ljust(4) + "\t\t    \t\t" + token[i-2])
+            q += 1
+
+        x = hasnum(token[i])
+        if x is True:
+            i += 1  # Accept NUM/FLOAT
+            if token[i] == "]":
+                i += 1  # Accept ]
+                if token[i] == ";":
+                    i += 1  # Accept ;
                     return
                 else:
                     print("REJECT")
-                    exit(0)
+                    sys.exit(0)
             else:
                 print("REJECT")
-                exit(0)
+                sys.exit(0)
         else:
             print("REJECT")
-            exit(0)
+            sys.exit(0)
+    else:
+        print("REJECT")
+        sys.exit(0)
 
 
-
-def typeSpecifier():  # Rule 7
-    global x
-    if token[x] in miniKeywords:
-        x += 1  # Accepts int/void/float
+def types():  # 6
+    global i
+    if token[i] == "int" or token[i] == "void" or token[i] == "float":
+        i += 1  # Accept int/void/float
     else:
         return
 
 
-def parameter():  # Rule 8
-    global x, checkMain
-    typeSpecifier()
+def fd():  # 7
+    global i
+    types()
 
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        if "main" in token[x]:
-            checkMain += 1
-        x += 1  # Accepts ID
+    x = token[i].isalpha()
+    if token[i] not in keywordchecklist and x is True:
+        i += 1  # Accept ID
     else:
         return
 
-    if "(" in token[x]:
-        x += 1  # Accepts (
+    if token[i] == "(":
+        i += 1  # Accept (
     else:
         print("REJECT")
-        exit(0)
+        sys.exit(0)
 
-    parameters()
+    params()
 
-    if ")" in token[x]:
-        x += 1  # Accepts )
+    if token[i] == ")":
+        i += 1  # Accept )
     else:
         print("REJECT")
-        exit(0)
+        sys.exit(0)
 
-    compoundStatement()
+    compoundstmt()
 
 
-def parameterPrime():  # Rule 9
-    global x, functionName, currentScope
-    typeSpecifier()
-    functionDeclaration[functionIndex] = functionDeclaration[functionIndex] + " " + token[x - 1]
-    functionCallArguments.append("")
-    functionCallArguments[functionIndex] = functionCallArguments[functionIndex] + " " + token[x - 1]
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        x += 1  # Accepts ID
-        functionDeclaration[functionIndex] = functionDeclaration[functionIndex] + " " + token[x - 1]
+def params():  # 8
+    global i
+    if token[i] == "int" or token[i] == "float" or token[i] == "void":
+        paramslist()
+    else:
+        print("REJECT")
+        sys.exit(0)
 
-        s = 0
-        g = 0
-        gh = 0
-        dn = 0
-        for l in vars:  # checks if there are duplicates of declared variables and their potential scope
-            if token[x - 1] in l:
-                if "global" not in varsScope[s] and varsScope[s] not in functionName:
-                    dn = 1
-                    continue
-                if "global" in varsScope[s]:
-                    g = s
-                    gh = 1
-                    break
-            s += 1
 
-        currentScope = 1
-        if not varsScope:
-            dn = 1
-        if dn == 0 and "global" in varsScope[g] and gh == 1:
-            variableDeclaration.append(token[x - 2] + " " + token[x - 1] + " global 0")
-            vars.append(token[x - 1])
-            variableType.append(token[x - 2])
-            varsScope.append("global")
-            varsScopeBlock.append(0)
+def paramslist():  # 9
+    param()
+    paramslistprime()
 
-        else:
-            variableDeclaration.append(token[x - 2] + " " + token[x - 1] + " " + str(functionName) + " " + str(currentScope))
-            vars.append(token[x - 1])
-            variableType.append(token[x - 2])
-            varsScope.append(functionName)
-            varsScopeBlock.append(currentScope)
 
-        currentScope = 0
+def paramslistprime():  # 10
+    global i
+    if token[i] == ",":
+        i += 1  # Accept ,
+        param()
+        paramslistprime()
+    elif token[i] == ")":
+        return
+    else:
+        return
 
-        if "[" in token[x]:
-            x += 1  # Accept [
-            if "]" in token[x]:
-                x += 1  # Accept ]
+
+def param():  # 11
+    global i
+    types()
+    x = token[i].isalpha()
+    if token[i] not in keywordchecklist and x is True:
+        i += 1  # Accept ID
+        if token[i] == "[":
+            i += 1  # Accept [
+            if token[i] == "]":
+                i += 1  # Accept ]
                 return
             else:
                 print("REJECT")
-                exit(0)
-        else:
-            return
+                sys.exit(0)
     else:
-        if "void" in token[x - 1]:
+        if token[i-1] == "void":
             return
         else:
             print("REJECT")
-            exit(0)
+            sys.exit(0)
 
 
-def parameters():  # Rule 10
-    global x
-    global functionIndex
-    if token[x] in intFloatKeywords:
-        parameterPrime()
-        parametersListPrime()
-        functionIndex += 1
-    elif "void" in token[x]:
-        parametersPrime()
-        functionIndex += 1
+def compoundstmt():  # 12
+    global i, currentfunc, q, incurrentfunc
+    if token[i] == "{":
+        i += 1  # Accept {
+        incurrentfunc += 1
+
+        if incurrentfunc > 1:
+            if inwlistq == 1:
+                whilelistq.append(str(q).ljust(4) + "\tblock\t\t    \t\t    ")
+                q += 1
+            elif iniflistq == 1:
+                iflistq.append(str(q).ljust(4) + "\tblock\t\t    \t\t    ")
+                q += 1
+            else:
+                print(str(q).ljust(4) + "\tblock\t\t    \t\t    ")
+                q += 1
+
+    else:
+        return
+
+    localdeclarations()
+    statementlist()
+
+    if token[i] == "}":
+        i += 1  # Accept }
+
+        incurrentfunc -= 1
+        if incurrentfunc > 0:
+            if inwlistq == 1:
+                whilelistq.append(str(q).ljust(4) + "\tend  \t\tblock\t\t")
+                q += 1
+            elif iniflistq == 1:
+                iflistq.append(str(q).ljust(4) + "\tend  \t\tblock\t\t")
+                q += 1
+            else:
+                print(str(q).ljust(4) + "\tend  \t\tblock\t\t")
+                q += 1
+
+        if incurrentfunc == 0:
+            print(str(q).ljust(4) + "\tend  \t\tfunc\t\t" + currentfunc)
+            q += 1
+
     else:
         print("REJECT")
-        exit(0)
+        sys.exit(0)
 
 
-def parametersPrime():  # Rule 11
-    global x
-    typeSpecifier()
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        parameterPrime()
-        parametersListPrime()
+def localdeclarations():  # 13
+    localdeclarationsprime()
+
+
+def localdeclarationsprime():  # 14
+    if token[i] == "int" or token[i] == "void" or token[i] == "float":
+        vd()
+        localdeclarationsprime()
     else:
         return
 
 
-def parametersList():  # Rule 12
-    parameterPrime()
-    parametersListPrime()
+def statementlist():  # 15
+    statementlistprime()
 
 
-def parametersListPrime():  # Rule 13
-    global x
-    if "," in token[x]:
-        x += 1  # Accepts ,
-        parameterPrime()
-        parametersListPrime()
-    elif ")" in token[x]:
-        return
-    else:
-        return
-
-
-def compoundStatement():  # Rule 14
-    global x, currentScope
-    if "{" in token[x]:
-        x += 1  # Accepts {
-        currentScope += 1
-    else:
-        return
-
-    localDeclarations()
-    statementList()
-
-    if "}" in token[x]:
-        x += 1  # Accepts }
-    else:
-        print("REJECT")
-        exit(0)
-
-
-def localDeclarations():  # Rule 15
-    localDeclarationsPrime()
-
-
-def localDeclarationsPrime():  # Rule 16
-    if token[x] in miniKeywords:
-        theVariableDeclaration()
-        localDeclarationsPrime()
-    else:
-        return
-
-
-def statementList():  # Rule 17
-    statementListPrime()
-
-
-def statementListPrime():  # Rule 18
-    w = token[x].isalpha()
-    z = hasnum(token[x])
-    if token[x] not in keywords and w is True or z is True or token[x] in miniKeywordsTwo:
+def statementlistprime():  # 16
+    x = token[i].isalpha()
+    y = hasnum(token[i])
+    if token[i] not in keywordchecklist and x is True:
         statement()
-        statementListPrime()
-    elif "}" in token[x]:
-        return
-    else:
-        return
-
-
-def statement():  # Rule 19
-    w = token[x].isalpha()
-    z = hasnum(token[x])
-    if token[x] not in keywords and w is True or z is True or token[x] in leftParenthesesSemicolon:
-        expressionStatement()
-    elif "{" in token[x]:
-        compoundStatement()
-    elif "if" in token[x]:
-        selectionStatement()
-    elif "while" in token[x]:
-        iterationStatement()
-    elif "return" in token[x]:
-        returnStatement()
-    else:
-        print("REJECT")
-        exit(0)
-
-
-def expressionStatement():  # Rule 20
-    global x
-    w = token[x].isalpha()
-    z = hasnum(token[x])
-    if token[x] not in keywords and w is True or z is True or "(" in token[x]:
-        expressionPrime()
-        if ";" in token[x]:
-            x += 1  # Accepts ;
-        else:
-            print("REJECT")
-            exit(0)
-
-
-def selectionStatement():  # Rule 21
-    global x
-    if "if" in token[x]:
-        x += 1  # Accepts if
-    else:
-        return
-
-    if "(" in token[x]:
-        x += 1  # Accepts (
-    else:
-        print("REJECT")
-        exit(0)
-
-    expressionPrime()
-    if ")" in token[x]:
-        x += 1  # Accepts )
-    else:
-        print("REJECT")
-        exit(0)
-    statement()
-    selectionStatementPrime()
-
-
-def selectionStatementPrime():  # Rule 22
-    global x
-    if "else" in token[x]:
-        x += 1  # Accepts else
+        statementlistprime()
+    elif y is True:
         statement()
+        statementlistprime()
+    elif token[i] == "(" or token[i] == ";" or token[i] == "{" or token[i] == "if" or\
+                     token[i] == "while" or token[i] == "return":
+        statement()
+        statementlistprime()
+    elif token[i] == "}":
+        return
     else:
         return
 
 
-def iterationStatement():  # Rule 23
-    global x
-    if "while" in token[x]:
-        x += 1  # Accepts while
-    else:
-        return
-
-    if "(" in token[x]:
-        x += 1  # Accepts (
+def statement():  # 17
+    x = token[i].isalpha()
+    y = hasnum(token[i])
+    if token[i] not in keywordchecklist and x is True:
+        expstmt()
+    elif y is True:
+        expstmt()
+    elif token[i] == "(" or token[i] == ";":
+        expstmt()
+    elif token[i] == "{":
+        compoundstmt()
+    elif token[i] == "if":
+        selectionstmt()
+    elif token[i] == "while":
+        itstmt()
+    elif token[i] == "return":
+        retstmt()
     else:
         print("REJECT")
-        exit(0)
+        sys.exit(0)
 
-    expressionPrime()
 
-    if ")" in token[x]:
-        x += 1  # Accepts )
+def expstmt():  # 18
+    global i
+    x = token[i].isalpha()
+    y = hasnum(token[i])
+    if token[i] not in keywordchecklist and x is True:
+        exp()
+        if token[i] == ";":
+            i += 1  # Accept ;
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif y is True:
+        exp()
+        if token[i] == ";":
+            i += 1  # Accept ;
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif token[i] == "(":
+        exp()
+        if token[i] == ";":
+            i += 1  # Accept ;
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif token[i] == ";":
+        i += 1  # Accept ;
     else:
         print("REJECT")
-        exit(0)
-
-    statement()
+        sys.exit(0)
 
 
-def returnStatement():  # Rule 24
-    global x
-    global functionReturn
-    if "return" in token[x]:
-        x += 1  # Accepts return
-        if "int" in functionType:
-            functionReturn = 1
-        else:
-            functionReturn = 1
+def selectionstmt():  # 19
+    global i, ifbr, q, t, iniflistq
+    if token[i] == "if":
+        i += 1  # Accept if
     else:
         return
-    returnStatementPrime()
 
+    if token[i] == "(":
+        i += 1  # Accept (
 
-def returnStatementPrime():  # Rule 25
-    global x
-    global functionReturn
-    global expressionReturn
-    global expressionType
-    w = token[x].isalpha()
-    z = hasnum(token[x])
-    if ";" in token[x]:
-        x += 1  # Accepts ;
-        if "void" not in functionType:  # checks if the int or float function does not return a value
-            print("REJECT")
-            exit(0)
-        return
-    elif token[x] not in keywords and w is True or z is True:
-        checkVoidIntFloatInFunctionType()
-    elif "(" in token[x]:
-        expressionPrime()
-        if ";" in token[x]:
-            x += 1  # Accept ;
-            return
-        else:
-            print("REJECT")
-            exit(0)
-    else:
-        print("REJECT")
-        exit(0)
-
-
-def expression():  # Rule 26
-    global x
-    global expressionType
-    global leftExpression
-    global rightExpression
-    global theParameter
-    global matchParameter
-    if "=" in token[x]:
-        x += 1  # Accepts =
-        s = 0
-        for l in vars:  # finds the type of the first ID for the expression
-            if token[x - 2] == l:
-                expressionType = variableType[s]
-                leftExpression = 1
-            s += 1
-        expressionPrime()
-        leftExpression = 0
-    elif "[" in token[x]:
-        x += 1  # Accept [
-        expressionType = "int"
-        rightExpression = 1
-        expressionPrime()
-        rightExpression = 0
-        if "[" in token[x - 1]:
-            print("REJECT")
-            exit(0)
-        if "]" in token[x]:
-            x += 1  # Accept ]
-            if "=" in token[x]:
-                x += 1  # Accepts =
-                expressionPrime()
-            elif token[x] in multiplicationDivisionSymbols:
-                termPrime()
-                addExpressionPrime()
-            elif token[x] in additionSubtractionSymbols:
-                addExpressionPrime()
-            elif token[x] in comparisionSymbols:
-                simpleExpressionPrime()
-        else:
-            print("REJECT")
-            exit(0)
-    elif "(" in token[x]:
-        x += 1  # Accept (
-        s = 0
-        for l in functionNames:
-            if l in token[x - 2]:
-                break
-            s += 1
-        arguments()
-        theParameter = 0
-        p = 0
-        if not matchParameter:
-            p = 1
-        if p == 0 and matchParameter not in functionCallArguments[s]:
-            print("REJECT")
-            exit(0)
-
-        if ")" in token[x]:
-            x += 1  # Accepts )
-            if token[x] in multiplicationDivisionSymbols:
-                termPrime()
-                addExpressionPrime()
-            elif token[x] in additionSubtractionSymbols:
-                addExpressionPrime()
-            elif token[x] in comparisionSymbols:
-                simpleExpressionPrime()
-        else:
-            print("REJECT")
-            exit(0)
-    elif token[x] in multiplicationDivisionSymbols:
-        termPrime()
-        addExpressionPrime()
-    elif token[x] in additionSubtractionSymbols:
-        addExpressionPrime()
-    elif token[x] in comparisionSymbols:
-        simpleExpressionPrime()
-
-
-def expressionPrime():  # Rule 27
-    global x
-    global expressionType
-    global rightExpression
-    global leftExpression
-    global expressionReturn
-    global matchParameter
-    global theParameter
-    w = token[x].isalpha()
-    z = hasnum(token[x])
-    if token[x] not in keywords and w is True:
-        x += 1  # Accept ID
-        if theParameter == 1:
-            q = 0
-            for l in vars:  # gets the type of the var for operation agreement
-                if l in token[x - 1]:
-                    check = variableType[q]
-                q += 1
-            matchParameter = matchParameter + " " + check
-
-        if leftExpression == 1 and theParameter == 0:
-            if "(" in token[x]:
-                q = 0
-                check = 0
-                for l in functionNames:  # gets the type of the function for operation agreement
-                    if l in token[x - 1]:
-                        check = functionTypes[q]
-                    q += 1
-                if expressionType != check:
-                    print("REJECT")
-                    exit(0)
-
+        f = i
+        iflistfront = ""
+        comparison = 0
+        bch = 0
+        while token[f] != "<" and token[f] != "<=" and token[f] != ">" and token[f] != ">=" and token[f] != "==" and token[f] != "!=":
+            if token[f] == "[" or bch == 1:
+                iflistfront = iflistfront + token[f]
+                bch = 1
+                if token[f] == "]":
+                    bch = 0
             else:
-                q = 0
-                dn = 0
-                check = 0
-                for l in vars:  # checks variable before checking for operation agreement
-                    if l in token[x - 1]:
-                        if "global" not in varsScope[q] and varsScope[q] not in functionName:
-                            dn = 1
-                        if varsScope[q] in functionName:
-                            dn = 0
-                            check = variableType[q]
-                            break
-                        check = variableType[q]
-                    q += 1
-                if dn == 1:
-                    print("REJECT")
-                    exit(0)
-                if expressionType != check:
-                    print("REJECT")
-                    exit(0)
+                iflistfront = iflistfront + " " + token[f]
+            f += 1
 
-        if rightExpression == 1:
-            getVar()
 
-        if expressionReturn == 1:
-            check = 0
-            getVar()
+        comparison = token[f]
+        iflistfront = infixToPostfix(iflistfront)
+        lastif = postfixEval(iflistfront)
 
-        if "(" in token[x] and leftExpression == 0 and theParameter == 0:
-            if token[x - 1] not in functionNames:
-                print("REJECT")
-                exit(0)
-
-        dn = 0
-        s = 0
-        for l in vars:  # checks for duplicates of declared variables
-            if l in token[x - 1]:
-                if functionName not in varsScope[s] and "global" not in varsScope[s]:
-                    dn = 1
-                if functionName in varsScope[s]:
-                    dn = 0
-            s += 1
-
-        if token[x - 1] not in vars and "(" not in token[x]:
-            print("REJECT")
-            exit(0)
-
-        if dn == 1:
-            print("REJECT")
-            exit(0)
-
-        expression()
-
-    elif "(" in token[x]:
-        x += 1  # Accept (
-        expressionPrime()
-        if ")" in token[x]:
-            x += 1  # Accept )
-            termPrime()
-            addExpressionPrime()
-            if token[x] in comparisionSymbols:
-                simpleExpressionPrime()
-            elif token[x] in additionSubtractionSymbols:
-                addExpressionPrime()
-        else:
-            print("REJECT")
-            exit(0)
-    elif z is True:
-        x += 1  # Accept NUM/FLOAT
-        if theParameter == 1:
-            if "." in token[x - 1] or "E" in token[x-1]:
-                matchParameter = matchParameter + " float"
+        f += 1
+        bch = 0
+        iflistback = ""
+        while token[f] != ")":
+            if token[f] == "[" or bch == 1:
+                iflistback = iflistback + token[f]
+                bch = 1
+                if token[f] == "]":
+                    bch = 0
             else:
-                matchParameter = matchParameter + " int"
+                iflistback = iflistback + " " + token[f]
+            f += 1
 
-        dn = 0
-        if token[x-1] in decimalExponentKeywords:
-            dn = 1
+        iflistback = infixToPostfix(iflistback)
+        lastif1 = postfixEval(iflistback)
 
-        if expressionReturn == 1 and dn == 1:
-            if "float" not in expressionType:
-                print("REJECT")
-                exit(0)
-
-        if expressionReturn == 1 and dn == 0:
-            if "int" not in expressionType:
-                print("REJECT")
-                exit(0)
-
-        if rightExpression == 1 and token[x-1] in decimalExponentKeywords:
-            print("REJECT")
-            exit(0)
-
-        if leftExpression == 1:
-            if dn != 1 and "float" in expressionType:
-                if token[x+1] not in decimalExponentKeywords:
-                    print("REJECT")
-                    exit(0)
-
-        termPrime()
-        addExpressionPrime()
-        if token[x] in comparisionSymbols:
-            simpleExpressionPrime()
-        elif token[x] in additionSubtractionSymbols:
-            addExpressionPrime()
-    else:
-        print("REJECT")
-        exit(0)
-
-
-def variable():  # Rule 28
-    global x
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        x += 1  # Accept ID
-    else:
-        return
-    variablePrime()
-
-
-def variablePrime():  # Rule 29
-    if "[" in token[x]:
-        x += 1  # Accepts [
-        expressionPrime()
-        if "]" in token[x]:
-            x += 1  # Accepts ]
-        else:
-            print("REJECT")
-            exit(0)
-    else:
-        return
-
-
-def simpleExpression():  # Rule 30
-    addExpression()
-    simpleExpressionPrime()
-
-
-def simpleExpressionPrime():  # Rule 31
-    if token[x] in comparisionSymbols:
-        comparisonOperation()
-        addExpression()
-    else:
-        return
-
-
-def comparisonOperation():  # Rule 32
-    global x
-    if token[x] in comparisionSymbols:
-        x += 1  # Accepts <=, <, >, >=, ==, or !=
-    else:
-        return
-
-
-def addExpression():  # Rule 33
-    term()
-    addExpressionPrime()
-
-
-def addExpressionPrime():  # Rule 34
-    if token[x] in additionSubtractionSymbols:
-        additiveOperation()
-        term()
-        addExpressionPrime()
-    else:
-        return
-
-
-def additiveOperation():  # Rule 35
-    global x
-    if token[x] in additionSubtractionSymbols:
-        x += 1  # Accepts +, -
-    else:
-        return
-
-
-def term():  # Rule 36
-    factor()
-    termPrime()
-
-
-def termPrime():  # Rule 37
-    if token[x] in multiplicationDivisionSymbols:
-        multiplicativeOperation()
-        factor()
-        termPrime()
-    else:
-        return
-
-
-def multiplicativeOperation():  # Rule 38
-    global x
-    if token[x] in multiplicationDivisionSymbols:
-        x += 1  # Accepts *, /
-    else:
-        return
-
-
-def factor():  # Rule 39
-    global x
-    leftExpression
-    expressionReturn
-    w = token[x].isalpha()
-    z = hasnum(token[x])
-    if token[x] not in keywords and w is True:
-        x += 1  # Accepts ID
-
-        if leftExpression == 1:
-            q = 0
-            dn = 0
-            for l in vars:  # get the type of the var for operation agreement
-                if l in token[x - 1]:
-                    if "global" not in varsScope[q] and functionName not in varsScope[q]:
-                        dn = 1
-                    if functionName in varsScope[q]:
-                        dn = 0
-                        check = variableType[q]
-                        break
-                    check = variableType[q]
-                q += 1
-            if expressionType not in check:
-                print("REJECT")
-                exit(0)
-            if dn == 1:
-                print("REJECT")
-                exit(0)
-
-        if expressionReturn == 1:
-            q = 0
-            for l in vars:  # gets the type of the var for operation agreement
-                if l in token[x - 1]:
-                    check = variableType[q]
-                q += 1
-            if expressionType not in check:
-                print("REJECT")
-                exit(0)
-
-        if "[" in token[x]:
-            x += 1  # Accepts [
-            expressionPrime()
-            if "]" in token[x]:
-                x += 1  # Accept ]
-            else:
-                return
-        elif "(" in token[x]:
-            x += 1  # Accepts (
-            arguments()
-            if ")" in token[x]:
-                x += 1  # Accepts )
-            else:
-                return
-        else:
-            return
-    elif z is True:
-        x += 1  # Accepts NUM/FLOAT
-    elif "(" in token[x]:
-        x += 1  # Accepts (
-        expressionPrime()
-        if ")" in token[x]:
-            x += 1  # Accepts )
-        else:
-            return
-    else:
-        print("REJECT")
-        exit(0)
-
-
-def factorPrime():  # Rule 40
-    global x
-    w = token[x].isalpha()
-    if token[x] not in keywords and w is True:
-        x += 1  # Accepts ID
-        if "(" in token[x]:
-            x += 1  # Accepts (
-            arguments()
-            if ")" in token[x]:
-                x += 1  # Accepts )
-            else:
-                print("REJECT")
-                exit(0)
-        else:
-            print("REJECT")
-            exit(0)
-    else:
-        return
-
-
-def arguments():  # Rule 41
-    global x
-    w = token[x].isalpha()
-    z = hasnum(token[x])
-    if token[x] not in keywords and w is True or z is True or "(" in token[x]:
-        argumentsList()
-    elif ")" in token[x]:
-        return
-    else:
-        return
-
-
-def argumentsList():  # Rule 42
-    global matchParameter
-    global theParameter
-    theParameter = 1
-    matchParameter = ""
-    expressionPrime()
-    argumentsListPrime()
-
-
-def argumentsListPrime():  # Rule 43
-    global x
-    if "," in token[x]:
-        x += 1  # Accepts ,
-        expressionPrime()
-        argumentsListPrime()
-    elif ")" in token[x]:
-        return
-    else:
-        return
-
-
-
-def duplicateFunctionCheck():
-    global x
-    global functionName
-    global currentScope
-    global functionType
-    global functionReturn
-    for l in functionDeclaration:  # checks if there are any dupllicates of declared functions
-        if token[x - 2] in l:
-            print("REJECT")
-            exit(0)
-    functionDeclaration.append(token[x - 3] + " " + token[x - 2])
-    functionName = token[x - 2]
-    functionNames.append(token[x - 2])
-    functionTypes.append(token[x - 3])
-    functionType = token[x - 3]
-    functionReturn = 0
-    currentScope = 0
-
-    parameters()
-
-def checkVoidIntFloatInFunctionType():
-    global x
-    global expressionReturn
-    global expressionType
-    if "void" in functionType:  # checks if void has a return with a value
-        print("REJECT")
-        exit(0)
-
-    if "int" in functionType:
-        expressionType = "int"
-    else:
-        expressionType = "float"
-    expressionReturn = 1
-    expressionPrime()
-    expressionReturn = 0
-
-    if ";" in token[x]:
-        x += 1  # Accepts ;
-        return
-    else:
-        print("REJECT")
-        exit(0)
-
-def duplicateVariableCheck():
-    global x
-    s = 0
-    for l in vars:  # checks if there are any duplicates of declared variables
-        if token[x - 2] in l:
-            if variableType[s] in token[x - 3]:
-                print("REJECT")
-                exit(0)
-        s += 1
-
-def variableAppend():
-    global x
-    variableDeclaration.append(token[x - 3] + " " + token[x - 2] + " global 0")
-    vars.append(token[x - 2])
-    variableType.append(token[x - 3])
-    varsScope.append("global")
-    varsScopeBlock.append(0)
-    if "void" in token[x - 3]:
-        print("REJECT")
-        exit(0)
-
-def getVar():
-    q = 0
-    global expressionType
-    for l in vars:  # gets the type of the var for operation agreement
-        if l in token[x - 1]:
-            check = variableType[q]
+        print(str(q).ljust(4) + "\tcomp \t\t" + lastif.ljust(4) + "\t\t" + lastif1.ljust(4) + "\t\tt" + str(t))
         q += 1
-    if expressionType not in check:
+        temp = "t" + str(t)
+        t += 1
+
+        if comparison == ">":
+            print(str(q).ljust(4) + "\tBGT  \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            q += 1
+        elif comparison == ">=":
+            print(str(q).ljust(4) + "\tBGET \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            q += 1
+        elif comparison == "<":
+            print(str(q).ljust(4) + "\tBLT  \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            q += 1
+        elif comparison == "<=":
+            print(str(q).ljust(4) + "\tBLET \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            q += 1
+        elif comparison == "==":
+            print(str(q).ljust(4) + "\tBEQ  \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            q += 1
+        else:  # comparison == "!="
+            print(str(q).ljust(4) + "\tBNEQ \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            q += 1
+
+        iflistq.append(str(q).ljust(4) + "\tBR   \t\t\t\t\t\t\t\t")
+        q += 1
+
+
+    else:
         print("REJECT")
-        exit(0)
+        sys.exit(0)
+
+    exp()
+
+    if token[i] == ")":
+        i += 1  # Accept )
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+    iniflistq = 1
+
+    statement()
+
+    if token[i] == "else":
+        iflistq[iflistqnum] = iflistq[iflistqnum] + str(q+1)
+    else:
+        iflistq[iflistqnum] = iflistq[iflistqnum] + str(q)
+    elsech = 0
+
+    for v in iflistq:
+        print(v)
+    iniflistq = 0
+
+    if token[i] == "else":
+        i += 1  # Accept else
+
+        iflistq.append(str(q).ljust(4) + "\tBR   \t\t\t\t\t\t\t\t")
+        elsech = len(iflistq)
+        q += 1
+        iniflistq = 1
+
+        statement()
+
+        iflistq[elsech-1] = iflistq[elsech-1] + str(q)
+
+        for v in range(elsech-1, len(iflistq)):
+            print(iflistq[v])
+        iniflistq = 0
+
+    else:
+        return
+
+
+def itstmt():  # 20
+    global i, lastw, t, q, inwlistq, doublecheck, wlistqnum
+    if token[i] == "while":
+        i += 1  # Accept while
+    else:
+        return
+
+    if token[i] == "(":
+        i += 1  # Accept (
+
+        whileendbr = q  # get start of while loop line for last quadruple in the block
+
+        f = i
+        wlistfront = ""
+        comparison = 0
+        bch = 0
+        while token[f] != "<" and token[f] != "<=" and token[f] != ">" and token[f] != ">=" and token[f] != "==" and token[f] != "!=":
+            if token[f] == "[" or bch == 1:
+                wlistfront = wlistfront + token[f]
+                bch = 1
+                if token[f] == "]":
+                    bch = 0
+            else:
+                wlistfront = wlistfront + " " + token[f]
+            f += 1
+
+
+        comparison = token[f]
+        wlistfront = infixToPostfix(wlistfront)
+        lastw = postfixEval(wlistfront)
+
+        f += 1
+        bch = 0
+        wlistback = ""
+        while token[f] != ")":
+            if token[f] == "[" or bch == 1:
+                wlistback = wlistback + token[f]
+                bch = 1
+                if token[f] == "]":
+                    bch = 0
+            else:
+                wlistback = wlistback + " " + token[f]
+            f += 1
+
+        wlistback = infixToPostfix(wlistback)
+        lastw1 = postfixEval(wlistback)
+
+        if inwlistq == 1:
+            whilelistq.append(str(q).ljust(4) + "\tcomp \t\t" + lastw.ljust(4) + "\t\t" + lastw1.ljust(4) + "\t\tt" + str(t))
+        else:
+            print(str(q).ljust(4) + "\tcomp \t\t" + lastw.ljust(4) + "\t\t" + lastw1.ljust(4) + "\t\tt" + str(t))
+        q += 1
+        temp = "t" + str(t)
+        t += 1
+
+        if comparison == ">":
+            if inwlistq == 1:
+                whilelistq.append(str(q).ljust(4) + "\tBGT  \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            else:
+                print(str(q).ljust(4) + "\tBGT  \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            q += 1
+        elif comparison == ">=":
+            if inwlistq == 1:
+                whilelistq.append(str(q).ljust(4) + "\tBGET \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            else:
+                print(str(q).ljust(4) + "\tBGET \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            q += 1
+        elif comparison == "<":
+            if inwlistq == 1:
+                whilelistq.append(str(q).ljust(4) + "\tBLT  \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            else:
+                print(str(q).ljust(4) + "\tBLT  \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            q += 1
+        elif comparison == "<=":
+            if inwlistq == 1:
+                whilelistq.append(str(q).ljust(4) + "\tBLET \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            else:
+                print(str(q).ljust(4) + "\tBLET \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            q += 1
+        elif comparison == "==":
+            if inwlistq == 1:
+                whilelistq.append(str(q).ljust(4) + "\tBEQ  \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            else:
+                print(str(q).ljust(4) + "\tBEQ  \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            q += 1
+        else:  # comparison == "!="
+            if inwlistq == 1:
+                whilelistq.append(str(q).ljust(4) + "\tBNEQ \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            else:
+                print(str(q).ljust(4) + "\tBNEQ \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
+            q += 1
+
+        whilelistq.append(str(q).ljust(4) + "\tBR   \t\t\t\t\t\t\t\t")
+        q += 1
+
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+    exp()
+
+    if token[i] == ")":
+        i += 1  # Accept )
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+
+    inwlistq = 1
+    doublecheck += 1
+
+    statement()
+    doublecheck -= 1
+
+
+    whilelistq[wlistqnum] = whilelistq[wlistqnum] + str(q + 1)  +"h"
+    inwlistq = 0
+
+    if doublecheck == 0:
+        for v in whilelistq:
+            print(v)
+
+    if inwlistq == 1:
+        whilelistq.append(str(q).ljust(4) + "\tBR  \t\t\t\t\t\t\t\t" + str(whileendbr))
+    else:
+        print(str(q).ljust(4) + "\tBR  \t\t\t\t\t\t\t\t" + str(whileendbr))
+    q += 1
+
+
+def retstmt():  # 21
+    global i, q, t
+    if token[i] == "return":
+        i += 1  # Accept return
+    else:
+        return
+
+    x = token[i].isalpha()
+    y = hasnum(token[i])
+    if token[i] == ";":
+        i += 1  # Accept ;
+
+        print(str(q).ljust(4) + "\treturn\t\t    \t\t    ")
+        q += 1
+        return
+
+    elif token[i] not in keywordchecklist and x is True:
+
+        if token[i+1] == "[":
+            f = i
+            retexp = ""
+            while token[f] != ";":
+                retexp = retexp + token[f]
+                f += 1
+
+            h1 = retexp.partition('[')
+            h2 = retexp.partition('[')[-1].rpartition(']')[0]
+            if h2.isdigit() == False:
+                print(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                h2 = temp
+            else:
+                h2 = int(h2) * 4
+            print(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+            q += 1
+            temp = "t" + str(t)
+            t += 1
+
+            print(str(q).ljust(4) + "\treturn\t\t    \t\t    \t\t" + temp)
+            q += 1
+
+        else:
+            print(str(q).ljust(4) + "\treturn\t\t    \t\t    \t\t" + token[i])
+            q += 1
+
+        exp()
+
+        if token[i] == ";":
+            i += 1  # Accept ;
+            return
+        else:
+            print("REJECT")
+            sys.exit(0)
+
+    elif y is True:
+
+        print(str(q).ljust(4) + "\treturn\t\t    \t\t    \t\t" + token[i])
+        q += 1
+
+        exp()
+
+        if token[i] == ";":
+            i += 1  # Accept ;
+            return
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif token[i] == "(":
+
+        f = i + 1
+        bch = 0
+        expret = ""
+        while token[f] != ")":
+            if token[f] == "[" or bch == 1:
+                expret = expret + token[f]
+                bch = 1
+                if token[f] == "]":
+                    bch = 0
+            else:
+                expret = expret + " " + token[f]
+            f += 1
+
+        expret = infixToPostfix(expret)
+        lastexpret = postfixEval(expret)
+
+        print(str(q).ljust(4) + "\treturn\t\t    \t\t    \t\t" + lastexpret)
+        q += 1
+
+        exp()
+
+        if token[i] == ";":
+            i += 1  # Accept ;
+            return
+        else:
+            print("REJECT")
+            sys.exit(0)
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+
+def exp():  # 22
+    global i, q, t, inexp
+    x = token[i].isalpha()
+    y = hasnum(token[i])
+    if token[i] not in keywordchecklist and x is True:
+        i += 1  # Accept ID
+
+        if token[i] == "[" and inexp == 0:
+            f = i - 1
+            check = ""
+            while token[f] != "=":
+                check = check + token[f]
+                f += 1
+            i = f
+            assign = check
+
+            if inwlistq == 1:
+                h1 = assign.partition('[')
+                h2 = assign.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    whilelistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                whilelistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                assign = temp
+
+            elif iniflistq == 1:
+                h1 = assign.partition('[')
+                h2 = assign.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    iflistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                iflistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                assign = temp
+
+            else:
+                h1 = assign.partition('[')
+                h2 = assign.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    print(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                print(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                assign = temp
+
+        else:
+            assign = token[i-1]
+
+        if token[i] == "(" and inexp == 0:
+            f = i
+            exquad = token[i-1]
+            while token[f] != ";":
+                exquad = exquad + token[f]
+                f += 1
+
+            if inwlistq == 1:
+                parmcount = 0
+                h1 = exquad.partition('(')[-1].rpartition(')')[0]
+                h2 = exquad.partition('(')
+                if ',' in h1:
+                    h1 = h1.split(',')
+                for v in h1:
+                    parmcount += 1
+                    whilelistq.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
+                    q += 1
+
+                whilelistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                t += 1
+
+            elif iniflistq == 1:
+                parmcount = 0
+                h1 = exquad.partition('(')[-1].rpartition(')')[0]
+                h2 = exquad.partition('(')
+                if ',' in h1:
+                    h1 = h1.split(',')
+                for v in h1:
+                    parmcount += 1
+                    iflistq.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
+                    q += 1
+
+                iflistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                t += 1
+
+            else:
+                parmcount = 0
+                h1 = exquad.partition('(')[-1].rpartition(')')[0]
+                h2 = exquad.partition('(')
+                if ',' in h1:
+                    h1 = h1.split(',')
+                for v in h1:
+                    parmcount += 1
+                    print(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
+                    q += 1
+
+                print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                t += 1
+
+        if token[i] == "=":
+            f = i + 1
+            exquad = ""
+            bch = 0
+            pch = 0
+            while token[f] != ";":
+                if token[f] == "[" or bch == 1:
+                    exquad = exquad + token[f]
+                    bch = 1
+                    if token[f] == "]":
+                        bch = 0
+                elif token[f] == "(" or pch == 1:
+                    if token[f-1] != "*" and token[f-1] != "/" and token[f-1] != "+" and token[f-1] != "-" and token[f-1] != "=":
+                        exquad = exquad + token[f]
+                        pch = 1
+                        if token[f] == ")":
+                            pch = 0
+                    else:
+                        exquad = exquad + " " + token[f]
+                else:
+                    exquad = exquad + " " + token[f]
+                f += 1
+            exquad = infixToPostfix(exquad)
+            lastexp = postfixEval(exquad)
+
+            if inwlistq == 1:
+                if "(" in lastexp:
+                    parmcount = 0
+                    h1 = lastexp.partition('(')[-1].rpartition(')')[0]
+                    h2 = lastexp.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        whilelistq.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    whilelistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    whilelistq.append(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
+                    q += 1
+                    inexp = 1
+
+                elif "[" in lastexp:
+                    h1 = lastexp.partition('[')
+                    h2 = lastexp.partition('[')[-1].rpartition(']')[0]
+                    if h2.isdigit() == False:
+                        whilelistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                        q += 1
+                        temp = "t" + str(t)
+                        t += 1
+                        h2 = temp
+                    else:
+                        h2 = int(h2) * 4
+                    whilelistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+
+                    whilelistq.append(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
+                    q += 1
+                    inexp = 1
+
+                else:
+                    whilelistq.append(str(q).ljust(4) + "\tassgn\t\t" + lastexp.ljust(4) + "\t\t\t\t\t" + str(assign))
+                    q += 1
+                    inexp = 1
+
+            elif iniflistq == 1:
+                if "(" in lastexp:
+                    parmcount = 0
+                    h1 = lastexp.partition('(')[-1].rpartition(')')[0]
+                    h2 = lastexp.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        iflistq.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    iflistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    iflistq.append(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
+                    q += 1
+                    inexp = 1
+
+                elif "[" in lastexp:
+                    h1 = lastexp.partition('[')
+                    h2 = lastexp.partition('[')[-1].rpartition(']')[0]
+                    if h2.isdigit() == False:
+                        iflistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                        q += 1
+                        temp = "t" + str(t)
+                        t += 1
+                        h2 = temp
+                    else:
+                        h2 = int(h2) * 4
+                    iflistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+
+                    iflistq.append(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
+                    q += 1
+                    inexp = 1
+
+                else:
+                    iflistq.append(str(q).ljust(4) + "\tassgn\t\t" + lastexp.ljust(4) + "\t\t\t\t\t" + str(assign))
+                    q += 1
+                    inexp =1
+
+            else:
+                if "(" in lastexp:
+                    parmcount = 0
+                    h1 = lastexp.partition('(')[-1].rpartition(')')[0]
+                    h2 = lastexp.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        print(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    print(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
+                    q += 1
+                    inexp =1
+
+                elif "[" in lastexp:
+                    h1 = lastexp.partition('[')
+                    h2 = lastexp.partition('[')[-1].rpartition(']')[0]
+                    if h2.isdigit() == False:
+                        print(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                        q += 1
+                        temp = "t" + str(t)
+                        t += 1
+                        h2 = temp
+                    else:
+                        h2 = int(h2) * 4
+                    print(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+
+                    print(str(q).ljust(4) + "\tassgn\t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(assign))
+                    q += 1
+                    inexp = 1
+
+                else:
+                    print(str(q).ljust(4) + "\tassgn\t\t" + lastexp.ljust(4) + "\t\t\t\t\t" + str(assign))
+                    q += 1
+                    inexp = 1
+
+        ex()
+        inexp = 0
+
+    elif token[i] == "(":
+        i += 1  # Accept (
+        exp()
+        if token[i] == ")":
+            i += 1  # Accept )
+            termprime()
+            addexpprime()
+            if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                           token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                relop()
+                addexp()
+            elif token[i] == "+" or token[i] == "-":
+                addexpprime()
+                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                    relop()
+                    addexp()
+            elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                             token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                relop()
+                addexp()
+            else:
+                return
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif y is True:
+        i += 1  # Accept NUM/FLOAT
+        termprime()
+        addexpprime()
+        if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                       token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+            relop()
+            addexp()
+        elif token[i] == "+" or token[i] == "-":
+            addexpprime()
+            if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                           token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                relop()
+                addexp()
+        elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                         token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                relop()
+                addexp()
+        else:
+            return
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+
+def ex():  # 22X
+    global i
+    if token[i] == "=":
+        i += 1  # Accept =
+        exp()
+    elif token[i] == "[":
+        i += 1  # Accept [
+        exp()
+        if token[i-1] == "[":
+            print("REJECT")
+            sys.exit(0)
+        if token[i] == "]":
+            i += 1  # Accept ]
+            if token[i] == "=":
+                i += 1  # Accept =
+                exp()
+            elif token[i] == "*" or token[i] == "/":
+                termprime()
+                addexpprime()
+                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                    relop()
+                    addexp()
+                else:
+                    return
+            elif token[i] == "+" or token[i] == "-":
+                addexpprime()
+                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                    relop()
+                    addexp()
+            elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                             token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                relop()
+                addexp()
+            else:
+                return
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif token[i] == "(":
+        i += 1  # Accept (
+        args()
+        if token[i] == ")":
+            i += 1  # Accept )
+            if token[i] == "*" or token[i] == "/":
+                termprime()
+                addexpprime()
+                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                    relop()
+                    addexp()
+                else:
+                    return
+            elif token[i] == "+" or token[i] == "-":
+                addexpprime()
+                if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                               token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                    relop()
+                    addexp()
+            elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                             token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+                relop()
+                addexp()
+            else:
+                return
+        else:
+            print("REJECT")
+            sys.exit(0)
+    elif token[i] == "*" or token[i] == "/":
+        termprime()
+        addexpprime()
+        if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                       token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+            relop()
+            addexp()
+        else:
+            return
+    elif token[i] == "+" or token[i] == "-":
+        addexpprime()
+        if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                       token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+            relop()
+            addexp()
+        else:
+            return
+    elif token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                     token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+        relop()
+        addexp()
+    else:
+        return
+
+
+def var():  # 23
+    global i
+    x = token[i].isalpha()
+    if token[i] not in keywordchecklist and x is True:
+        i += 1  # Accept ID
+    else:
+        return
+    if token[i] == "[":
+        i += 1  # Accept [
+        exp()
+        if token[i] == "]":
+            i += 1  # Accept ]
+        else:
+            print("REJECT")
+            sys.exit(0)
+    else:
+        return
+
+
+def simexp():  # 24
+    addexp()
+    if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                   token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+        relop()
+        addexp()
+    else:
+        return
+
+
+def relop():  # 25
+    global i
+    if token[i] == "<=" or token[i] == "<" or token[i] == ">" or\
+                   token[i] == ">=" or token[i] == "==" or token[i] == "!=":
+        i += 1  # Accept <=, <, >, >=, ==, or !=
+    else:
+        return
+
+
+def addexp():  # 26
+    term()
+    addexpprime()
+
+
+def addexpprime():  # 27
+    if token[i] == "+" or token[i] == "-":
+        addop()
+        term()
+        addexpprime()
+    else:
+        return
+
+
+def addop():  # 28
+    global i
+    if token[i] == "+" or token[i] == "-":
+        i += 1  # Accept +, -
+    else:
+        return
+
+
+def term():  # 29
+    factor()
+    termprime()
+
+
+def termprime():  # 30
+    if token[i] == "*" or token[i] == "/":
+        mulop()
+        factor()
+        termprime()
+    else:
+        return
+
+
+def mulop():  # 31
+    global i
+    if token[i] == "*" or token[i] == "/":
+        i += 1  # Accept *, /
+    else:
+        return
+
+
+def factor():  # 32
+    global i
+    x = token[i].isalpha()
+    y = hasnum(token[i])
+    if token[i] not in keywordchecklist and x is True:
+        i += 1  # Accept ID
+        if token[i] == "[":
+            i += 1  # Accept [
+            exp()
+            if token[i] == "]":
+                i += 1  # Accept ]
+            else:
+                return
+        elif token[i] == "(":
+            i += 1  # Accept (
+            args()
+            if token[i] == ")":
+                i += 1  # Accept )
+            else:
+                return
+        else:
+            return
+    elif y is True:
+        i += 1  # Accept NUM/FLOAT
+    elif token[i] == "(":
+        i += 1  # Accept (
+        exp()
+        if token[i] == ")":
+            i += 1  # Accept )
+        else:
+            return
+    else:
+        print("REJECT")
+        sys.exit(0)
+
+
+def call():  # 33
+    global i
+    x = token[i].isalpha()
+    if token[i] not in keywordchecklist and x is True:
+        i += 1  # Accept ID
+        if token[i] == "(":
+            i += 1  # Accept (
+            args()
+            if token[i] == ")":
+                i += 1  # Accept )
+            else:
+                print("REJECT")
+                sys.exit(0)
+        else:
+            print("REJECT")
+            sys.exit(0)
+    else:
+        return
+
+
+def args():  # 34
+    global i
+    x = token[i].isalpha()
+    y = hasnum(token[i])
+    if token[i] not in keywordchecklist and x is True:
+        arglist()
+    elif y is True:
+        arglist()
+    elif token[i] == "(":
+        arglist()
+    elif token[i] == ")":
+        return
+    else:
+        return
+
+
+def arglist():  # 35
+    exp()
+    arglistprime()
+
+
+def arglistprime():  # 36
+    global i
+    if token[i] == ",":
+        i += 1  # Accept ,
+        exp()
+        arglistprime()
+    elif token[i] == ")":
+        return
+    else:
+        return
+
+
 # ----------------------------- end of parsing functions --------------------------------- #
+# ---------------------------- stack for infix to postfix -------------------------------- #
+
+# turn infix to postfix
+def infixToPostfix(infixexpr):  # turn infix to postfix
+    prec = {}
+    prec["*"] = 3
+    prec["/"] = 3
+    prec["+"] = 2
+    prec["-"] = 2
+    prec["("] = 1
+    opStack = Stack()
+    postfixList = []
+    tokenList = infixexpr.split()
+
+    for token in tokenList:
+        if token.isalnum() or "[" in token or ("(" in token and ")" in token) or (re.search('[a-z]', token) == True and "(" in token) or token in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" or token in "0123456789" or token in "abcdefghijklmnopqrstuvwxyz":
+            postfixList.append(token)
+        elif token == '(':
+            opStack.push(token)
+        elif token == ')':
+            topToken = opStack.pop()
+            while topToken != '(':
+                postfixList.append(topToken)
+                topToken = opStack.pop()
+        else:
+            while (not opStack.isEmpty()) and \
+               (prec[opStack.peek()] >= prec[token]):
+                  postfixList.append(opStack.pop())
+            opStack.push(token)
+
+    while not opStack.isEmpty():
+        postfixList.append(opStack.pop())
+    return " ".join(postfixList)
+
+# perform quadruples in postfix correct order
+def postfixEval(postfixExpr):
+    operandStack = Stack()
+    tokenList = postfixExpr.split()
+
+    for token in tokenList:
+        if token.isalnum() or "[" in token or ("(" in token and ")" in token) or (re.search('[a-z]', token) == True and "(" in token) or token in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" or token in "0123456789" or token in "abcdefghijklmnopqrstuvwxyz":
+            operandStack.push(token)
+        else:
+            operand2 = operandStack.pop()
+            operand1 = operandStack.pop()
+            result = doMath(token,operand1,operand2)
+            operandStack.push(result)
+    return operandStack.pop()
+
+def doMath(op, op1, op2):
+    global q, t
+
+    if op == "*":
+        if inwlistq == 1:
+            if "(" in op1:
+                    parmcount = 0
+                    h1 = op1.partition('(')[-1].rpartition(')')[0]
+                    h2 = op1.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        whilelistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    whilelistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op1 = temp
+
+            if "(" in op2:
+                    parmcount = 0
+                    h1 = op2.partition('(')[-1].rpartition(')')[0]
+                    h2 = op2.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        whilelistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    whilelistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op2 = temp
+
+            if "[" in op1:
+                h1 = op1.partition('[')
+                h2 = op1.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    whilelistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                whilelistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op1 = temp
+
+            if "[" in op2:
+                h1 = op2.partition('[')
+                h2 = op2.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    whilelistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                whilelistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op2 = temp
+            whilelistq.append(str(q).ljust(4) + "\tmult \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+
+        elif iniflistq == 1:
+            if "(" in op1:
+                    parmcount = 0
+                    h1 = op1.partition('(')[-1].rpartition(')')[0]
+                    h2 = op1.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        iflistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    iflistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op1 = temp
+
+            if "(" in op2:
+                    parmcount = 0
+                    h1 = op2.partition('(')[-1].rpartition(')')[0]
+                    h2 = op2.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        iflistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    iflistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op2 = temp
+
+            if "[" in op1:
+                h1 = op1.partition('[')
+                h2 = op1.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    iflistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                iflistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op1 = temp
+
+            if "[" in op2:
+                h1 = op2.partition('[')
+                h2 = op2.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    iflistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                iflistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op2 = temp
+            iflistq.append(str(q).ljust(4) + "\tmult \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+
+        else:
+            if "(" in op1:
+                    parmcount = 0
+                    h1 = op1.partition('(')[-1].rpartition(')')[0]
+                    h2 = op1.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op1 = temp
+
+            if "(" in op2:
+                    parmcount = 0
+                    h1 = op2.partition('(')[-1].rpartition(')')[0]
+                    h2 = op2.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op2 = temp
+
+            if "[" in op1:
+                h1 = op1.partition('[')
+                h2 = op1.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    print(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                print(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op1 = temp
+
+            if "[" in op2:
+                h1 = op2.partition('[')
+                h2 = op2.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    print(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                print(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op2 = temp
+            print(str(q).ljust(4) + "\tmult \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+        q += 1
+        temp = "t" + str(t)
+        t += 1
+        return temp
+
+    elif op == "/":
+        if inwlistq == 1:
+            if "(" in op1:
+                    parmcount = 0
+                    h1 = op1.partition('(')[-1].rpartition(')')[0]
+                    h2 = op1.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        whilelistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    whilelistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op1 = temp
+
+            if "(" in op2:
+                    parmcount = 0
+                    h1 = op2.partition('(')[-1].rpartition(')')[0]
+                    h2 = op2.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        whilelistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    whilelistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op2 = temp
+
+            if "[" in op1:
+                h1 = op1.partition('[')
+                h2 = op1.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    whilelistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                whilelistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op1 = temp
+
+            if "[" in op2:
+                h1 = op2.partition('[')
+                h2 = op2.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    whilelistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                whilelistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op2 = temp
+            whilelistq.append(str(q).ljust(4) + "\tdiv  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+
+        elif iniflistq == 1:
+            if "(" in op1:
+                    parmcount = 0
+                    h1 = op1.partition('(')[-1].rpartition(')')[0]
+                    h2 = op1.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        iflistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    iflistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op1 = temp
+
+            if "(" in op2:
+                    parmcount = 0
+                    h1 = op2.partition('(')[-1].rpartition(')')[0]
+                    h2 = op2.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        iflistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    iflistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op2 = temp
+
+            if "[" in op1:
+                h1 = op1.partition('[')
+                h2 = op1.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    iflistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                iflistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op1 = temp
+
+            if "[" in op2:
+                h1 = op2.partition('[')
+                h2 = op2.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    iflistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                iflistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op2 = temp
+            iflistq.append(str(q).ljust(4) + "\tdiv  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+
+        else:
+            if "(" in op1:
+                    parmcount = 0
+                    h1 = op1.partition('(')[-1].rpartition(')')[0]
+                    h2 = op1.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op1 = temp
+
+            if "(" in op2:
+                    parmcount = 0
+                    h1 = op2.partition('(')[-1].rpartition(')')[0]
+                    h2 = op2.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op2 = temp
+
+            if "[" in op1:
+                h1 = op1.partition('[')
+                h2 = op1.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    print(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                print(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op1 = temp
+
+            if "[" in op2:
+                h1 = op2.partition('[')
+                h2 = op2.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    print(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                print(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op2 = temp
+            print(str(q).ljust(4) + "\tdiv  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+        q += 1
+        temp = "t" + str(t)
+        t += 1
+        return temp
+
+    elif op == "+":
+        if inwlistq == 1:
+            if "(" in op1:
+                    parmcount = 0
+                    h1 = op1.partition('(')[-1].rpartition(')')[0]
+                    h2 = op1.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        whilelistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    whilelistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op1 = temp
+
+            if "(" in op2:
+                    parmcount = 0
+                    h1 = op2.partition('(')[-1].rpartition(')')[0]
+                    h2 = op2.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        whilelistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    whilelistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op2 = temp
+
+            if "[" in op1:
+                h1 = op1.partition('[')
+                h2 = op1.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    whilelistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                whilelistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op1 = temp
+
+            if "[" in op2:
+                h1 = op2.partition('[')
+                h2 = op2.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    whilelistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                whilelistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op2 = temp
+
+            whilelistq.append(str(q).ljust(4) + "\tadd  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+
+        elif iniflistq == 1:
+            if "(" in op1:
+                    parmcount = 0
+                    h1 = op1.partition('(')[-1].rpartition(')')[0]
+                    h2 = op1.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        iflistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    iflistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op1 = temp
+
+            if "(" in op2:
+                    parmcount = 0
+                    h1 = op2.partition('(')[-1].rpartition(')')[0]
+                    h2 = op2.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        iflistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    iflistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op2 = temp
+
+            if "[" in op1:
+                h1 = op1.partition('[')
+                h2 = op1.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    iflistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                iflistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op1 = temp
+
+            if "[" in op2:
+                h1 = op2.partition('[')
+                h2 = op2.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    iflistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                iflistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op2 = temp
+
+            iflistq.append(str(q).ljust(4) + "\tadd  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+
+        else:
+            if "(" in op1:
+                    parmcount = 0
+                    h1 = op1.partition('(')[-1].rpartition(')')[0]
+                    h2 = op1.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op1 = temp
+
+            if "(" in op2:
+                    parmcount = 0
+                    h1 = op2.partition('(')[-1].rpartition(')')[0]
+                    h2 = op2.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op2 = temp
+
+            if "[" in op1:
+                h1 = op1.partition('[')
+                h2 = op1.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    print(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                print(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op1 = temp
+
+            if "[" in op2:
+                h1 = op2.partition('[')
+                h2 = op2.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    print(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                print(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op2 = temp
+
+            print(str(q).ljust(4) + "\tadd  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+        q += 1
+        temp = "t" + str(t)
+        t += 1
+        return temp
+
+    else:  # if op == "-"
+        if inwlistq == 1:
+            if "(" in op1:
+                    parmcount = 0
+                    h1 = op1.partition('(')[-1].rpartition(')')[0]
+                    h2 = op1.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        whilelistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    whilelistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op1 = temp
+
+            if "(" in op2:
+                    parmcount = 0
+                    h1 = op2.partition('(')[-1].rpartition(')')[0]
+                    h2 = op2.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        whilelistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    whilelistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op2 = temp
+
+            if "[" in op1:
+                h1 = op1.partition('[')
+                h2 = op1.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    whilelistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                whilelistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op1 = temp
+
+            if "[" in op2:
+                h1 = op2.partition('[')
+                h2 = op2.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    whilelistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                whilelistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op2 = temp
+            whilelistq.append(str(q).ljust(4) + "\tsub  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+
+        elif iniflistq == 1:
+            if "(" in op1:
+                    parmcount = 0
+                    h1 = op1.partition('(')[-1].rpartition(')')[0]
+                    h2 = op1.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        iflistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    iflistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op1 = temp
+
+            if "(" in op2:
+                    parmcount = 0
+                    h1 = op2.partition('(')[-1].rpartition(')')[0]
+                    h2 = op2.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        iflistq.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    iflistq.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op2 = temp
+
+            if "[" in op1:
+                h1 = op1.partition('[')
+                h2 = op1.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    iflistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                iflistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op1 = temp
+
+            if "[" in op2:
+                h1 = op2.partition('[')
+                h2 = op2.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    iflistq.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                iflistq.append(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op2 = temp
+            iflistq.append(str(q).ljust(4) + "\tsub  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+
+        else:
+            if "(" in op1:
+                    parmcount = 0
+                    h1 = op1.partition('(')[-1].rpartition(')')[0]
+                    h2 = op1.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op1 = temp
+
+            if "(" in op2:
+                    parmcount = 0
+                    h1 = op2.partition('(')[-1].rpartition(')')[0]
+                    h2 = op2.partition('(')
+                    if ',' in h1:
+                        h1 = h1.split(',')
+                    for v in h1:
+                        parmcount += 1
+                        print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
+                        q += 1
+
+                    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    op2 = temp
+
+            if "[" in op1:
+                h1 = op1.partition('[')
+                h2 = op1.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    print(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                print(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op1 = temp
+
+            if "[" in op2:
+                h1 = op2.partition('[')
+                h2 = op2.partition('[')[-1].rpartition(']')[0]
+                if h2.isdigit() == False:
+                    print(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
+                    q += 1
+                    temp = "t" + str(t)
+                    t += 1
+                    h2 = temp
+                else:
+                    h2 = int(h2) * 4
+                print(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
+                q += 1
+                temp = "t" + str(t)
+                t += 1
+                op2 = temp
+            print(str(q).ljust(4) + "\tsub  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+        q += 1
+        temp = "t" + str(t)
+        t += 1
+        return temp
+
+
+class Stack:
+    def __init__(self):
+        self.items = []
+
+    def isEmpty(self):
+        return self.items == []
+
+    def push(self, item):
+        self.items.append(item)
+
+    def pop(self):
+        return self.items.pop()
+
+    def peek(self):
+        return self.items[len(self.items)-1]
+
+    def size(self):
+        return len(self.items)
+
+# ---------------------- end of our stack for infix to postfix --------------------------- #
 
 # begin parsing
-programDeclaration()
-
-print(variableDeclaration)
-print(functionDeclaration)
-
-if checkMain == 1 and checkFinalMain == 1:  # check if contains 1 main function
-    print("ACCEPT")
-else:
-    print("REJECT")
+program()
+print("----------------------------------------------------")

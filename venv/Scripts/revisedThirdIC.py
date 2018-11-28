@@ -140,7 +140,7 @@ def declaration():  # Rule 4
     w = token[x].isalpha()
     if token[x] not in keywords and w is True:
         x += 1  # Accept ID
-        funcparm = []
+        functionParameter = []
         if "main" in token[x]:
             print(str(q).ljust(4) + "\tfunc \t\t" + token[x-1] + "\t\tvoid\t\t0")
             q += 1
@@ -154,19 +154,19 @@ def declaration():  # Rule 4
                     currentFunction = token[x - 1]
                 else:
                     f = x + 1
-                    paramcount = 0
-                    qch = q + 1
+                    theParameterCount = 0
+                    quadrupleCharacter = q + 1
                     while ")" not in token[f]:
                         if token[f] in intFloatKeywords:
-                            paramcount += 1
-                            funcparm.append(str(qch).ljust(4) + "\tparam\t\t4   \t\t\t\t\t" + token[f + 1])
-                            qch += 1
+                            theParameterCount += 1
+                            functionParameter.append(str(quadrupleCharacter).ljust(4) + "\tparam\t\t4   \t\t\t\t\t" + token[f + 1])
+                            quadrupleCharacter += 1
                             f += 2
                             if "," in token[f]:
                                 f += 1
-                    print(str(q).ljust(4) + "\tfunc \t\t" + token[x - 1].ljust(4) + "\t\t" + token[x - 2].ljust( 4) + "\t\t" + str(paramcount))
-                    q = qch
-                    for v in funcparm:
+                    print(str(q).ljust(4) + "\tfunc \t\t" + token[x - 1].ljust(4) + "\t\t" + token[x - 2].ljust( 4) + "\t\t" + str(theParameterCount))
+                    q = quadrupleCharacter
+                    for v in functionParameter:
                         print(v)
                     currentFunction = token[x - 1]
             else:
@@ -176,21 +176,21 @@ def declaration():  # Rule 4
                     currentFunction = token[x - 1]
                 else:
                     f = x + 1
-                    paramcount = 0
-                    qch = q + 1
+                    theParameterCount = 0
+                    quadrupleCharacter = q + 1
                     while ")" not in token[f]:
                         if token[f] in intFloatKeywords:
-                            paramcount += 1
-                            funcparm.append(str(qch).ljust(4) + "\tparam\t\t4   \t\t\t\t\t" + token[f + 1])
-                            qch += 1
+                            theParameterCount += 1
+                            functionParameter.append(str(quadrupleCharacter).ljust(4) + "\tparam\t\t4   \t\t\t\t\t" + token[f + 1])
+                            quadrupleCharacter += 1
                             f += 2
                             if "," in token[f]:
                                 f += 1
                     print(str(q).ljust(4) + "\tfunc \t\t" + token[x - 1].ljust(4) + "\t\t" + token[x - 2].ljust(
                         4) + "\t\t" + str(
-                        paramcount))
-                    q = qch
-                    for v in funcparm:
+                        theParameterCount))
+                    q = quadrupleCharacter
+                    for v in functionParameter:
                         print(v)
                     currentFunction = token[x - 1]
 
@@ -525,13 +525,13 @@ def selectionStatement():  # Rule 22
         f = x
         ifListFront = ""
         comparison = 0
-        bch = 0
+        backCharacter = 0
         while token[f] not in comparisionSymbols:
-            if "[" in token[f] or bch == 1:
+            if "[" in token[f] or backCharacter == 1:
                 ifListFront = ifListFront + token[f]
-                bch = 1
+                backCharacter = 1
                 if "]" in token[f]:
-                    bch = 0
+                    backCharacter = 0
             else:
                 ifListFront = ifListFront + " " + token[f]
             f += 1
@@ -539,23 +539,23 @@ def selectionStatement():  # Rule 22
 
         comparison = token[f]
         ifListFront = infixToPostfix(ifListFront)
-        lastIf = postfixEval(ifListFront)
+        lastIf = postfixEvaluation(ifListFront)
 
         f += 1
-        bch = 0
+        backCharacter = 0
         ifListBack = ""
         while ")" not in token[f]:
-            if "[" in token[f] or bch == 1:
+            if "[" in token[f] or backCharacter == 1:
                 ifListBack = ifListBack + token[f]
-                bch = 1
+                backCharacter = 1
                 if "]" in token[f]:
-                    bch = 0
+                    backCharacter = 0
             else:
                 ifListBack = ifListBack + " " + token[f]
             f += 1
 
         ifListBack = infixToPostfix(ifListBack)
-        lastIfL = postfixEval(ifListBack)
+        lastIfL = postfixEvaluation(ifListBack)
 
         print(str(q).ljust(4) + "\tcomp \t\t" + lastIf.ljust(4) + "\t\t" + lastIfL.ljust(4) + "\t\tt" + str(t))
         q += 1
@@ -612,7 +612,7 @@ def selectionStatementPrime(): # Rule 23
         ifListQuadruples[ifListNumberQuadruples] = ifListQuadruples[ifListNumberQuadruples] + str(q + 1)
     else:
         ifListQuadruples[ifListNumberQuadruples] = ifListQuadruples[ifListNumberQuadruples] + str(q)
-    elsech = 0
+    elseCharacter = 0
 
     for v in ifListQuadruples:
         print(v)
@@ -622,15 +622,15 @@ def selectionStatementPrime(): # Rule 23
         x += 1  # Accepts else
 
         ifListQuadruples.append(str(q).ljust(4) + "\tBR   \t\t\t\t\t\t\t\t")
-        elsech = len(ifListQuadruples)
+        elseCharacter = len(ifListQuadruples)
         q += 1
         insideIfListQuadruples = 1
 
         statement()
 
-        ifListQuadruples[elsech - 1] = ifListQuadruples[elsech - 1] + str(q)
+        ifListQuadruples[elseCharacter - 1] = ifListQuadruples[elseCharacter - 1] + str(q)
 
-        for v in range(elsech-1, len(ifListQuadruples)):
+        for v in range(elseCharacter-1, len(ifListQuadruples)):
             print(ifListQuadruples[v])
         insideIfListQuadruples = 0
 
@@ -659,13 +659,13 @@ def iterationStatement():  # Rule 24
         f = x
         wListFront = ""
         comparison = 0
-        bch = 0
+        backCharacter = 0
         while token[f] not in comparisionSymbols:
-            if "[" in token[f] or bch == 1:
+            if "[" in token[f] or backCharacter == 1:
                 wListFront = wListFront + token[f]
-                bch = 1
+                backCharacter = 1
                 if "]" in token[f]:
-                    bch = 0
+                    backCharacter = 0
             else:
                 wListFront = wListFront + " " + token[f]
             f += 1
@@ -673,23 +673,23 @@ def iterationStatement():  # Rule 24
 
         comparison = token[f]
         wListFront = infixToPostfix(wListFront)
-        lastWhile = postfixEval(wListFront)
+        lastWhile = postfixEvaluation(wListFront)
 
         f += 1
-        bch = 0
+        backCharacter = 0
         wListBack = ""
         while ")" not in token[f]:
-            if "[" in token[f] or bch == 1:
+            if "[" in token[f] or backCharacter == 1:
                 wListBack = wListBack + token[f]
-                bch = 1
+                backCharacter = 1
                 if "]" in token[f]:
-                    bch = 0
+                    backCharacter = 0
             else:
                 wListBack = wListBack + " " + token[f]
             f += 1
 
         wListBack = infixToPostfix(wListBack)
-        lastWL = postfixEval(wListBack)
+        lastWL = postfixEvaluation(wListBack)
 
         if insideWhileListQuadruples == 1:
             whileListQuadruples.append(str(q).ljust(4) + "\tcomp \t\t" + lastWhile.ljust(4) + "\t\t" + lastWL.ljust(4) + "\t\tt" + str(t))
@@ -799,13 +799,13 @@ def returnStatementPrime(): # Rule 26
 
         if "[" in token[x+1]:
             f = x
-            retexp = ""
+            returnExpression = ""
             while ";" not in token[f]:
-                retexp = retexp + token[f]
+                returnExpression = returnExpression + token[f]
                 f += 1
 
-            h1 = retexp.partition('[')
-            h2 = retexp.partition('[')[-1].rpartition(']')[0]
+            h1 = returnExpression.partition('[')
+            h2 = returnExpression.partition('[')[-1].rpartition(']')[0]
             if h2.isdigit() is False:
                 print(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
                 q += 1
@@ -852,21 +852,21 @@ def returnStatementPrime(): # Rule 26
 
         f = x + 1
         bch = 0
-        expret = ""
+        expressionReturn = ""
         while ")" not in token[f]:
             if "[" in token[f] or bch == 1:
-                expret = expret + token[f]
+                expressionReturn = expressionReturn + token[f]
                 bch = 1
                 if "]" in token[f]:
                     bch = 0
             else:
-                expret = expret + " " + token[f]
+                expressionReturn = expressionReturn + " " + token[f]
             f += 1
 
-        expret = infixToPostfix(expret)
-        lastexpret = postfixEval(expret)
+        expressionReturn = infixToPostfix(expressionReturn)
+        lastExpressionReturn = postfixEvaluation(expressionReturn)
 
-        print(str(q).ljust(4) + "\treturn\t\t    \t\t    \t\t" + lastexpret)
+        print(str(q).ljust(4) + "\treturn\t\t    \t\t    \t\t" + lastExpressionReturn)
         q += 1
 
         expressionPrime()
@@ -976,9 +976,9 @@ def expressionPrime():  # Rule 28
 
         if "(" in token[x] and insideExpression == 0:
             f = x
-            exquad = token[x-1]
+            expressionQuadruples = token[x-1]
             while ";" not in token[f]:
-                exquad = exquad + token[f]
+                expressionQuadruples = expressionQuadruples + token[f]
                 f += 1
 
             if insideWhileListQuadruples == 1:
@@ -992,61 +992,61 @@ def expressionPrime():  # Rule 28
 
         if "=" in token[x]:
             f = x + 1
-            exquad = ""
-            bch = 0
-            pch = 0
+            expressionQuadruples = ""
+            backCharacter = 0
+            patchCharacter = 0
             while ";" not in token[f]:
-                if "[" in token[f] or bch == 1:
-                    exquad = exquad + token[f]
-                    bch = 1
+                if "[" in token[f] or backCharacter == 1:
+                    expressionQuadruples = expressionQuadruples + token[f]
+                    backCharacter = 1
                     if "]" in token[f]:
-                        bch = 0
-                elif "(" in token[f] or pch == 1:
+                        backCharacter = 0
+                elif "(" in token[f] or patchCharacter == 1:
                     if token[f-1] not in fourMathOperations:
-                        exquad = exquad + token[f]
-                        pch = 1
+                        expressionQuadruples = expressionQuadruples + token[f]
+                        patchCharacter = 1
                         if ")" in token[f]:
-                            pch = 0
+                            patchCharacter = 0
                     else:
-                        exquad = exquad + " " + token[f]
+                        expressionQuadruples = expressionQuadruples + " " + token[f]
                 else:
-                    exquad = exquad + " " + token[f]
+                    expressionQuadruples = expressionQuadruples + " " + token[f]
                 f += 1
-            exquad = infixToPostfix(exquad)
-            lastexp = postfixEval(exquad)
+            expressionQuadruples = infixToPostfix(expressionQuadruples)
+            lastExpression = postfixEvaluation(expressionQuadruples)
 
             if insideWhileListQuadruples == 1:
-                if "(" in lastexp:
+                if "(" in lastExpression:
                     whileListQuadruplesParameterCountLastExpression()
 
-                elif "[" in lastexp:
+                elif "[" in lastExpression:
                     whileListQuadruplesLastExpression()
 
                 else:
-                    whileListQuadruples.append(str(q).ljust(4) + "\tassgn\t\t" + lastexp.ljust(4) + "\t\t\t\t\t" + str(assign))
+                    whileListQuadruples.append(str(q).ljust(4) + "\tassgn\t\t" + lastExpression.ljust(4) + "\t\t\t\t\t" + str(assign))
                     q += 1
                     insideExpression = 1
 
             elif insideIfListQuadruples == 1:
-                if "(" in lastexp:
+                if "(" in lastExpression:
                     ifListQuadruplesParamterCounterLastExpression()
 
-                elif "[" in lastexp:
+                elif "[" in lastExpression:
                    ifListQuadruplesLastExpression()
 
                 else:
-                    ifListQuadruples.append(str(q).ljust(4) + "\tassgn\t\t" + lastexp.ljust(4) + "\t\t\t\t\t" + str(assign))
+                    ifListQuadruples.append(str(q).ljust(4) + "\tassgn\t\t" + lastExpression.ljust(4) + "\t\t\t\t\t" + str(assign))
                     q += 1
                     insideExpression =1
 
             else:
-                if "(" in lastexp:
+                if "(" in lastExpression:
                     printParameterCountLastExpression()
 
-                elif "[" in lastexp:
+                elif "[" in lastExpression:
                     printLastExpressionh2()
                 else:
-                    print(str(q).ljust(4) + "\tassgn\t\t" + lastexp.ljust(4) + "\t\t\t\t\t" + str(assign))
+                    print(str(q).ljust(4) + "\tassgn\t\t" + lastExpression.ljust(4) + "\t\t\t\t\t" + str(assign))
                     q += 1
                     insideExpression = 1
 
@@ -1249,40 +1249,40 @@ def argumentsListPrime():  # Rule 44
 # ---------------------------- stack for infix to postfix -------------------------------- #
 
 # turn infix to postfix
-def infixToPostfix(infixexpr):  # turn infix to postfix
-    prec = {}
-    prec["*"] = 3
-    prec["/"] = 3
-    prec["+"] = 2
-    prec["-"] = 2
-    prec["("] = 1
-    opStack = Stack()
-    postfixList = []
-    tokenList = infixexpr.split()
+def infixToPostfix(inFixExpression):  # turn infix to postfix
+    preCharacter = {}
+    preCharacter["*"] = 3
+    preCharacter["/"] = 3
+    preCharacter["+"] = 2
+    preCharacter["-"] = 2
+    preCharacter["("] = 1
+    operationStack = Stack()
+    postFixList = []
+    tokenList = inFixExpression.split()
 
     for token in tokenList:
         if token.isalnum() or "[" in token or ("(" in token and ")" in token) or (re.search('[a-z]', token) is True and "(" in token):
-            postfixList.append(token)
+            postFixList.append(token)
         elif "(" in token:
-            opStack.push(token)
+            operationStack.push(token)
         elif ")" in token :
-            topToken = opStack.pop()
+            topToken = operationStack.pop()
             while "(" not in topToken:
-                postfixList.append(topToken)
-                topToken = opStack.pop()
+                postFixList.append(topToken)
+                topToken = operationStack.pop()
         else:
-            while (not opStack.isEmpty()) and (prec[opStack.peek()] >= prec[token]):
-                  postfixList.append(opStack.pop())
-            opStack.push(token)
+            while (not operationStack.isEmpty()) and (preCharacter[operationStack.peek()] >= preCharacter[token]):
+                  postFixList.append(operationStack.pop())
+            operationStack.push(token)
 
-    while not opStack.isEmpty():
-        postfixList.append(opStack.pop())
-    return " ".join(postfixList)
+    while not operationStack.isEmpty():
+        postFixList.append(operationStack.pop())
+    return " ".join(postFixList)
 
 # perform quadruples in postfix correct order
-def postfixEval(postfixExpr):
+def postfixEvaluation(postFixExpression):
     operandStack = Stack()
-    tokenList = postfixExpr.split()
+    tokenList = postFixExpression.split()
 
     for token in tokenList:
         if token.isalnum() or "[" in token or ("(" in token and ")" in token) or (re.search('[a-z]', token) is True and "(" in token):
@@ -1290,242 +1290,243 @@ def postfixEval(postfixExpr):
         else:
             operand2 = operandStack.pop()
             operand1 = operandStack.pop()
-            result = doMath(token,operand1,operand2)
+            result = accomplishMath(token, operand1, operand2)
             operandStack.push(result)
     return operandStack.pop()
 
-def doMath(op, op1, op2):
+def accomplishMath(operation, operationOne, operationTwo):
     global q
     global t
 
-    if "*" in op:
+    if "*" in operation:
         if insideWhileListQuadruples == 1:
-            if "(" in op1:
+            if "(" in operationOne:
                     whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation1()
 
-            if "(" in op2:
+            if "(" in operationTwo:
                     whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation2()
 
-            if "[" in op1:
+            if "[" in operationOne:
                 whileListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation1()
 
-            if "[" in op2:
+            if "[" in operationTwo:
                whileListQuadruplesIncrementationh2()
                afterWhileListQuadruplesIncrementationOperation2()
-            whileListQuadruples.append(str(q).ljust(4) + "\tmult \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+            whileListQuadruples.append(str(q).ljust(4) + "\tmult \t\t" + operationOne.ljust(4) + "\t\t" + operationTwo.ljust(4) + "\t\tt" + str(t))
 
         elif insideIfListQuadruples == 1:
-            if "(" in op1:
+            if "(" in operationOne:
                     whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation1()
 
-            if "(" in op2:
+            if "(" in operationTwo:
                     whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation2()
 
-            if "[" in op1:
+            if "[" in operationOne:
                 ifListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation1()
 
-            if "[" in op2:
+            if "[" in operationTwo:
                 ifListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation2()
-            ifListQuadruples.append(str(q).ljust(4) + "\tmult \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+            ifListQuadruples.append(str(q).ljust(4) + "\tmult \t\t" + operationOne.ljust(4) + "\t\t" + operationTwo.ljust(4) + "\t\tt" + str(t))
 
         else:
-            if "(" in op1:
+            if "(" in operationOne:
                     whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation1()
 
-            if "(" in op2:
+            if "(" in operationTwo:
                     whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation2()
 
-            if "[" in op1:
+            if "[" in operationOne:
                 whileListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation1()
 
-            if "[" in op2:
+            if "[" in operationTwo:
                 whileListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation2()
-            print(str(q).ljust(4) + "\tmult \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+            print(str(q).ljust(4) + "\tmult \t\t" + operationOne.ljust(4) + "\t\t" + operationTwo.ljust(4) + "\t\tt" + str(t))
         q += 1
         temp = "t" + str(t)
         t += 1
         return temp
 
-    elif "/" in op:
+    elif "/" in operation:
         if insideWhileListQuadruples == 1:
-            if "(" in op1:
+            if "(" in operationOne:
                     whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation1()
 
-            if "(" in op2:
+            if "(" in operationTwo:
                     whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation2()
 
-            if "[" in op1:
+            if "[" in operationOne:
                 whileListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation1()
 
-            if "[" in op2:
+            if "[" in operationTwo:
                 whileListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation2()
-            whileListQuadruples.append(str(q).ljust(4) + "\tdiv  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+            whileListQuadruples.append(str(q).ljust(4) + "\tdiv  \t\t" + operationOne.ljust(4) + "\t\t" + operationTwo.ljust(4) + "\t\tt" + str(t))
 
         elif insideIfListQuadruples == 1:
-            if "(" in op1:
+            if "(" in operationOne:
                     ifListQuadruplesParacount()
                     afterWhileListQuadruplesIncrementationOperation1()
 
-            if "(" in op2:
+            if "(" in operationTwo:
                     ifListQuadruplesParacount()
                     afterWhileListQuadruplesIncrementationOperation2()
 
-            if "[" in op1:
+            if "[" in operationOne:
                 ifListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation1()
 
-            if "[" in op2:
+            if "[" in operationTwo:
                 ifListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation2()
-            ifListQuadruples.append(str(q).ljust(4) + "\tdiv  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+            ifListQuadruples.append(str(q).ljust(4) + "\tdiv  \t\t" + operationOne.ljust(4) + "\t\t" + operationTwo.ljust(4) + "\t\tt" + str(t))
 
         else:
-            if "(" in op1:
+            if "(" in operationOne:
                     printParameterCount()
                     afterWhileListQuadruplesIncrementationOperation1()
 
-            if "(" in op2:
+            if "(" in operationTwo:
                     printParameterCount()
                     afterWhileListQuadruplesIncrementationOperation2()
 
-            if "[" in op1:
+            if "[" in operationOne:
                 printh2()
                 afterWhileListQuadruplesIncrementationOperation1()
 
-            if "[" in op2:
+            if "[" in operationTwo:
                 printh2()
                 afterWhileListQuadruplesIncrementationOperation2()
-            print(str(q).ljust(4) + "\tdiv  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+            print(str(q).ljust(4) + "\tdiv  \t\t" + operationOne.ljust(4) + "\t\t" + operationTwo.ljust(4) + "\t\tt" + str(t))
         q += 1
         temp = "t" + str(t)
         t += 1
         return temp
 
-    elif "+" in op:
+    elif "+" in operation:
         if insideWhileListQuadruples == 1:
-            if "(" in op1:
+            if "(" in operationOne:
                     whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation1()
 
-            if "(" in op2:
+            if "(" in operationTwo:
                     whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation2()
 
-            if "[" in op1:
+            if "[" in operationOne:
                 whileListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation1()
 
-            if "[" in op2:
+            if "[" in operationTwo:
                 whileListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation2()
-            whileListQuadruples.append(str(q).ljust(4) + "\tadd  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+            whileListQuadruples.append(str(q).ljust(4) + "\tadd  \t\t" + operationOne.ljust(4) + "\t\t" + operationTwo.ljust(4) + "\t\tt" + str(t))
 
         elif insideIfListQuadruples == 1:
-            if "(" in op1:
+            if "(" in operationOne:
                     ifListQuadruplesParacount()
                     afterWhileListQuadruplesIncrementationOperation1()
 
-            if "(" in op2:
+            if "(" in operationTwo:
                     ifListQuadruplesParacount()
                     afterWhileListQuadruplesIncrementationOperation2()
 
-            if "[" in op1:
+            if "[" in operationOne:
                 ifListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation1()
 
-            if "[" in op2:
+            if "[" in operationTwo:
                 ifListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation2()
-            ifListQuadruples.append(str(q).ljust(4) + "\tadd  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+            ifListQuadruples.append(str(q).ljust(4) + "\tadd  \t\t" + operationOne.ljust(4) + "\t\t" + operationTwo.ljust(4) + "\t\tt" + str(t))
 
         else:
-            if "(" in op1:
+            if "(" in operationOne:
                     printParameterCount()
                     afterWhileListQuadruplesIncrementationOperation1()
-            if "(" in op2:
+            if "(" in operationTwo:
                     printParameterCount()
                     afterWhileListQuadruplesIncrementationOperation2()
-            if "[" in op1:
+            if "[" in operationOne:
                 printh2()
                 afterWhileListQuadruplesIncrementationOperation1()
 
-            if "[" in op2:
+            if "[" in operationTwo:
                 printh2()
                 afterWhileListQuadruplesIncrementationOperation2()
-            print(str(q).ljust(4) + "\tadd  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+            print(str(q).ljust(4) + "\tadd  \t\t" + operationOne.ljust(4) + "\t\t" + operationTwo.ljust(4) + "\t\tt" + str(t))
         q += 1
         temp = "t" + str(t)
         t += 1
         return temp
 
-    else:  # if op == "-"
+    elif "-" in operation:
+    #else:  # if op == "-"
         if insideWhileListQuadruples == 1:
-            if "(" in op1:
+            if "(" in operationOne:
                     whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation1()
 
-            if "(" in op2:
+            if "(" in operationTwo:
                     whileListQuadruplesParamcount()
                     afterWhileListQuadruplesIncrementationOperation2()
 
-            if "[" in op1:
+            if "[" in operationOne:
                 whileListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation1()
 
-            if "[" in op2:
+            if "[" in operationTwo:
                 whileListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation2()
-            whileListQuadruples.append(str(q).ljust(4) + "\tsub  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+            whileListQuadruples.append(str(q).ljust(4) + "\tsub  \t\t" + operationOne.ljust(4) + "\t\t" + operationTwo.ljust(4) + "\t\tt" + str(t))
 
         elif insideIfListQuadruples == 1:
-            if "(" in op1:
+            if "(" in operationOne:
                     ifListQuadruplesParacount()
                     afterWhileListQuadruplesIncrementationOperation1()
 
-            if "(" in op2:
+            if "(" in operationTwo:
                     ifListQuadruplesParacount()
                     afterWhileListQuadruplesIncrementationOperation2()
 
-            if "[" in op1:
+            if "[" in operationOne:
                 ifListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation1()
 
-            if "[" in op2:
+            if "[" in operationTwo:
                 ifListQuadruplesIncrementationh2()
                 afterWhileListQuadruplesIncrementationOperation2()
-            ifListQuadruples.append(str(q).ljust(4) + "\tsub  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+            ifListQuadruples.append(str(q).ljust(4) + "\tsub  \t\t" + operationOne.ljust(4) + "\t\t" + operationTwo.ljust(4) + "\t\tt" + str(t))
 
         else:
-            if "(" in op1:
+            if "(" in operationOne:
                     printParameterCount()
                     afterWhileListQuadruplesIncrementationOperation1()
 
-            if "(" in op2:
+            if "(" in operationTwo:
                     printParameterCount()
                     afterWhileListQuadruplesIncrementationOperation2()
-            if "[" in op1:
+            if "[" in operationOne:
                 printh2()
                 afterWhileListQuadruplesIncrementationOperation1()
 
-            if "[" in op2:
+            if "[" in operationTwo:
                 printh2()
                 afterWhileListQuadruplesIncrementationOperation2()
-            print(str(q).ljust(4) + "\tsub  \t\t" + op1.ljust(4) + "\t\t" + op2.ljust(4) + "\t\tt" + str(t))
+            print(str(q).ljust(4) + "\tsub  \t\t" + operationOne.ljust(4) + "\t\t" + operationTwo.ljust(4) + "\t\tt" + str(t))
         q += 1
         temp = "t" + str(t)
         t += 1
@@ -1555,13 +1556,13 @@ def afterWhileListQuadruplesIncrementationOperation1():
     q += 1
     temp = "t" + str(t)
     t += 1
-    op1 = temp
+    operationOne = temp
 
 def afterWhileListQuadruplesIncrementationOperation2():
     q += 1
     temp = "t" + str(t)
     t += 1
-    op2 = temp
+    operationTwo = temp
 
 def afterWhileListQuadruplesIncrementationh1():
     q += 1
@@ -1571,8 +1572,8 @@ def afterWhileListQuadruplesIncrementationh1():
 
 def ifListQuadruplesParacount():
     parmcount = 0
-    h1 = op1.partition('(')[-1].rpartition(')')[0]
-    h2 = op1.partition('(')
+    h1 = operationOne.partition('(')[-1].rpartition(')')[0]
+    h2 = operationOne.partition('(')
     if ',' in h1:
         h1 = h1.split(',')
     for v in h1:
@@ -1583,20 +1584,20 @@ def ifListQuadruplesParacount():
     ifListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
 
 def whileListQuadruplesParamcount():
-    parmcount = 0
-    h1 = op1.partition('(')[-1].rpartition(')')[0]
-    h2 = op1.partition('(')
+    theParameterCount = 0
+    h1 = operationOne.partition('(')[-1].rpartition(')')[0]
+    h2 = operationOne.partition('(')
     if ',' in h1:
         h1 = h1.split(',')
     for v in h1:
-        parmcount += 1
+        theParameterCount += 1
         whileListQuadruples.append(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
         q += 1
         whileListQuadruples.append(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
 
 def ifListQuadruplesIncrementationh2():
-    h1 = op2.partition('[')
-    h2 = op2.partition('[')[-1].rpartition(']')[0]
+    h1 = operationTwo.partition('[')
+    h2 = operationTwo.partition('[')[-1].rpartition(']')[0]
     if h2.isdigit() is False:
         ifListQuadruples.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
     else:
@@ -1608,17 +1609,17 @@ def ifListQuadruplesIncrementationh2():
     h2 = temp
 
 def printParameterCount():
-    parmcount = 0
-    h1 = op1.partition('(')[-1].rpartition(')')[0]
-    h2 = op1.partition('(')
+    parmeterCount = 0
+    h1 = operationOne.partition('(')[-1].rpartition(')')[0]
+    h2 = operationOne.partition('(')
     if ',' in h1:
         h1 = h1.split(',')
     for v in h1:
-        parmcount += 1
+        parmeterCount += 1
         print(str(q).ljust(4) + "\targ \t\t\t\t\t\t\t\t" + v)
         q += 1
 
-    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmeterCount).ljust(4) + "\t\tt" + str(t))
 
 def whileListQuadruplesAssignh2():
     h1 = assign.partition('[')
@@ -1673,8 +1674,8 @@ def printAssignh2():
     assign = temp
 
 def whileListQuadruplesIncrementationh2():
-    h1 = op1.partition('[')
-    h2 = op1.partition('[')[-1].rpartition(']')[0]
+    h1 = operationOne.partition('[')
+    h2 = operationOne.partition('[')[-1].rpartition(']')[0]
     if h2.isdigit() is False:
         whileListQuadruples.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
         q += 1
@@ -1686,8 +1687,8 @@ def whileListQuadruplesIncrementationh2():
     whileListQuadruples.append( str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
 
 def printh2():
-    h1 = op1.partition('[')
-    h2 = op1.partition('[')[-1].rpartition(']')[0]
+    h1 = operationOne.partition('[')
+    h2 = operationOne.partition('[')[-1].rpartition(']')[0]
     if h2.isdigit() is False:
         print(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
         q += 1
@@ -1699,67 +1700,67 @@ def printh2():
     print(str(q).ljust(4) + "\tdisp \t\t" + h1[0].ljust(4) + "\t\t" + str(h2).ljust(4) + "\t\tt" + str(t))
 
 def whileParameterCountExpressionQuadruples():
-    parmcount = 0
-    h1 = exquad.partition('(')[-1].rpartition(')')[0]
-    h2 = exquad.partition('(')
+    theParameterCount = 0
+    h1 = expressionQuadruples.partition('(')[-1].rpartition(')')[0]
+    h2 = expressionQuadruples.partition('(')
     if ',' in h1:
         h1 = h1.split(',')
     for v in h1:
-        parmcount += 1
+        theParameterCount += 1
         whileListQuadruples.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
         q += 1
 
     whileListQuadruples.append(
-        str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+        str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(theParameterCount).ljust(4) + "\t\tt" + str(t))
     q += 1
     t += 1
 
 def ifParameterCountExpressionQuadruples():
-    parmcount = 0
-    h1 = exquad.partition('(')[-1].rpartition(')')[0]
-    h2 = exquad.partition('(')
+    theParameterCount = 0
+    h1 = expressionQuadruples.partition('(')[-1].rpartition(')')[0]
+    h2 = expressionQuadruples.partition('(')
     if ',' in h1:
         h1 = h1.split(',')
     for v in h1:
-        parmcount += 1
+        theParameterCount += 1
         ifListQuadruples.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
         q += 1
 
     ifListQuadruples.append(
-        str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+        str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(theParameterCount).ljust(4) + "\t\tt" + str(t))
     q += 1
     t += 1
 
 def printParameterCountExpressionQuadruples():
-    parmcount = 0
-    h1 = exquad.partition('(')[-1].rpartition(')')[0]
-    h2 = exquad.partition('(')
+    theParameterCount = 0
+    h1 = expressionQuadruples.partition('(')[-1].rpartition(')')[0]
+    h2 = expressionQuadruples.partition('(')
     if ',' in h1:
         h1 = h1.split(',')
     for v in h1:
-        parmcount += 1
+        theParameterCount += 1
         ifListQuadruples.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
         q += 1
 
     ifListQuadruples.append(
-        str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+        str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(theParameterCount).ljust(4) + "\t\tt" + str(t))
     q += 1
     t += 1
 
 def ifListQuadruplesParamterCounterLastExpression():
-    if "(" in lastexp:
-        parmcount = 0
-        h1 = lastexp.partition('(')[-1].rpartition(')')[0]
-        h2 = lastexp.partition('(')
+    if "(" in lastExpression:
+        theParameterCount = 0
+        h1 = lastExpression.partition('(')[-1].rpartition(')')[0]
+        h2 = lastExpression.partition('(')
         if ',' in h1:
             h1 = h1.split(',')
         for v in h1:
-            parmcount += 1
+            theParameterCount += 1
             ifListQuadruples.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
             q += 1
 
         ifListQuadruples.append(
-            str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+            str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(theParameterCount).ljust(4) + "\t\tt" + str(t))
         q += 1
         temp = "t" + str(t)
         t += 1
@@ -1768,18 +1769,18 @@ def ifListQuadruplesParamterCounterLastExpression():
         insideExpression = 1
 
 def whileListQuadruplesParameterCountLastExpression():
-    parmcount = 0
-    h1 = lastexp.partition('(')[-1].rpartition(')')[0]
-    h2 = lastexp.partition('(')
+    theParameterCount = 0
+    h1 = lastExpression.partition('(')[-1].rpartition(')')[0]
+    h2 = lastExpression.partition('(')
     if ',' in h1:
         h1 = h1.split(',')
     for v in h1:
-        parmcount += 1
+        theParameterCount += 1
         whileListQuadruples.append(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
         q += 1
 
     whileListQuadruples.append(
-        str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+        str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(theParameterCount).ljust(4) + "\t\tt" + str(t))
     q += 1
     temp = "t" + str(t)
     t += 1
@@ -1787,17 +1788,17 @@ def whileListQuadruplesParameterCountLastExpression():
     q += 1
     insideExpression = 1
 def printParameterCountLastExpression():
-    parmcount = 0
-    h1 = lastexp.partition('(')[-1].rpartition(')')[0]
-    h2 = lastexp.partition('(')
+    theParameterCount = 0
+    h1 = lastExpression.partition('(')[-1].rpartition(')')[0]
+    h2 = lastExpression.partition('(')
     if ',' in h1:
         h1 = h1.split(',')
     for v in h1:
-        parmcount += 1
+        theParameterCount += 1
         print(str(q).ljust(4) + "\targ  \t\t\t\t\t\t\t\t" + v)
         q += 1
 
-    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(parmcount).ljust(4) + "\t\tt" + str(t))
+    print(str(q).ljust(4) + "\tcall \t\t" + h2[0].ljust(4) + "\t\t" + str(theParameterCount).ljust(4) + "\t\tt" + str(t))
     q += 1
     temp = "t" + str(t)
     t += 1
@@ -1806,8 +1807,8 @@ def printParameterCountLastExpression():
     insideExpression = 1
 
 def ifListQuadruplesLastExpression():
-    h1 = lastexp.partition('[')
-    h2 = lastexp.partition('[')[-1].rpartition(']')[0]
+    h1 = lastExpression.partition('[')
+    h2 = lastExpression.partition('[')[-1].rpartition(']')[0]
     if h2.isdigit() is False:
         ifListQuadruples.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
         q += 1
@@ -1827,8 +1828,8 @@ def ifListQuadruplesLastExpression():
     insideExpression = 1
 
 def whileListQuadruplesLastExpression():
-    h1 = lastexp.partition('[')
-    h2 = lastexp.partition('[')[-1].rpartition(']')[0]
+    h1 = lastExpression.partition('[')
+    h2 = lastExpression.partition('[')[-1].rpartition(']')[0]
     if h2.isdigit() is False:
         whileListQuadruples.append(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
         q += 1
@@ -1848,8 +1849,8 @@ def whileListQuadruplesLastExpression():
     insideExpression = 1
 
 def printLastExpressionh2():
-    h1 = lastexp.partition('[')
-    h2 = lastexp.partition('[')[-1].rpartition(']')[0]
+    h1 = lastExpression.partition('[')
+    h2 = lastExpression.partition('[')[-1].rpartition(']')[0]
     if h2.isdigit() is False:
         print(str(q).ljust(4) + "\tmult \t\t" + h2.ljust(4) + "\t\t4   \t\tt" + str(t))
         q += 1
@@ -1872,20 +1873,20 @@ def parameterCount():
     global q
     global currentFunction
     f = x + 1
-    paramcount = 0
-    qch = q + 1
+    theParameterCount = 0
+    quadrupleCharacter = q + 1
     while ")" not in token[f]:
         if token[f] in intFloatKeywords:
-            paramcount += 1
-            funcparm.append(str(qch).ljust(4) + "\tparam\t\t4   \t\t\t\t\t" + token[f + 1])
-            qch += 1
+            theParameterCount += 1
+            functionParameter.append(str(quadrupleCharacter).ljust(4) + "\tparam\t\t4   \t\t\t\t\t" + token[f + 1])
+            quadrupleCharacter += 1
             f += 2
             if "," in token[f]:
                 f += 1
     print(str(q).ljust(4) + "\tfunc \t\t" + token[x - 1].ljust(4) + "\t\t" + token[x - 2].ljust(4) + "\t\t" + str(
-        paramcount))
-    q = qch
-    for v in funcparm:
+        theParameterCount))
+    q = quadrupleCharacter
+    for v in functionParameter:
         print(v)
     currentFunction = token[x - 1]
 # ---------------------- end of our stack for infix to postfix --------------------------- #

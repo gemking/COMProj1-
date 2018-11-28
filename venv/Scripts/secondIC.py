@@ -647,7 +647,7 @@ def selectionStatementPrime(): # Rule 23
 
     for v in ifListQuadruples:
         print(v)
-    inIfListQuadruples = 0
+    insideIfListQuadruples = 0
 
     if "else" in token[x]:
         x += 1  # Accepts else
@@ -655,7 +655,7 @@ def selectionStatementPrime(): # Rule 23
         ifListQuadruples.append(str(q).ljust(4) + "\tBR   \t\t\t\t\t\t\t\t")
         elsech = len(ifListQuadruples)
         q += 1
-        inIfListQuadruples = 1
+        insideIfListQuadruples = 1
 
         statement()
 
@@ -663,7 +663,7 @@ def selectionStatementPrime(): # Rule 23
 
         for v in range(elsech-1, len(ifListQuadruples)):
             print(ifListQuadruples[v])
-        inIfListQuadruples = 0
+        insideIfListQuadruples = 0
 
     else:
         return

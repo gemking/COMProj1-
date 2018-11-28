@@ -682,7 +682,7 @@ def itstmt():  # 24
         temp = "t" + str(t)
         t += 1
 
-        if ">" in comparision:
+        if ">" in comparison:
             if inwlistq == 1:
                 whilelistq.append(str(q).ljust(4) + "\tBGT  \t\t" + temp.ljust(4) + "\t\t\t\t\t" + str(q + 2))
             else:
@@ -757,7 +757,7 @@ def itstmt():  # 24
 
 
 def retstmt():  # 25
-    global i, q, t
+    global i
     if "return" in token[i]:
         i += 1  # Accept return
     else:
@@ -1313,8 +1313,13 @@ def simexp():  # 31
     addexp()
     simpleExpressionPrime()
 
-def simpleExpressionPrime(): #Rule 32
-    if token[i]
+def simpleExpressionPrime():  # Rule 32
+    if token[x] in comparisionSymbols:
+        comparisonOperation()
+        addExpression()
+    else:
+        return
+
 
 
 def relop():  # 25
