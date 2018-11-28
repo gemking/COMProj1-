@@ -625,39 +625,39 @@ def iterationStatement():  # Rule 24
         whileEndBranch = q  # get start of while loop line for last quadruple in the block
 
         f = x
-        wListFront = ""
+        whileListFront = ""
         comparison = 0
         backCharacter = 0
         while token[f] not in comparisionSymbols:
             if "[" in token[f] or backCharacter == 1:
-                wListFront = wListFront + token[f]
+                whileListFront = whileListFront + token[f]
                 backCharacter = 1
                 if "]" in token[f]:
                     backCharacter = 0
             else:
-                wListFront = wListFront + " " + token[f]
+                whileListFront = whileListFront + " " + token[f]
             f += 1
 
 
         comparison = token[f]
-        wListFront = infixToPostfix(wListFront)
-        lastWhile = postfixEvaluation(wListFront)
+        whileListFront = infixToPostfix(whileListFront)
+        lastWhile = postfixEvaluation(whileListFront)
 
         f += 1
         backCharacter = 0
-        wListBack = ""
+        whileListBack = ""
         while ")" not in token[f]:
             if "[" in token[f] or backCharacter == 1:
-                wListBack = wListBack + token[f]
+                whileListBack = whileListBack + token[f]
                 backCharacter = 1
                 if "]" in token[f]:
                     backCharacter = 0
             else:
-                wListBack = wListBack + " " + token[f]
+                whileListBack = whileListBack + " " + token[f]
             f += 1
 
-        wListBack = infixToPostfix(wListBack)
-        lastWL = postfixEvaluation(wListBack)
+        whileListBack = infixToPostfix(whileListBack)
+        lastWL = postfixEvaluation(whileListBack)
 
         if insideWhileListQuadruples == 1:
             whileListQuadruples.append(str(q).ljust(4) + "\tcomp \t\t" + lastWhile.ljust(4) + "\t\t" + lastWL.ljust(4) + "\t\tt" + str(t))

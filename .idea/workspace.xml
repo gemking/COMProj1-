@@ -49,14 +49,14 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="23" />
-          <entry key="py" value="54227" />
+          <entry key="py" value="54361" />
           <entry key="txt" value="701" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="724" />
-          <entry key="Python" value="54226" />
+          <entry key="Python" value="54360" />
           <entry key="RegExp" value="1" />
         </counts>
       </usages-collector>
@@ -79,8 +79,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/firstIC.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-39205">
-              <caret line="85" column="10" selection-start-line="85" selection-start-column="10" selection-end-line="85" selection-end-column="10" />
+            <state relative-caret-position="201">
+              <caret line="2403" lean-forward="true" selection-start-line="2403" selection-end-line="2403" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -109,11 +109,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/revisedThirdIC.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="1833" lean-forward="true" selection-start-line="1833" selection-end-line="1833" />
+            <state relative-caret-position="-377">
+              <caret line="679" column="61" selection-start-line="679" selection-start-column="61" selection-end-line="679" selection-end-column="61" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
               </folding>
@@ -133,9 +133,13 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/venv/Scripts/test.txt">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" selection-start-line="12" selection-end-line="12" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -224,13 +228,14 @@
         <option value="$PROJECT_DIR$/venv/Scripts/revisionSA.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/thirdIC.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/allTests/test.txt" />
-        <option value="$PROJECT_DIR$/venv/Scripts/revisedThirdIC.py" />
         <option value="$PROJECT_DIR$/venv/Scripts/test.txt" />
+        <option value="$PROJECT_DIR$/venv/Scripts/revisedThirdIC.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="30" />
+    <option name="x" value="377" />
+    <option name="y" value="46" />
     <option name="width" value="1940" />
     <option name="height" value="1021" />
   </component>
@@ -487,7 +492,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="608" y="53" width="1940" height="1021" extended-state="0" />
+    <frame x="377" y="46" width="1940" height="1021" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4990403" visible="true" weight="0.32071504" />
@@ -739,44 +744,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/semanticParserMod1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="435" selection-start-line="435" selection-end-line="1129" selection-end-column="19" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/test3.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
           <caret line="3" selection-start-line="3" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/allTests/test2.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="1" lean-forward="true" selection-end-line="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/firstIC.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-39205">
-          <caret line="85" column="10" selection-start-line="85" selection-start-column="10" selection-end-line="85" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/allTests/test.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="1" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
         </state>
       </provider>
     </entry>
@@ -790,18 +761,56 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Scripts/revisedThirdIC.py">
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/semanticParserMod1.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="1833" lean-forward="true" selection-start-line="1833" selection-end-line="1833" />
+        <state relative-caret-position="17">
+          <caret line="435" selection-start-line="435" selection-end-line="1129" selection-end-column="19" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/allTests/test.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="1" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/firstIC.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="2403" lean-forward="true" selection-start-line="2403" selection-end-line="2403" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/allTests/test2.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="1" lean-forward="true" selection-end-line="13" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/venv/Scripts/test.txt">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Scripts/revisedThirdIC.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-377">
+          <caret line="679" column="61" selection-start-line="679" selection-start-column="61" selection-end-line="679" selection-end-column="61" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
