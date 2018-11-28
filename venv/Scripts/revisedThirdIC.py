@@ -153,46 +153,14 @@ def declaration():  # Rule 4
                     q += 1
                     currentFunction = token[x - 1]
                 else:
-                    f = x + 1
-                    theParameterCount = 0
-                    quadrupleCharacter = q + 1
-                    while ")" not in token[f]:
-                        if token[f] in intFloatKeywords:
-                            theParameterCount += 1
-                            functionParameter.append(str(quadrupleCharacter).ljust(4) + "\tparam\t\t4   \t\t\t\t\t" + token[f + 1])
-                            quadrupleCharacter += 1
-                            f += 2
-                            if "," in token[f]:
-                                f += 1
-                    print(str(q).ljust(4) + "\tfunc \t\t" + token[x - 1].ljust(4) + "\t\t" + token[x - 2].ljust( 4) + "\t\t" + str(theParameterCount))
-                    q = quadrupleCharacter
-                    for v in functionParameter:
-                        print(v)
-                    currentFunction = token[x - 1]
+                    parameterCount()
             else:
                 if "void" in token[x+1]:
                     print(str(q).ljust(4) + "\tfunc \t\t" + token[x-1].ljust(4) + "\t\t" + token[x-2].ljust(4) + "\t\t0")
                     q += 1
                     currentFunction = token[x - 1]
                 else:
-                    f = x + 1
-                    theParameterCount = 0
-                    quadrupleCharacter = q + 1
-                    while ")" not in token[f]:
-                        if token[f] in intFloatKeywords:
-                            theParameterCount += 1
-                            functionParameter.append(str(quadrupleCharacter).ljust(4) + "\tparam\t\t4   \t\t\t\t\t" + token[f + 1])
-                            quadrupleCharacter += 1
-                            f += 2
-                            if "," in token[f]:
-                                f += 1
-                    print(str(q).ljust(4) + "\tfunc \t\t" + token[x - 1].ljust(4) + "\t\t" + token[x - 2].ljust(
-                        4) + "\t\t" + str(
-                        theParameterCount))
-                    q = quadrupleCharacter
-                    for v in functionParameter:
-                        print(v)
-                    currentFunction = token[x - 1]
+                    parameterCount()
 
 
         if ";" in token[x]:
@@ -1873,8 +1841,10 @@ def parameterCount():
     global q
     global currentFunction
     f = x + 1
+    f = x + 1
     theParameterCount = 0
     quadrupleCharacter = q + 1
+    functionParameter = []
     while ")" not in token[f]:
         if token[f] in intFloatKeywords:
             theParameterCount += 1
@@ -1883,8 +1853,7 @@ def parameterCount():
             f += 2
             if "," in token[f]:
                 f += 1
-    print(str(q).ljust(4) + "\tfunc \t\t" + token[x - 1].ljust(4) + "\t\t" + token[x - 2].ljust(4) + "\t\t" + str(
-        theParameterCount))
+    print(str(q).ljust(4) + "\tfunc \t\t" + token[x - 1].ljust(4) + "\t\t" + token[x - 2].ljust(4) + "\t\t" + str(theParameterCount))
     q = quadrupleCharacter
     for v in functionParameter:
         print(v)
